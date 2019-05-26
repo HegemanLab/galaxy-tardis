@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html class="remark-container">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="remark-container.css" />
+    <link rel="stylesheet" href="slides.css" />
+    <link rel="stylesheet" href="font-awesome.css" id="theme" />
+    <script type="text/javascript" src="MathJax.js"></script>
+
+    <title>Time-Travel Through Your Galaxy</title>
+</head>
+  <body class="remark-container"><div id="MathJax_Message" style="display: none;"></div>
+
+    <!--
+      Begin CDATA wrapper-hack so that HTML entities are not needed for '<' etc.
+      Note zero-pixel font size that is neede to hide <![CDATA[ ]]>
+    --><div style="font-size: 0px;">&lt;![CDATA[
+
+      <textarea id="source" style="display: none;">
+        <p>
+        Markdown not loaded.
+        </p>
+        <p>
+        Try serving this locally, e.g., with<br />
+        python3 -m http.server --bind 127.0.0.1 4000
+        </p>
+      </textarea>
+
+    ]]&gt;</div><!-- End CDATA wrapper-hack -->
+
+    <script>
+      var filename = "tardis-intro.md";
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("source").innerHTML = this.responseText;
+        }
+      };
+      xhttp.open("GET", filename, true);
+      xhttp.send();
+    </script>
+  
+    <script src="remark-latest.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({navigation: {scroll: false,}});
+      var hljs = remark.highlighter.engine;
+    </script>
+  
+
+  </body>
+</html>
