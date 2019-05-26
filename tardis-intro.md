@@ -56,7 +56,7 @@ TARDIS assumes:
 - that Galaxy is running
   on [Usernetes](https://github.com/rootless-containers/usernetes)
   in [docker](https://en.wikipedia.org/wiki/Docker_(software)) (or [docker-compose](https://docs.docker.com/compose/overview/))
-- that the Galaxy is backed up to two 
+- that the Galaxy is backed up to two
   [S3-compatible](https://en.wikipedia.org/wiki/Amazon_S3#S3_API_and_competing_services)
   buckets
 
@@ -147,7 +147,7 @@ in a nutshell, Ubuntu just works without special intervention.
 
 **Setting Up Usernetes**
 
-- Get and decompress a Usernetes release from 
+- Get and decompress a Usernetes release from
   [https://github.com/rootless-containers/usernetes/releases](https://github.com/rootless-containers/usernetes/releases)
   and move the result to `~/usernetes` (for example).
 - For convenience, to simplify starting the rootless Docker daemon, you may want to invoke
@@ -200,14 +200,12 @@ Usernetes:
 ```
 pushd restore_example; bash setup_env.example; popd
 ```
-- Set the `TARDIS` environment variable
+- Set the `TARDIS` environment variable and invoke the TARDIS, e.g.:
 ```
 . tardis_envar.sh
-```
-- Invoke the TARDIS, e.g.
-```
 $TARDIS help
 ```
+- By its definition, `TARDIS` runs as a container named `tardis`, so only one instance can run at a time.
 
 ---
 
@@ -233,7 +231,7 @@ Usage:
                                - Upgrade conda (both arguments required)
 where:
   date        - can be relative (e.g., "1 hour ago") or absolute (e.g., any format accepted by the
-                  Linux `date` program, see e.g. http://man7.org/linux/man-pages/man1/date.1.html)
+                  Linux `date` program, see e.g. https://linux.die.net/man/1/date)
   hour24UTC   - any two digit hour for backup to occur; must be UTC (GMT), not local time.
   url_or_path - any URL from https://repo.continuum.io/miniconda/, or path (e.g., if you
                   copied the miniconda installer to your export directory)
@@ -307,7 +305,7 @@ where:
 - Applies configuration data originally gathered by the `backup` command to `/export`.
 - Does *not* modify the PostgreSQL database (the `seed database` command does that).
 - A date/time pattern may be specified; the most recent backup as of that date will be retored.
-  - The pattern is any pattern accepted by the Linux `date` program.
+  - The pattern is any pattern accepted by [the Linux `date` program](https://linux.die.net/man/1/date).
 - Required Docker bind-mounts (defined by `tardis_envar.sh`):
   - `/export`
   - `/var/run/docker.sock`
@@ -318,7 +316,7 @@ where:
 
 - Restores the PostgreSQL database to its most recent state if no date/time is specified.
 - When a date/time pattern is specified; the most recent backup as of that date will be retored.
-  - The pattern is any pattern accepted by the Linux `date` program.
+  - The pattern is any pattern accepted by [the Linux `date` program](https://linux.die.net/man/1/date).
 - Required Docker bind-mounts (defined by `tardis_envar.sh`):
   - `/export`
   - `/var/run/docker.sock`
@@ -327,10 +325,19 @@ where:
 
 ### TARDIS Command - `upgrade_database`
 
+- Upgrades the PostgreSQL database schema to match the version of Galaxy running.
+    - You should backup the database beforehand
+        - TARDIS can help with that.
+- Requires that PostgreSQL be running.
+- Required Docker bind-mounts (defined by `tardis_envar.sh`):
+    - `/var/run/docker.sock`
+
 ---
 
 ### TARDIS Command - `bash`
 
+- You can run a bash shell within the TARDIS.
+  - Passing
 ---
 
 ### TARDIS Command - `upgrade_conda`
