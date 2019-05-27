@@ -266,6 +266,20 @@ th {
   clear: both;
 }
 
+.tugleft-left {
+  float: left;
+  width: 67%;
+}
+
+.tugleft-right {
+  float: right;
+  width: 27%;
+}
+
+.tugleft-right ~ p {
+  clear: both;
+}
+
 .left {
   text-align: left !important;
 }
