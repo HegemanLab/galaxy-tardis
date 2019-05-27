@@ -21,7 +21,7 @@ MY_GALAXY_TOOL_DEPS_CONDA_BASE_PYTHON_VERSION=3
 MY_GALAXY_EXPORT=`readlink -f /path/to/export`
 # Path on docker host where usernetes is located, if you are using usernetes,
 #   e.g., an unzipped release from https://github.com/rootless-containers/usernetes/releases
-MY_USERNETES=~/u7s
+MY_USERNETES=~/usernetes
 # Path to the config file for s3cmd, see https://github.com/s3tools/s3cmd
 MY_S3CFG=~/.ssh/s3/${MY_BUCKET_PREFIX}.s3cfg
 # Name of configuration-backup bucket on S3-compatible storage; stores backups but not datasets

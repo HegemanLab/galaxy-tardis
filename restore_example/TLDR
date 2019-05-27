@@ -67,10 +67,10 @@ case ${TLDR_RUN_MODE:?} in
     ;;
   fresh)
     echo "#*#*#*#*#*#*#*#  Not restoring Galaxy, initializng fresh instance if necessary  #*#*#*#*#*#*#*#"
-    # Initialize Galaxy and upgrade the database to match the inited Galaxy's version
-    ./compose_start.sh --init-only --init-db --upgrade-db
-    # Initialize Galaxy and upgrade the database to match the inited Galaxy's version
-    ./compose_start.sh --init-only --init-db --upgrade-db
+    # Initialize Galaxy
+    ./compose_start.sh --init-only --init-db
+    # Upgrade the database to match the inited Galaxy's version
+    ./compose_start.sh --init-only --upgrade-db
     ;;
   restore)
     echo "#*#*#*#*#*#*#*#  Restoring an instance of Galaxy from S3  #*#*#*#*#*#*#*#"
