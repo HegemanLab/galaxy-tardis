@@ -118,6 +118,18 @@ restore_example/compose_cron_backup.sh 06
 
 ---
 
+### Prelude to the Overview of Using the TARDIS
+
+.left[
+The next section provides an introduction to the details of how the TARDIS may be used directly.
+
+However, the `restore_example` subdirectory includes some scripts that package and automate invocation of the TARDIS in the context of a general docker-composition of Galaxy, and the `restore_example/TLDR` script demonstrates this.
+
+For now we will dive into the details of what the TARDIS does in response to each subcommand, but after that we will return to `TLDR` and the other scripts in the `restore_example` subdirectory.
+]
+
+---
+
 ### A Brief Overview of Using the TARDIS - part 1
 
 - Clone the code from [https://github.com/HegemanLab/galaxy-tardis](https://github.com/HegemanLab/galaxy-tardis)
@@ -170,6 +182,9 @@ popd
 
 ### Aside: Why run Docker rootlessly?
 
+<img  alt="No Anchor sign" src="NoAnchor.svg" height="100" />
+<img  alt="Blue Whale Blowing" src="blue-whale-1296931.svg" height="100" />
+<br />
 .left[
 With an unprivileged Docker daemon:
 - There is no need to resort to `sudo` or to add the user to the `docker` group.
@@ -257,12 +272,16 @@ where:
 
 ### TARDIS Command - `transmit`
 
-- Transmits to one S3 bucket the backup configuration data gathered by the `backup` command.
-- Transmits to the other S3 bucket any datasets not currently on S3.
+- Transmits to the S3 config bucket
+    - the backup configuration data gathered by the `backup` command.
+    - the installed tools from the toolshed(s) and
+        - the definitions needed to reconstruct the conda environments needed to support the tools
+        - but not the actual contents of the environments, which can be fairly large
+- Transmits to the S3 dataset bucket any datasets not currently on S3.
 - Required Docker bind-mounts (defined by `tardis_envar.sh`):
-  - `/export`
-  - `/opt/s3/dest.s3cfg`
-  - `/opt/s3/dest.config`
+    - `/export`
+    - `/opt/s3/dest.s3cfg`
+    - `/opt/s3/dest.config`
 ---
 
 ### TARDIS Command - `cron [hour24UTC]`
@@ -283,7 +302,7 @@ where:
 
 ### TARDIS Command - `restore_files`
 
-- Retrieves datasets from the other S3 bucket.
+- Retrieves datasets from the S3 dataset bucket.
 - Required Docker bind-mounts (defined by `tardis_envar.sh`):
   - `/export`
   - `/opt/s3/dest.s3cfg`
@@ -292,7 +311,10 @@ where:
 
 ### TARDIS Command - `retrieve_config`
 
-- Retrieves from one S3 bucket the configuration data originally gathered by the `backup` command.
+- Retrieves from S3 configuration bucket
+    - the configuration data originally gathered by the `backup` command.
+        - the tools installed from the toolshed(s)
+            - the definitions of the conda environments needed to support the tools
 - Does *not* retrieve datasets from the other S3 bucket (the `restore_files` command does that).
 - Required Docker bind-mounts (defined by `tardis_envar.sh`):
   - `/export`
@@ -306,6 +328,8 @@ where:
 - Does *not* modify the PostgreSQL database (the `seed database` command does that).
 - A date/time pattern may be specified; the most recent backup as of that date will be retored.
   - The pattern is any pattern accepted by [the Linux `date` program](https://linux.die.net/man/1/date).
+- Installs the tools and conda dependencies *as of the last backup*, not as of `date`
+  - Any tools removed since `date` will have to be reinstalled.
 - Required Docker bind-mounts (defined by `tardis_envar.sh`):
   - `/export`
   - `/var/run/docker.sock`
@@ -315,7 +339,7 @@ where:
 ### TARDIS Command - `seed_database [date]`
 
 - Restores the PostgreSQL database to its most recent state if no date/time is specified.
-- When a date/time pattern is specified; the most recent backup as of that date will be retored.
+- When a date/time pattern is specified; the most recent backup as of `date` will be restored.
   - The pattern is any pattern accepted by [the Linux `date` program](https://linux.die.net/man/1/date).
 - Required Docker bind-mounts (defined by `tardis_envar.sh`):
   - `/export`
@@ -325,11 +349,11 @@ where:
 
 ### TARDIS Command - `upgrade_database`
 
-- Upgrades the PostgreSQL database schema to match the version of Galaxy running.
+- Upgrades the PostgreSQL database schema to match the version of Galaxy installed.
     - You should backup the database beforehand
-        - TARDIS can help with that.
+        - The Galaxy TARDIS can help with that :)
 - Requires that PostgreSQL be running.
-- Required Docker bind-mounts (defined by `tardis_envar.sh`):
+- Required Docker bind-mounts, defined by `tardis_envar.sh`:
     - `/var/run/docker.sock`
 
 ---
@@ -337,10 +361,36 @@ where:
 ### TARDIS Command - `bash`
 
 - You can run a bash shell within the TARDIS.
-  - Passing
+  - You can pass arguments to bash as you would pass arguments to `docker run`
+  - For example, `docker run -ti --rm tardis bash -c "echo hello world"`
 ---
 
-### TARDIS Command - `upgrade_conda`
+### TARDIS Command - `upgrade_conda {url_or_path} {md5sum}`
+
+- To replace the conda base package:
+    - Choose an environment from [https://repo.continuum.io/miniconda/](https://repo.continuum.io/miniconda/)
+    - Supply the URL for the relase and md5hash when invoking `upgrade_conda`
+    - Alternatively, you can copy the release to `/export` and supply the full path in lieu of the URL
+- Restoration installs each environment from a manifest rather than copying content from S3.
+    - The `upgrade_conda` command allows fresh replacement of the base conda environment with one of your own choosing.
+    - Probably a good time to do this is when you are doing a full restoration.
+        - The internal structure of conda environments (e.g., paths) is somewhat dependent on the base environment.
+        - In the worst case, assuming you have backed up to S3, you can  recreate the environments:
+```bash
+rm -rf /export/tool_deps/_conda
+$TARDIS retrieve_config && $TARDIS apply_config
+```
+
+---
+
+### `restore_example` - An Example of a Galaxy backed up by S3
+
+- Our lab's instance of Galaxy is backed up to S3.  This has been extremely helpful to us because:
+    - It gives us offsite backup for disaster recovery.
+    - We are still causing disasters (with the help of our systems, hardware, and campus power interruptions) because we are new to administering Galaxy.
+    - If you haven't restored a system and tested the result, you have no basis for trust in your backup procedure.
+        - We have recovered our Galaxy multiple times, albeit by trial and error.
+- What we have learned in the process of restoring our Galaxy has been coded into the TARDIS and the scripts in the `restore_example` subdirectory.
 
 ---
 
@@ -348,21 +398,26 @@ where:
 
 #### `screen`
 
-##### foo
-
 baz
 
 #### `systemd --user`
 
-bar
+
+```
+# TODO Note that I did `sudo loginctl enable-linger floyd` to keep galaxy session from terminating, per
+#      https://www.brendanlong.com/systemd-user-services-are-amazing.html
+
+# TODO add a script to init the docker.service in user directory and daemon-reload
+```
 
 ---
 
-### Credits
+### Image Credits
 
-.left[
-UK Police Box image: [https://pixabay.com/vectors/tardis-doctor-who-time-travel-2311634](https://pixabay.com/vectors/tardis-doctor-who-time-travel-2311634)
-]
+- UK Police Box image: [https://pixabay.com/vectors/tardis-doctor-who-time-travel-2311634](https://pixabay.com/vectors/tardis-doctor-who-time-travel-2311634)
+- Blue Whale Blowing: [https://pixabay.com/vectors/blue-comic-mammals-ocean-whale-1296931/](https://pixabay.com/vectors/blue-comic-mammals-ocean-whale-1296931/)
+- No Anchor Sign: [https://commons.wikimedia.org/wiki/File:NoAnchor.svg](https://commons.wikimedia.org/wiki/File:NoAnchor.svg)
+    - Mixed from [https://svgsilh.com/image/156169.html](https://svgsilh.com/image/156169.html) and [https://commons.wikimedia.org/wiki/File:Anchor.svg](https://commons.wikimedia.org/wiki/File:Anchor.svg)
 
 ---
 
