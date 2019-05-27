@@ -22,6 +22,7 @@ MY_S3CFG            : ${MY_S3CFG:?}
 MY_CONFIG           : ${MY_CONFIG_BUCKET:?}
 MY_DATASETS         : ${MY_DATASET_BUCKET:?}
 MY_COMPOSE_FILE     : ${MY_COMPOSE_FILE:?}
+MY_GALAXY_TOOL_DEPS_CONDA_BASE_PYTHON_VERSION : ${MY_GALAXY_TOOL_DEPS_CONDA_BASE_PYTHON_VERSION:?}
 ls -l tardis/s3/dest.s3cfg tardis/s3/dest.config
 "
 ln -s -f dot_env_for_compose .env > /dev/null
@@ -76,8 +77,9 @@ case ${TLDR_RUN_MODE:?} in
     # Initialize Galaxy export and database - this kills itself after circa 5 minutes
     ./compose_start.sh --init-only
     echo "#*#*#*#*#*#*#*#  Fetching and applying Galaxy configuration from S3  #*#*#*#*#*#*#*#"
-    # Run this if you would like to upgrade conda; use --Miniconda3 when Galaxy uses python3
-    ./compose_restore.sh --Miniconda2; if [ $? -ne 0 ]; then echo "FATAL: Updating conda failed - aborting TLDR"; exit 1; fi
+    # You may want to use --Miniconda2 when Galaxy uses python2, but that may not even be necessary
+    # You probably ought to use --Miniconda3 when Galaxy uses python3
+    ./compose_restore.sh --Miniconda${MY_GALAXY_TOOL_DEPS_CONDA_BASE_PYTHON_VERSION}; if [ $? -ne 0 ]; then echo "FATAL: Updating conda failed - aborting TLDR"; exit 1; fi
     # Restore Galaxy configuration
     ./compose_restore.sh --retrieve_config --apply_config; if [ $? -ne 0 ]; then echo "FATAL: Retrieving or applying config failed - aborting TLDR"; exit 1; fi
     # Fetch datasets from S3 backup; you won't want to do this if you are using an S3 bucket as your object store

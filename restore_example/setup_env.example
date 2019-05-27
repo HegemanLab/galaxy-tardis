@@ -13,6 +13,9 @@ MY_INSTANCE=myinstance
 # Prefix for bucket names - again, feel free to change it
 MY_BUCKET_PREFIX=myprefix
 
+# Conda base's python version: should be '2' or '3'; default is '3'
+MY_GALAXY_TOOL_DEPS_CONDA_BASE_PYTHON_VERSION=3
+
 # Fully nonsymbolic path on docker host to directory that will be
 #   mounted as '/export' in container
 MY_GALAXY_EXPORT=`readlink -f /path/to/export`
