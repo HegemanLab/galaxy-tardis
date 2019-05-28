@@ -633,7 +633,6 @@ class: left
 
 ### Setting Up Usernetes
 
-Usernetes set-up is very simple on most distributions:
 - Review and meet the requirements at<br />
   [https://github.com/rootless-containers/usernetes#requirements](https://github.com/rootless-containers/usernetes#requirements)
 - Fetch and un-bzip2 the (very big) release, e.g.:
