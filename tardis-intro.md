@@ -48,7 +48,7 @@ The Galaxy ["Temporal Archive Remote Distribution and Installation System", http
 
 Notably, the intent is **not** to replace other automation systems (e.g., ansible):
 - Rather, it is focused on restoring an existing Galaxy instance to a known state.
-- However, the TARDIS facilitates migrating an instance to another host.
+- The TARDIS also facilitates migrating a Galaxy instance to another host.
 
 ---
 name: dont-panic
@@ -67,22 +67,22 @@ TARDIS simplifies:
 TARDIS assumes:
 - that Galaxy is running
   on [Usernetes](https://github.com/rootless-containers/usernetes)
-  in [docker](https://en.wikipedia.org/wiki/Docker_(software)) (or [docker-compose](https://docs.docker.com/compose/overview/))
+  in [Docker](https://en.wikipedia.org/wiki/Docker_(software) (or [docker-compose](https://docs.docker.com/compose/overview/))
 - that the Galaxy is backed up to two
   [S3-compatible](https://en.wikipedia.org/wiki/Amazon_S3#S3_API_and_competing_services)
   buckets
 
-It is likely that TARDIS could be adapted to work other docker-based Galaxies that are not running under Usernetes.
+It is likely that TARDIS could be adapted to work other with Docker-based Galaxies that are not running under Usernetes.
 
 ---
-name: getting-started---tldr---part-1---setup-composition-and-the-tardis
+name: getting-started---tldr---part-1
 class: left
 
 ### Getting Started - TL;DR - part 1 - Setup Composition and the TARDIS
 
 **For the impatient**
 
-- Install Usernetes, then start docker in Usernetes
+- Install Usernetes, then start the Docker daemon in Usernetes
   - e.g., see https://github.com/rootless-containers/usernetes#start-dockerd-only-no-kubernetes
 - Next, build the TARDIS:
 ```bash
@@ -138,7 +138,7 @@ class: left
 
 The next section provides an introduction to the details of how the TARDIS may be used directly.
 
-However, the `restore_example` subdirectory includes some scripts that package and automate invocation of the TARDIS in the context of a general docker-composition of Galaxy, and the `restore_example/TLDR` script demonstrates this.
+However, the `restore_example` subdirectory includes some scripts that package and automate invocation of the TARDIS in the context of a general Docker-composition of Galaxy, and the `restore_example/TLDR` script demonstrates this.
 
 For now we will dive into the details of what the TARDIS does in response to each subcommand, but after that we will return to `TLDR` and the other scripts in the `restore_example` subdirectory.
 
@@ -670,11 +670,11 @@ deactivate
 name: setting-up-usernetes---docker-daemon
 class: left
 
-### Setting Up Usernetes - docker-daemon
+### Setting Up Usernetes - Docker-daemon
 
-**Running dockerd one-off:**
+**Running `dockerd` one-off:**
 
-You can run the docker daemon, `dockerd`, one time with:
+You can run the Docker daemon, `dockerd`, one time with:
 ```bash
 pushd ~/usernetes; ./run.sh default-docker-nokube
 ```
@@ -695,7 +695,7 @@ class: left
 
 ### Setting Up Usernetes - Docker Service
 
-In `systemd` based distributions (such as Ubuntu), you can have the per-user docker daemon run when you log in by:
+In `systemd` based distributions (such as Ubuntu), you can have the per-user Docker daemon run when you log in by:
 ```bash
 cp docker.service ~/.config/systemd/user/docker.service
 systemctl --user daemon-reload
