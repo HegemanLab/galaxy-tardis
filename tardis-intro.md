@@ -9,6 +9,7 @@ class: center, middle, inverse
     </a>
   </span>
 </div>
+
 ---
 name: title
 
@@ -17,6 +18,7 @@ name: title
 by Art Eschenlauer
 
 25 May 2019
+
 ---
 name: time-travel-through-your-galaxy
 
@@ -27,9 +29,10 @@ name: time-travel-through-your-galaxy
 <br />
 Using the Galaxy TARDIS to backup and restore<br />
 a `docker-compose` based Galaxy instance
+
 ---
 name: motivation-administering-a-local-galaxy-with-minimal-stress
-class: left, middle
+class: left
 
 ### Motivation: Administering a Local Galaxy with Minimal Stress
 
@@ -42,9 +45,14 @@ Basically, you want to be able to travel (back) in time.
 
 The Galaxy ["Temporal Archive Remote Distribution and Installation System", https://github.com/HegemanLab/galaxy-tardis](https://github.com/HegemanLab/galaxy-tardis) may be right for you.
 - Any resemblance of the Galaxy TARDIS to [the TARDIS from *Doctor Who*](https://en.wikipedia.org/wiki/TARDIS) is purely (albeit intentionally) coincidental.
+
+Notably, the intent is **not** to replace other automation systems (e.g., ansible):
+- Rather, it is focused on restoring an existing Galaxy instance to a known state.
+- However, the TARDIS facilitates migrating an instance to another host.
+
 ---
 name: dont-panic
-class: left, middle
+class: left
 
 ### [Don't Panic](https://en.wikipedia.org/wiki/Phrases_from_The_Hitchhiker%27s_Guide_to_the_Galaxy#Don't_Panic)
 
@@ -65,9 +73,10 @@ TARDIS assumes:
   buckets
 
 It is likely that TARDIS could be adapted to work other docker-based Galaxies that are not running under Usernetes.
+
 ---
 name: getting-started---tldr---part-1---setup-composition-and-the-tardis
-class: left, middle
+class: left
 
 ### Getting Started - TL;DR - part 1 - Setup Composition and the TARDIS
 
@@ -93,7 +102,7 @@ cp setup_env.example setup_env.my_instance
 
 ---
 name: getting-started---tldr---part-2---restore-or-run-galaxy
-class: left, middle
+class: left
 
 ### Getting Started - TL;DR - part 2 - Restore or Run Galaxy
 
@@ -123,7 +132,7 @@ To schedule daily backups from a running Galaxy at 6 hours UTC:
 
 ---
 name: prelude-to-the-overview-of-using-the-tardis
-class: left, middle
+class: left
 
 ### Prelude to the Overview of Using the TARDIS
 
@@ -132,9 +141,10 @@ The next section provides an introduction to the details of how the TARDIS may b
 However, the `restore_example` subdirectory includes some scripts that package and automate invocation of the TARDIS in the context of a general docker-composition of Galaxy, and the `restore_example/TLDR` script demonstrates this.
 
 For now we will dive into the details of what the TARDIS does in response to each subcommand, but after that we will return to `TLDR` and the other scripts in the `restore_example` subdirectory.
+
 ---
 name: a-brief-overview-of-using-the-tardis---part-1
-class: left, middle
+class: left
 
 ### A Brief Overview of Using the TARDIS - part 1
 
@@ -154,9 +164,10 @@ class: left, middle
         - can be run to generate the files used by the `compose_*.sh` scripts,
           `docker-compose-env.yml`, and `tardis_envar.sh`.
 - Source `tardis_envar.sh` to set up the `TARDIS` environment variable to invoke TARDIS.
+
 ---
 name: a-brief-overview-of-using-the-tardis---part-2
-class: left, middle
+class: left
 
 ### A Brief Overview of Using the TARDIS - part 2
 
@@ -183,9 +194,10 @@ pushd ~/usernetes
 ./run.sh default-docker-nokube
 popd
 ```
+
 ---
 name: aside-why-run-docker-rootlessly
-class: left, middle
+class: left
 
 ### Aside: Why run Docker rootlessly?
 
@@ -211,9 +223,10 @@ class: left, middle
 - Runs in userspace.
 - Provides rootlesskit, Docker, and Kubernetes.
 - [https://github.com/rootless-containers/usernetes](https://github.com/rootless-containers/usernetes)
+
 ---
 name: build-and-fly-the-tardis
-class: left, middle
+class: left
 
 ### Build and Fly the TARDIS
 
@@ -226,9 +239,9 @@ class: left, middle
 
 - Ensure that `tags-for-tardis_envar-to-source.sh` exists
   - either by copying and adapting<br />`tags-for-tardis_envar-to-source.sh.example`
-  - or by customizing `restore_example/setup_env.example` and then:
+  - or by copying `restore_example/setup_env.example` to `restore_example/setup_env.my_instance`, customizing it, and:
 ```
-pushd restore_example; bash setup_env.example; popd
+pushd restore_example; bash setup_env.my_instance; popd
 ```
 - Set the `TARDIS` environment variable and invoke the TARDIS, e.g.:
 ```
@@ -239,7 +252,7 @@ $TARDIS help
 
 ---
 name: tardis-command---help
-class: left, center
+class: left
 
 ### TARDIS Command - `help`
 
@@ -268,9 +281,10 @@ where:
                   copied the miniconda installer to your export directory)
   md5sum      - MD5 digest for url_or_path, e.g., from https://repo.continuum.io/miniconda/
 </pre>
+
 ---
 name: tardis-command---backup
-class: left, center
+class: left
 
 ### TARDIS Command - `backup`
 
@@ -284,9 +298,10 @@ class: left, center
   - `/export`
   - `/pgparent`
   - `/var/run/docker.sock`
+
 ---
 name: tardis-command---transmit
-class: left, center
+class: left
 
 ### TARDIS Command - `transmit`
 
@@ -300,9 +315,10 @@ class: left, center
     - `/export`
     - `/opt/s3/dest.s3cfg`
     - `/opt/s3/dest.config`
+
 ---
 name: tardis-command---cron-hour24utc
-class: left, center
+class: left
 
 ### TARDIS Command - `cron [hour24UTC]`
 
@@ -318,9 +334,10 @@ class: left, center
   - `/var/run/docker.sock`
   - `/opt/s3/dest.s3cfg`
   - `/opt/s3/dest.config`
+
 ---
 name: tardis-command---restore_files
-class: left, center
+class: left
 
 ### TARDIS Command - `restore_files`
 
@@ -329,7 +346,10 @@ class: left, center
   - `/export`
   - `/opt/s3/dest.s3cfg`
   - `/opt/s3/dest.config`
+
 ---
+name: tardis-command---retrieve_config
+class: left
 
 ### TARDIS Command - `retrieve_config`
 
@@ -342,7 +362,10 @@ class: left, center
   - `/export`
   - `/opt/s3/dest.s3cfg`
   - `/opt/s3/dest.config`
+
 ---
+name: tardis-command---apply_config-date
+class: left
 
 ### TARDIS Command - `apply_config [date]`
 
@@ -357,6 +380,8 @@ class: left, center
   - `/var/run/docker.sock`
 
 ---
+name: tardis-command---seed_database-date
+class: left
 
 ### TARDIS Command - `seed_database [date]`
 
@@ -366,8 +391,10 @@ class: left, center
 - Required Docker bind-mounts (defined by `tardis_envar.sh`):
   - `/export`
   - `/var/run/docker.sock`
----
 
+---
+name: tardis-command---upgrade_database
+class: left
 
 ### TARDIS Command - `upgrade_database`
 
@@ -379,13 +406,18 @@ class: left, center
     - `/var/run/docker.sock`
 
 ---
+name: tardis-command---bash
+class: left
 
 ### TARDIS Command - `bash`
 
 - You can run a bash shell within the TARDIS.
   - You can pass arguments to bash as you would pass arguments to `docker run`
   - For example, `docker run -ti --rm tardis bash -c "echo hello world"`
+
 ---
+name: tardis-command---upgrade_conda-url_or_path-md5sum
+class: left
 
 ### TARDIS Command - `upgrade_conda {url_or_path} {md5sum}`
 
@@ -404,6 +436,8 @@ $TARDIS retrieve_config && $TARDIS apply_config
 ```
 
 ---
+name: restore_example---an-example-of-a-galaxy-backed-up-by-s3
+class: left
 
 ### `restore_example` - An Example of a Galaxy backed up by S3
 
@@ -413,10 +447,13 @@ $TARDIS retrieve_config && $TARDIS apply_config
     - If you haven't restored a system and tested the result, you have no basis for trust in your backup procedure.
         - We have recovered our Galaxy multiple times, albeit by trial and error.
 - What we have learned in the process of restoring our Galaxy has been coded into the TARDIS and the scripts in the `restore_example` subdirectory.
+- The scripts use configuration files produced by `setup_env.*` [as described below](#restore_example---configuration-settings).
 - These scripts were developed assuming access to Docker through [Usernetes](https://github.com/rootless-containers/usernetes).
-    - Setup of Usernetes is described after the descriptions of these scripts.
+    - [Setup of Usernetes](#setting-up-usernetes) is described below.
 
 ---
+name: restore_examplecompose_startsh---start-galaxy
+class: left
 
 ### `restore_example/compose_start.sh` - start Galaxy
 
@@ -436,6 +473,8 @@ $TARDIS retrieve_config && $TARDIS apply_config
     - In response, it invokes the `compose_stop.sh` script (see below).
 
 ---
+name: restore_examplecompose_stopsh---stop-galaxy
+class: left
 
 ### `restore_example/compose_stop.sh` - stop Galaxy
 
@@ -445,23 +484,233 @@ $TARDIS retrieve_config && $TARDIS apply_config
     - Signals `docker-compose` to bring down all of the services.
 
 ---
+name: restore_examplecompose_restore---restore-galaxy
+class: left
 
-### Running Disconnected
+### `restore_example/compose_stop.sh` - restore Galaxy
 
-#### `screen`
+This script wraps most of the TARDIS functions as invocation options:
+<pre style="font-size:11px">
+  --help                   Show this help text
+  --datasets               Restore ALL dataset file (not necessary when using Galaxy object store)
+  --retrieve_config        Retrieve config data
+  --apply_config ['date']  Apply retrieved config data
+  --database ['date']      Restore PostgreSQL database (this makes database changes since last backup unavailable)
+     'date' can be used to specify the newest backup can be applied, i.e., exclude backups newer than the date
+     'date' can be any format accepted by the Linxx 'date' program (https://linux.die.net/man/1/date),
+         which may be relative (e.g., '3 days ago')
+         or RFC822  (e.g., '28 Apr 2019 05:20:23 -5')  [where '-5' means five hours behind UTC]
+         or pseudo ISO8601 ('2019-04-28 05:20:23 -05:00')  [where '-05:00' means five hours behind UTC].
+         It is quite flexible, so go ahead and try something that makes sense to you.
+  --db_upgrade             Upgrade PostgreSQL to match installed Galaxy version
+  --Miniconda3             Upgrade /export/_conda to the latest Miniconda3 version. (experimental, requires lynx)
+  --Miniconda2             Upgrade /export/_conda to the latest Miniconda2 version. (experimental, requires lynx)
+     Upgrading to Miniconda2 will pointless once Galaxy has sunseted Python 2.
+</pre>
 
-baz
+---
+name: restore_example---configuration-settings
+class: left
 
-#### `systemd --user`
+### `restore_example` - Configuration Settings
 
+Three files need to be edited to configure `restore_example`:
+- `restore_example/tardis/s3/dest.config`
+    - This file names the S3 buckets used for backup and restore.
+        - Example at `restore_example/tardis/s3/dest.config.example`
+    - Note that `restore_example/tardis` is just a logical link to `restore_example/..`
+- `restore_example/tardis/s3/dest.s3cfg`
+    - This file has the configuration for [the s3cmd utility](https://github.com/s3tools/s3cmd#simple-s3cmd-howto).
+        - It is in the format recognized and generated by the `s3cmd --configure` command.
+        - Example at `restore_example/tardis/s3/dest.s3cfg.example`
+- `restore_example/setup_env.my_instance` (named as you like)
+    - Copy this from `restore_example/setup_env.example`
+    - Adjust the many variables to meet your needs.
+    - `restore_example/setup_env.in` is a "helper" called by this script.
 
+One additional logical link is needed:
+```bash
+ln -s restore_example/dot_env_for_compose restore_example/.env`
 ```
-# TODO Note that I did `sudo loginctl enable-linger floyd` to keep galaxy session from terminating, per
-#      https://www.brendanlong.com/systemd-user-services-are-amazing.html
 
-# TODO add a script to init the docker.service in user directory and daemon-reload
+---
+name: restore_example---configuration-generation
+class: left
+
+### `restore_example` - Configuration Generation
+
+Now you can generate the configuraton for the `restore_example/compose_*.sh` scripts.
+
+- To instantiate a fresh Galaxy:
+```bash
+bash -c "export TLDR_RUN_MODE=fresh;   bash setup_env.my_instance"
+```
+- To instantiate restore a Galaxy from an S3-compatible bucket:
+```bash
+bash -c "export TLDR_RUN_MODE=restore; bash setup_env.my_instance"
+```
+- To instantiate run the existing Galaxy:
+```bash
+bash -c "export TLDR_RUN_MODE=run;     bash setup_env.my_instance"
+```
+---
+name: restore_example---configuration-result
+class: left
+
+### `restore_example` - Configuration Result
+
+Configuration-generation produces the following files, relative to `restore_example/`:
+- `env-for-TLDR`, which is used by the `restore_example/TLDR` script
+- `tardis/tags-for-tardis_envar-to-source.sh` and `tardis/s3/dest.config`, which are needed when you source `tardis_envar.sh`
+- `tags-for-compose-to-source.sh`, which is needed by `docker-compose-env.yml`, `compose_start.sh`, and `compose_restore.sh` 
+- `env-for-compose-to-source.sh`, which is needed by `compose_stop.sh`, `compose_start.sh`, and `compose_restore.sh`
+- `dot_env_for_compose`, which should be linked by, or copied to, `.env`
+- `docker.service`, which will be discussed below.
+
+---
+name: restore_example---fresh-galaxy
+class: left
+
+### `restore_example` - Fresh Galaxy
+
+If you chose `TLDR_RUN_MODE=fresh`, then, when you `bash TLDR`, the following occur:
+- Directories are created as specified in config files, if necessary.
+- Galaxy is initialized, as is the database:
+```bash
+    ./compose_start.sh --init-only --init-db
+```
+- The database is upgraded if necessary:
+```bash
+    ./compose_start.sh --init-only --upgrade-db
+```
+- The `/export/config/tool_conf.xml` file is created if it is missing.
+- `compose_start.sh` is invoked without options to launch Galaxy.
+  - If `screen` is installed, Galaxy will be launched within it.
+
+---
+name: restore_example---restore-galaxy
+class: left
+
+### `restore_example` - Restore Galaxy
+
+If you chose `TLDR_RUN_MODE=restore`, then, when you `bash TLDR`:
+- Directories are created as specified in config files, if necessary.
+- Galaxy is initialized, as is the database:
+```bash
+    ./compose_start.sh --init-only --init-db
+```
+- Assuming that you chose Miniconda3, Galaxy is restored like so:
+```bash
+    ./compose_restore.sh --retrieve_config --apply_config --datasets \
+      --database --Miniconda3
+```
+- The database is upgraded if necessary:
+```bash
+    ./compose_start.sh --init-only --upgrade-db
+```
+- The `/export/config/tool_conf.xml` file is created if it is missing.
+- `compose_start.sh` is invoked without options to launch Galaxy.
+  - If `screen` is installed, Galaxy will be launched within it.
+
+---
+name: restore_example---run-galaxy
+class: left
+
+### `restore_example` - Run Galaxy
+
+If you chose `TLDR_RUN_MODE=run` (and the Galaxy instance 
+has already been initialized), then, when you `bash TLDR`:
+- `compose_start.sh` is invoked without options to launch Galaxy.
+  - If `screen` is installed, Galaxy will be launched within it.
+
+If you are very lucky, the rudimentary error checking for this 
+case will warn you when you have not yet initialized Galaxy;
+don't rely on it. :)
+
+---
+name: setting-up-usernetes
+class: left
+
+### Setting Up Usernetes
+
+Usernetes set-up is very simple on most distributions:
+- Review and meet the requirements at<br />
+  [https://github.com/rootless-containers/usernetes#requirements](https://github.com/rootless-containers/usernetes#requirements)
+- Fetch and un-bzip2 the (very big) release, e.g.:
+```bash
+wget -O - https://github.com/rootless-containers/usernetes/releases/download/v20190511.1/SHA256SUM 2>/dev/null
+wget https://github.com/rootless-containers/usernetes/releases/download/v20190511.1/usernetes-x86_64.tbz
+sha256sum usernetes-x86_64.tbz
+# If the sha256 sums don't match, stop here!
+tar xjvf usernetes-x86_64.tbz
+mv usernetes ~/usernetes
 ```
 
+---
+name: setting-up-usernetes---convenience-script
+class: left
+
+### Setting Up Usernetes - Convenience Script
+
+If you apply this script:
+```bash
+sh restore_example/util/usernetes_activate.sh
+```
+then you can use
+```bash
+source ~/usernetes/bin/activate
+```
+to 
+- put the `~/usernetes/bin` directory on your path 
+- set the `DOCKER_HOST` environment variable
+
+Reverse this with:
+```bash
+deactivate
+```
+
+---
+name: setting-up-usernetes---docker-daemon
+class: left
+
+### Setting Up Usernetes - docker-daemon
+
+**Running dockerd one-off:**
+
+You can run the docker daemon, `dockerd`, one time with:
+```bash
+pushd ~/usernetes; ./run.sh default-docker-nokube 
+```
+
+If you `dockerd` to run after you are log off, and `screen` is installed, this will work:
+```bash
+screen -S my_docker -d -m bash -c "pushd ~/usernetes; ./run.sh default-docker-nokube"
+```
+and you can kill it off later with
+```bash
+screen -r my_docker
+```
+and pressing control-C.
+
+---
+name: setting-up-usernetes---docker-service
+class: left
+
+### Setting Up Usernetes - Docker Service
+
+In `systemd` based distributions (such as Ubuntu), you can have the per-user docker daemon run when you log in by:
+```bash
+cp docker.service ~/.config/systemd/user/docker.service
+systemctl --user daemon-reload
+systemctl --user start docker.service
+```
+
+To keep the daemon running when you logout, you will have to run the following once:
+```bash
+sudo loginctl enable-linger $(whoami)
+```
+(Thanks to Brendan Long for pointing this out on [https://www.brendanlong.com/systemd-user-services-are-amazing.html](https://www.brendanlong.com/systemd-user-services-are-amazing.html))
+ 
 ---
 
 ### Image Credits
