@@ -28,7 +28,7 @@ bash build_notar.sh
 
 ## TL;DR
 
-For a quick start with minimal reading, got to [https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html#getting-started---tldr---part-1---setup-composition-and-the-tardis](https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html#getting-started---tldr---part-1---setup-composition-and-the-tardis).
+For a quick start with minimal reading, got to [https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html#getting-started---tldr---part-1](https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html#getting-started---tldr---part-1).
 
 ## Usage 
 
