@@ -1,70 +1,119 @@
 # TARDIS - Temporal Archive Remote Distribution and Installation System
 
-The purpose of this Docker image is to back up and restore Galaxy instances that are based on [galaxy-docker-stable](https://github.com/bgruening/docker-galaxy-stable/).  The only storage back-end implemented thus far is S3-compatible storage such as Ceph.
+## Motivation: Administering a Local Galaxy with Minimal Stress
 
-Usage for the `suppport/tardis` script is as follows:
+Suppose that:
+- You want to host a local instance of Galaxy.
+- You want to lose nothing if your Galaxy is swallowed by a black hole.
+- You want your backups to be efficient, easy to manage, secure, and offsite.
+
+Basically, you want to be able to travel (back) in time.
+
+The Galaxy ["Temporal Archive Remote Distribution and Installation System", https://github.com/HegemanLab/galaxy-tardis](https://github.com/HegemanLab/galaxy-tardis) may be right for you.
+- Any resemblance of the Galaxy TARDIS to [the TARDIS from *Doctor Who*](https://en.wikipedia.org/wiki/TARDIS) is purely (albeit intentionally) coincidental.
+
+Notably, the intent is **not** to replace other automation systems (e.g., ansible):
+- Rather, it is focused on restoring an existing Galaxy instance to a known state.
+- However, the TARDIS facilitates migrating an instance to another host.
+
+## Overview
+
+- The purpose of the Galaxy `tardis` Docker image is to back up and restore Galaxy instances that are based on [galaxy-docker-stable](https://github.com/bgruening/docker-galaxy-stable/).
+- The only storage back-end for backup implemented thus far is S3-compatible storage such as Ceph.
+- You can build the image from this repository with:
+```bash
+bash build_notar.sh
 ```
+- A practical example of application of the Galaxy TARDIS is given in the `restore example` directory.
+
+## TL;DR
+
+For a quick start with minimal reading, got to [https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html#getting-started---tldr---part-1---setup-composition-and-the-tardis](https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html#getting-started---tldr---part-1---setup-composition-and-the-tardis).
+
+## Usage 
+
+Usage for the `tardis` Docker image:
+
+```
+tardis - Temporal Archive Remote Distribution and Installation System for Galaxy-in-Docker
+
+Usage:
   tardis backup                - Back up PostgreSQL database and galaxy-central/config.
   tardis transmit              - Transmit datasets and backup to Amazon-S3-compatible storage.
+  tardis cron [hour24UTC]      - Run backup and transmit daily at hour24 UTC.
+  tardis restore_files         - Retrieve datasets from S3 (not desirable when using object store).
   tardis retrieve_config       - Retrieve database and config backup (but not datasets) from S3.
   tardis apply_config [date]   - Restore config from backup, whether from S3 or "tardis backup".
-  tardis restore_files         - Retrieve datasets from S3 (not desirable when using object store).
   tardis seed_database [date]  - Replace PostgreSQL database with copy from backup.
   tardis purge_empty_tmp_dirs  - Purge empty tmp directories that accumulate with datasets.
-  tardis cron                  - Run dcron NOT as daemon to run backup daily.
   tardis upgrade_database      - Upgrade the PostgreSQL database to match the Galaxy version.
+  tardis bash                  - Enter a bash shell.
+  tardis upgrade_conda {url_or_path} {md5sum}
+                               - Upgrade conda (both arguments required)
+where:
+  date        - can be relative (e.g., "1 hour ago") or absolute (e.g., any format accepted by the
+                  Linux `date` program, see e.g. http://man7.org/linux/man-pages/man1/date.1.html)
+  hour24UTC   - any two digit hour for backup to occur; must be UTC (GMT), not local time.
+  url_or_path - any URL from https://repo.continuum.io/miniconda/, or path (e.g., if you
+                  copied the miniconda installer to your export directory)
+  md5sum      - MD5 digest for url_or_path, e.g., from https://repo.continuum.io/miniconda/
 
-  tardis upgrade_conda [url_or_path] [md5sum]
-                               - Upgrade conda (e.g. from https://repo.continuum.io/miniconda/).
-  tardis bash                  - Enter a bash shell, if applicable.
+Optional environment variables:
+  EXPORT_DIR (default "/export") - path to directory containing "galaxy-central"
+    - Optional, used by most tasks
+  PGDATA (default "/var/lib/postgresql/data") - internal path to database in "galaxy-postgres"
+    - Optional, used by "backup" and "seed_database"
+  PGDATA_SUBDIR (default "main") - name of subdirectory of PGDATA_PARENT where PostgreSQL database lives
+Required environment Variables (set using the "-e" option of the "docker run")
+  These are the environment variables and the tasks that require them:
+    HOST_EXPORT_DIR - host path to the EXPORT_DIR as bind-mounted in docker
+      - Used by "seed database"
+    HOST_PGDATA_PARENT - host directory whose PGDATA_SUBDIR subdirectory is
+        bind-mounted by the "galaxy-postgres" container to the path specified by PGDATA
+      - Used by "seed database"
+    PGDATA_PARENT - bind-mount within "tardis" for HOST_PGDATA_PARENT
+      - Used by "seed database"
+    IMAGE_POSTGRES - docker image for PostgreSQL, e.g., "quay.io/bgruening/galaxy-postgres"
+      - Used by "seed database"
+    TAG_POSTGRES - tag for docker image for PostgreSQL, e.g., "9.6.5_for_19.01"
+      - Used by "seed database"
+Required bind-mounts:
+  "/export"       - required by all but "bash" and "help"
+  "/var/run/docker.sock"  - required by "seed_database", "backup"
+  "/opt/s3/dest.s3cfg"    - required by "transmit", "retrieve_config", and "restore_files"
+  "/opt/s3/dest.config"   - required by "transmit", "retrieve_config", and "restore_files"
+
 ```
 
-# How to use ths repository
+## Documentation
 
-## build
+The main documentation for using the Galaxy TARDIS may be found at [https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html](https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html).
 
-- [ ] Copy or symlink `s3/dest.config.example` and `s3/dest.s3cfg.example` to `s3/dest.config` and `s3/dest.s3cfg` and adjust
-  - `access_key`
-  - `secret_key`
-  - `FILE_BUCKET`
-  - `CONFIG_BUCKET`
-  - `EXPORT_ROOT`
-- [ ] *If you didn't use symlinks,* then run `docker build -t .` from the directory containing this README.md file.
-- [ ] *If you used symlinks,* then run `tar ch . | docker build -t tardis -` from the directory containing this README.md file.
-  - The `tar` command was added per [https://github.com/moby/moby/issues/18789#issuecomment-165985865](https://github.com/moby/moby/issues/18789#issuecomment-165985865) to dereference logical links when instantiating the build environment.
-  - It says in `man docker-build` that, when a URL to a tarball is supplied, `docker build` will use that tarball as the build context rather than the current directory.
-  - Apparently, this works when the standard input is a tarball as well, although the man page does not say so explicitly.  Hopefully this capability won't vanish in the future.
+### How to build the Docker image:
 
-## run
+See [https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html#build-and-fly-the-tardis](https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html#build-and-fly-the-tardis)
 
-The TARDIS needs to use docker to run commands in the other containers.  Therefore, you will need to forward the dockerd socket into the container, as shown below.
+## Supporting Software
 
-```
-# using rootless dockerd on usernetes
-TARDIS="docker run --rm -ti -v ${XDG_RUNTIME_DIR}/docker.sock:/var/run/docker.sock -v /path/to/export:/export --name tardis tardis"
-# running dockerd as root
-TARDIS="sudo docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock -v /path/to/export:/export --name tardis tardis"
-# Collect configuration data from the running instance.
-$TARDIS backup
-# Transmit the configuration, histories, datasets, and even shed tools to CephS3 storage at MSI.
-$TARDIS export
-```
+### CVS
 
-Other commands will require other environment variables; see `tags-for-tardis_envar-to-source.sh.example`.  For convenience, when you source the `tardis_envar.sh` script, it reads variables from `tags-for-tardis_envar-to-source.sh` and sets up the `TARDIS` variable accordingly.
+Configuration is backed up using CVS repositories
 
-# CVS
-
-## Why use CVS rather than Git?
+#### Why use CVS rather than Git?
 
 CVS (Concurrent Versions System, [https://www.nongnu.org/cvs/](https://www.nongnu.org/cvs/)) stores all revisions of a text file in an extremely compact format.  This project backs up the Galaxy database to a single SQL file.  Multiple revisions of this file take up an much larger space in a Git repository, whereas, in a CVS repository, they take up little more room than a few times the size of the SQL file.  CVS has been replaced for general software development, but it seems to fill a good niche here.  On the other hand, a more compelling question might be "Why use CVS rather than RCS?", since both CVS and RCS use the same storage format - maybe CVS is more familiar and easier to install (CVS has a single binary, compared to nine for RCS).
 
 There may be a modern source control system that could achieve compact storage and a single binary.  Fossil ([https://www.fossil-scm.org/](https://www.fossil-scm.org/)) seems like a possible candidate, but I have not yet worked with it enough to become familiar with its operation and security model.
 
-## Statically linked `cvs` binary
+#### Statically linked `cvs` binary
 
-The `support/cvs-static` binary was compiled and statically linked as described at [https://github.com/eschen42/alpine-cbuilder#a-use-case](https://github.com/eschen42/alpine-cbuilder#a-use-case)
+The `support/cvs-static` binary was compiled and statically linked as described at [https://github.com/eschen42/alpine-cbuilder#cvs-executable-independent-of-glibc](https://github.com/eschen42/alpine-cbuilder#cvs-executable-independent-of-glibc)
 
-# Docker client
+### Busybox
+
+This Docker image is based on Alpine linux, which uses the `musl` C library rather than `glibc`.  Busybox provides diverse functionality, especially useful inside a very minimal Docker container.  However, I don't want to have track one `musl` busybox and another `glibc` busybox, so I replaced the Alpine busybox in the image with a statically linked busybox, built as described at [https://github.com/eschen42/alpine-cbuilder#statically-linked-busybox](https://github.com/eschen42/alpine-cbuilder#statically-linked-busybox).
+
+### Docker client
 
 The `support/docker-usernetes` binary is a statically linked binary that was extracted from:
 [https://github.com/rootless-containers/usernetes/releases/tag/v20190511.1](https://github.com/rootless-containers/usernetes/releases/tag/v20190511.1)
