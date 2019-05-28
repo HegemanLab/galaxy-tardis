@@ -119,7 +119,10 @@ The `support/docker-usernetes` binary is a statically linked binary that was ext
 [https://github.com/rootless-containers/usernetes/releases/tag/v20190511.1](https://github.com/rootless-containers/usernetes/releases/tag/v20190511.1)
 as follows:
 ```bash
+wget -O - https://github.com/rootless-containers/usernetes/releases/download/v20190511.1/SHA256SUM 2>/dev/null
 wget https://github.com/rootless-containers/usernetes/releases/download/v20190511.1/usernetes-x86_64.tbz
+sha256sum usernetes-x86_64.tbz
+# If the sha256 sums don't match, stop here!
 bzip2 -d usernetes-x86_64.tbz
 tar -xvf usernetes-x86_64.tar usernetes/bin/docker
 cp usernetes/bin/docker support/docker-usernetes
