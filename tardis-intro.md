@@ -642,8 +642,9 @@ wget -O - https://github.com/rootless-containers/usernetes/releases/download/v20
 wget https://github.com/rootless-containers/usernetes/releases/download/v20190511.1/usernetes-x86_64.tbz
 sha256sum usernetes-x86_64.tbz
 # If the sha256 sums don't match, stop here!
-tar xjvf usernetes-x86_64.tbz
-mv usernetes ~/usernetes
+bzip2 -d usernetes-x86_64.tbz
+tar -xvf usernetes-x86_64.tar ~/usernetes
+rm usernetes-x86_64.tar
 ```
 
 ---
