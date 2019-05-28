@@ -172,10 +172,9 @@ class: left
 ### A Brief Overview of Using the TARDIS - part 2
 
 The TARDIS was built and tested to run on rootless Docker in Usernetes.
-Read and understand the [requirements for Usernetes](https://github.com/rootless-containers/usernetes#requirements);
-in a nutshell, Ubuntu just works without special intervention.
 
-**Setting Up Usernetes**
+Here is a very brief summary of the setup process.
+For more detail, see [Setting Up Usernetes](#setting-up-usernetes) below.
 
 - Get and decompress a Usernetes release from
   [https://github.com/rootless-containers/usernetes/releases](https://github.com/rootless-containers/usernetes/releases)
@@ -184,9 +183,6 @@ in a nutshell, Ubuntu just works without special intervention.
 ```
 sh restore_example/util/usernetes_activate.sh ~/usernetes
 ```
-
-**Starting the `rootless` Docker Daemon**
-
 - Activate the usernetes path and run the appropriate task
 ```
 pushd ~/usernetes
@@ -562,7 +558,7 @@ class: left
 Configuration-generation produces the following files, relative to `restore_example/`:
 - `env-for-TLDR`, which is used by the `restore_example/TLDR` script
 - `tardis/tags-for-tardis_envar-to-source.sh` and `tardis/s3/dest.config`, which are needed when you source `tardis_envar.sh`
-- `tags-for-compose-to-source.sh`, which is needed by `docker-compose-env.yml`, `compose_start.sh`, and `compose_restore.sh` 
+- `tags-for-compose-to-source.sh`, which is needed by `docker-compose-env.yml`, `compose_start.sh`, and `compose_restore.sh`
 - `env-for-compose-to-source.sh`, which is needed by `compose_stop.sh`, `compose_start.sh`, and `compose_restore.sh`
 - `dot_env_for_compose`, which should be linked by, or copied to, `.env`
 - `docker.service`, which will be discussed below.
@@ -618,12 +614,12 @@ class: left
 
 ### `restore_example` - Run Galaxy
 
-If you chose `TLDR_RUN_MODE=run` (and the Galaxy instance 
+If you chose `TLDR_RUN_MODE=run` (and the Galaxy instance
 has already been initialized), then, when you `bash TLDR`:
 - `compose_start.sh` is invoked without options to launch Galaxy.
   - If `screen` is installed, Galaxy will be launched within it.
 
-If you are very lucky, the rudimentary error checking for this 
+If you are very lucky, the rudimentary error checking for this
 case will warn you when you have not yet initialized Galaxy;
 don't rely on it. :)
 
@@ -661,8 +657,8 @@ then you can use
 ```bash
 source ~/usernetes/bin/activate
 ```
-to 
-- put the `~/usernetes/bin` directory on your path 
+to
+- put the `~/usernetes/bin` directory on your path
 - set the `DOCKER_HOST` environment variable
 
 Reverse this with:
@@ -680,7 +676,7 @@ class: left
 
 You can run the docker daemon, `dockerd`, one time with:
 ```bash
-pushd ~/usernetes; ./run.sh default-docker-nokube 
+pushd ~/usernetes; ./run.sh default-docker-nokube
 ```
 
 If you `dockerd` to run after you are log off, and `screen` is installed, this will work:
@@ -711,7 +707,7 @@ To keep the daemon running when you logout, you will have to run the following o
 sudo loginctl enable-linger $(whoami)
 ```
 (Thanks to Brendan Long for pointing this out on [https://www.brendanlong.com/systemd-user-services-are-amazing.html](https://www.brendanlong.com/systemd-user-services-are-amazing.html))
- 
+
 ---
 
 ### Image Credits
