@@ -643,7 +643,8 @@ wget https://github.com/rootless-containers/usernetes/releases/download/v2019051
 sha256sum usernetes-x86_64.tbz
 # If the sha256 sums don't match, stop here!
 bzip2 -d usernetes-x86_64.tbz
-tar -xvf usernetes-x86_64.tar ~/usernetes
+tar -xvf usernetes-x86_64.tar
+mv usernetes ~/usernetes
 rm usernetes-x86_64.tar
 ```
 
@@ -655,7 +656,7 @@ class: left
 
 If you apply this script:
 ```bash
-sh restore_example/util/usernetes_activate.sh
+sh restore_example/util/usernetes_activate.sh ~/usernetes
 ```
 then you can use
 ```bash
