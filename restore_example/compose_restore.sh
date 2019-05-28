@@ -2,10 +2,9 @@
 usage() {
   echo "Usage (note that options may be combined):"
   echo "  $0 --help                   Show this help text"
+  echo "  $0 --datasets               Restore ALL dataset file (not necessary when using Galaxy object store)"
   echo "  $0 --retrieve_config        Retrieve config data"
   echo "  $0 --apply_config ['date']  Apply retrieved config data"
-  echo "  $0 --datasets               Restore ALL dataset file (not necessary when using Galaxy object store)"
-  echo "  $0 --db_upgrade             Upgrade PostgreSQL to match installed Galaxy version"
   echo "  $0 --database ['date']      Restore PostgreSQL database (this makes database changes since last backup unavailable)"
   echo "        'date' can be used to specify the newest backup can be applied, i.e., exclude backups newer than the date"
   echo "        'date' can be any format accepted by the Linxx 'date' program (https://linux.die.net/man/1/date),"
@@ -13,8 +12,10 @@ usage() {
   echo "            or RFC822  (e.g., '28 Apr 2019 05:20:23 -5')  [where '-5' means five hours behind UTC]"
   echo "            or pseudo ISO8601 ('2019-04-28 05:20:23 -05:00')  [where '-05:00' means five hours behind UTC]."
   echo "            It is quite flexible, so go ahead and try something that makes sense to you."
+  echo "  $0 --db_upgrade             Upgrade PostgreSQL to match installed Galaxy version"
   echo "  $0 --Miniconda3             Upgrade /export/_conda to the latest Miniconda3 version. (experimental, requires lynx)"
   echo "  $0 --Miniconda2             Upgrade /export/_conda to the latest Miniconda2 version. (experimental, requires lynx)"
+  echo "        Upgrading to Miniconda2 will pointless once Galaxy has sunseted Python 2."
 }
 if [ -z "$1" ]; then
   usage
