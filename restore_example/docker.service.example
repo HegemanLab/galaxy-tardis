@@ -4,7 +4,7 @@ Documentation=https://docs.docker.com
 
 [Service]
 Environment=PATH=/path/to/usernetes/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-ExecStart=/bin/bash -c "pushd /path/to/usernetes; /path/to/usernetes/run.sh default-docker-nokube ; sleep 5; while [ -f /run/user/1450/docker.pid ]; do sleep 5; done"
+ExecStart=/bin/bash -c "pushd /path/to/usernetes; ./run.sh default-docker-nokube ; sleep 5; while [ -f /run/user/1450/docker.pid ]; do sleep 5; done"
 ExecReload=/bin/kill -s HUP $MAINPID
 TimeoutSec=0
 RestartSec=2

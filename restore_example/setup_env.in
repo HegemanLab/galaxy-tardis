@@ -118,4 +118,4 @@ ${EXTRA_GALAXY_ENVARS:?}
 
 " > dot_env_for_compose
 
-sed -e "s@/path/to/usernetes@${MY_USERNETES:?}@" docker.service.example > docker.service
+sed -e "s@/path/to/usernetes@${MY_USERNETES:?}@g" docker.service.example > docker.service
