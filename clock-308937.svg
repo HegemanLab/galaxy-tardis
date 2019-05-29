@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+ <circle cx="29.75" cy="29.375" r="25.809" fill="none" stroke="#333" stroke-width="3.205"/>
+ <g fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+  <g stroke="#4c4c4c" stroke-width="5">
+   <path transform="rotate(18.074 33.754 19.535)" d="m33.753 29.385v-19.701" fill="#219696"/>
+   <path transform="rotate(240.32 29.506 21.312)" d="m22.913 17.507l13.183 7.6113" fill="none"/>
+  </g>
+  <path d="m32.557 30.039a2.4162 2.4162 0 1 0 -4.8323 0 2.4162 2.4162 0 1 0 4.8323 0h-2.4162 2.4162z" stroke="#333" stroke-width="3.026"/>
+ </g>
+</svg>
