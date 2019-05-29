@@ -107,27 +107,29 @@ name: tardis-and-usernetes
 
 ### TARDIS and Usernetes
 
-TARDIS development history:
-- The TARDIS evolved from scripts running a classic [`docker-galaxy-stable`](https://github.com/bgruening/docker-galaxy-stable)-based Galaxy installation.
+- Our motivation for using Usernetes to run Docker rootlessly, and our approach to setting up Usernetes, is discussed in
+[Appendix: Running Docker Rootlessly ](#appendix-running-docker-rootlessly) below.
+- The TARDIS evolved from scripts running against classic [`docker-galaxy-stable`](https://github.com/bgruening/docker-galaxy-stable)-based Galaxy installations.
 - The TARDIS was developed and tested with "rootless Docker" running on [Usernetes](https://github.com/rootless-containers/usernetes) on Ubuntu 18.04 LTS.
     - It does not directly interact any differently with the Docker daemon than it would with a daemon running as root.
     - Thus, it should work without modification with other Docker-based Galaxies that are not running under Usernetes.
         - Future testing should prove this out.
+- The `restore_example` presented next:
+    - is dependent on Usernetes, but likely could be adapted to work with other Docker-based Galaxies that are not running under Usernetes.
+    - is intentionally very terse, for those who want to dive in right away.
 
-The `restore_example` presented below is dependent on Usernetes, but likely could be adapted to work with other Docker-based Galaxies that are not running under Usernetes.
-
-Our motivation for using Usernetes, and our approach to setting up Usernetes, is discussed in
-[Appendix: Running Docker Rootlessly ](#appendix-running-docker-rootlessly) below.
+If you would like a full explanation of the TARDIS and `restore_example`, you can skip through the "TL;DR" to ["Prelude to the Overview of Using the TARDIS"](#prelude-to-the-overview-of-using-the-tardis)
 
 ---
 name: tldr--part-1-build-the-tardis
 
 ### TL;DR--part 1: Build the TARDIS
 
-**This is for the impatient.**  Patient readers may skip these three "TL;DR" sections to a more detailed explanation.
+**This is for the impatient.**
 
-- Install Usernetes, then start the Docker daemon in Usernetes
-  - e.g., see https://github.com/rootless-containers/usernetes#start-dockerd-only-no-kubernetes
+Patient readers may skip these three "TL;DR" sections to a more detailed explanation.
+
+- At present, the example is dependent on Usernetes for running Docker rootlessly.  So, install Usernetes, then start the Docker daemon in Usernetes; e.g., see [Setting Up Usernetes--Getting It](#setting-up-usernetes--getting-it) below.
 - Next, build the TARDIS:
 ```bash
 git clone https://github.com/HegemanLab/galaxy-tardis.git
@@ -140,7 +142,7 @@ name: tldr--part-2-composition-setup
 
 ### TL;DR--part 2: Composition Setup
 
-Continuing in the `galaxy-tardis` directory...
+- Continuing in the `galaxy-tardis` directory...
 ```bash
 cp s3/dest.config.example s3/dest.config
 cp s3/dest.s3cfg.example s3/dest.s3cfg
@@ -638,7 +640,7 @@ name: appendix-running-docker-rootlessly
 - [https://github.com/rootless-containers/usernetes](https://github.com/rootless-containers/usernetes)
 
 ---
-name: setting-up-usernetes
+name: setting-up-usernetes--getting-int
 
 ### Setting Up Usernetes--Getting It
 

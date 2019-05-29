@@ -88,14 +88,14 @@ name: tardis-and-usernetes
 
 ### TARDIS and Usernetes
 
-- The TARDIS evolved from scripts running a classic [`docker-galaxy-stable`](https://github.com/bgruening/docker-galaxy-stable)-based Galaxy installation.
+- Our motivation for using Usernetes to run Docker rootlessly, and our approach to setting up Usernetes, is discussed in
+[Appendix: Running Docker Rootlessly ](#appendix-running-docker-rootlessly) below.
+- The TARDIS evolved from scripts running against classic [`docker-galaxy-stable`](https://github.com/bgruening/docker-galaxy-stable)-based Galaxy installations.
 - The TARDIS was developed and tested with "rootless Docker" running on [Usernetes](https://github.com/rootless-containers/usernetes) on Ubuntu 18.04 LTS.
     - It does not directly interact any differently with the Docker daemon than it would with a daemon running as root.
     - Thus, it should work without modification with other Docker-based Galaxies that are not running under Usernetes.
         - Future testing should prove this out.
-- Our motivation for using Usernetes, and our approach to setting up Usernetes, is discussed in
-[Appendix: Running Docker Rootlessly ](#appendix-running-docker-rootlessly) below.
-- The `restore_example` presented next
+- The `restore_example` presented next:
     - is dependent on Usernetes, but likely could be adapted to work with other Docker-based Galaxies that are not running under Usernetes.
     - is intentionally very terse, for those who want to dive in right away.
 
