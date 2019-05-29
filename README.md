@@ -16,10 +16,15 @@ Notably, the intent is **not** to replace other automation systems (e.g., ansibl
 - Rather, it is focused on restoring an existing Galaxy instance to a known state.
 - However, the TARDIS facilitates migrating an instance to another host.
 
+## Documentation
+
+Documentation for using the Galaxy TARDIS may be found at [https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html](https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html).
+
 ## Overview
 
 - The purpose of the Galaxy `tardis` Docker image is to back up and restore Galaxy instances that are based on [galaxy-docker-stable](https://github.com/bgruening/docker-galaxy-stable/).
 - The only storage back-end for backup implemented thus far is S3-compatible storage such as Ceph.
+    - Because the implementation is modular, it should not be particularly challenging to support other back-ends.
 - You can build the image from this repository with:
 ```bash
 bash build_notar.sh
@@ -28,7 +33,7 @@ bash build_notar.sh
 
 ## TL;DR
 
-For a quick start with minimal reading, got to [https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html#getting-started---tldr---part-1](https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html#getting-started---tldr---part-1).
+For a quick start with minimal reading, got to [https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html#tldr--part-1-build-the-tardis](https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html#tldr--part-1-build-the-tardis).
 
 ## Usage 
 
@@ -84,10 +89,6 @@ Required bind-mounts:
   "/opt/s3/dest.config"   - required by "transmit", "retrieve_config", and "restore_files"
 
 ```
-
-## Documentation
-
-The main documentation for using the Galaxy TARDIS may be found at [https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html](https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html).
 
 ### How to build the Docker image:
 
