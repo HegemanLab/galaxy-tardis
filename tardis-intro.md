@@ -31,6 +31,14 @@ Using the Galaxy TARDIS to backup and restore<br />
 a `docker-galaxy-stable` based Galaxy instance
 
 ---
+name: table-of-contents
+class: left, middle
+
+### Table of Contents
+
+TODO Put here table of contents.
+
+---
 name: bodyLayout
 layout: true
 class: left, middle
@@ -88,8 +96,7 @@ name: tardis-and-usernetes
 
 ### TARDIS and Usernetes
 
-- Our motivation for using Usernetes to run Docker rootlessly, and our approach to setting up Usernetes, is discussed in
-[Appendix: Running Docker Rootlessly ](#appendix-running-docker-rootlessly) below.
+- Our motivation for using Usernetes to run Docker rootlessly, and our approach to setting up Usernetes, is discussed in [Appendix: Running Docker Rootlessly ](#appendix-running-docker-rootlessly) below.
 - The TARDIS evolved from scripts running against classic [`docker-galaxy-stable`](https://github.com/bgruening/docker-galaxy-stable)-based Galaxy installations.
 - The TARDIS was developed and tested with "rootless Docker" running on [Usernetes](https://github.com/rootless-containers/usernetes) on Ubuntu 18.04 LTS.
     - It does not directly interact any differently with the Docker daemon than it would with a daemon running as root.
@@ -172,7 +179,7 @@ The next section provides an introduction to the details of how the TARDIS may b
 
 For now, we will dive into the details of what the TARDIS does in response to each subcommand, but after that we will return to `TLDR` and the other scripts in the `restore_example` subdirectory.
 
-The TARDIS was built and tested to run on rootless Docker in Usernetes.  For an introduction to Usernetes, and a detailed description of the setup process, see [Appendix: Running Docker Rootlessly](#appendix-running-docker-rootlessly) below.  If you want to use rootless Docker, follow the instructions in the appendix before the next section (Building the TARDIS).
+The TARDIS was built and tested to run on rootless Docker in Usernetes.  For an introduction to Usernetes, and a detailed description of the setup process, see [Appendix: Running Docker Rootlessly](#appendix-running-docker-rootlessly) below.  If you want to use rootless Docker, follow the instructions in the appendix before the next section (["Overview of Using the TARDIS"](#overview-of-using-the-tardis)).
 
 ---
 name: overview-of-using-the-tardis
@@ -215,10 +222,11 @@ bash build_notar.sh
 **Flying the TARDIS**
 
 - Ensure that `tags-for-tardis_envar-to-source.sh` exists
-  - either by copying and adapting<br />
-    `tags-for-tardis_envar-to-source.sh.example`
-  - or by copying `restore_example/setup_env.example` to `restore_example/setup_env.my_instance`, customizing it, and:<br />
-    `pushd restore_example; bash setup_env.my_instance; popd`
+    - either by copying and adapting<br />
+      `tags-for-tardis_envar-to-source.sh.example`
+    - or by copying `restore_example/setup_env.example` to `restore_example/setup_env.my_instance`, customizing it, and:<br />
+      `pushd restore_example; bash setup_env.my_instance; popd`
+        - More information about this option is presented in ["An Example of a Galaxy backed up by S3"](#an-example-of-a-galaxy-backed-up-by-s3)
 - Set the `TARDIS` environment variable and invoke the TARDIS, e.g.:<br />
   `tardis_envar.sh`<br />
   `$TARDIS help`
@@ -229,7 +237,7 @@ name: tardis-command---help
 
 ### TARDIS Command: `help`
 
-This is the summary that is produced by the `$TARDIS help` command.
+The `$TARDIS help` command produces this summary:
 
 <pre style="font-size:11px">
 tardis - Temporal Archive Remote Distribution and Installation System for Galaxy-in-Docker
@@ -256,54 +264,85 @@ where:
   md5sum      - MD5 digest for url_or_path, e.g., from https://repo.continuum.io/miniconda/
 </pre>
 
-Each of the other TARDIS commands is described below.
+Each of the other TARDIS commands is described after a visual overview of these operations.
 
 ---
-name: tardis-command---backup
+name: visual-overview-of-tardis-operations
 
-### TARDIS Command: `backup` &nbsp;&nbsp;&nbsp; <img  alt="Backup sign" src="backup-153008.svg" height="30" />
+### Visual Overview of TARDIS Operations
 
-- This command:
-    - backs up the following to `/export/backup`:
-        - XML files from the Galaxy configuration directory (`/export/config/*.xml`)
-        - The pgadmin directory (`/export/pgadmin`)
-        - The PostgreSQL database (`*.conf` and a result from `pg_dumpall`)
-        - The definitions of conda environments (under `/export/tool_deps/_conda/envs`)
-    - Requires that PostgreSQL be running.
-    - Does **not** transmit data to the S3 buckets (see the `transmit` command)
-- Required Docker bind-mounts (defined by `tardis_envar.sh`) are:
+.tugleft-left[
+![TARDIS cartoon](TARDIS_cartoon.svg)
+]
+.tugleft-right[
+Galaxy-state
+- Internal
+  - PostgreSQL
+  - datasets
+  - config XML
+  - conda environments
+- Local backup
+  - `/export/backup`
+- Remote backup
+  - S3 (Ceph, Swift, etc.)
+
+<p style="color:blue">
+TARDIS backup operations in blue
+</p>
+<p style="color:red">
+TARDIS restore operations in red
+</p>
+]
+
+---
+name: tardis-command---backup--
+
+### TARDIS Command: `backup` &nbsp;&nbsp;&nbsp; <img  alt="Backup sign" src="backup-153008.svg" height="60" />
+
+The `backup` command:
+- backs up the following to `/export/backup`:
+    - XML files from the Galaxy configuration directory (`/export/config/*.xml`)
+    - The pgadmin directory (`/export/pgadmin`)
+    - The PostgreSQL database (`*.conf` and a result from `pg_dumpall`)
+    - The definitions of conda environments (under `/export/tool_deps/_conda/envs`)
+- Requires that PostgreSQL be running.
+- Does **not** transmit data to the S3 buckets (see the `transmit` command)
+- Requires these Docker bind-mounts (defined by `tardis_envar.sh`):
     - `/export`
     - `/pgparent`
     - `/var/run/docker.sock`
 
 ---
-name: tardis-command---transmit
+name: tardis-command---transmit--
 
-### TARDIS Command: `transmit` &nbsp;&nbsp;&nbsp; <img  alt="Radio Dish image" src="transmitter-312354.svg" height="30" />
+### TARDIS Command: `transmit` &nbsp;&nbsp;&nbsp; <img  alt="Radio Dish image" src="transmitter-312354.svg" height="60" />
 
+The `transmit` command:
 - Transmits to the S3 config bucket
     - the backup configuration data gathered by the `backup` command.
     - the installed tools from the toolshed(s) and
         - the definitions needed to reconstruct the conda environments needed to support the tools
         - but not the actual contents of the environments, which can be fairly large
 - Transmits to the S3 dataset bucket any datasets not currently on S3.
-- Required Docker bind-mounts (defined by `tardis_envar.sh`):
+- Requires these Docker bind-mounts (defined by `tardis_envar.sh`):
     - `/export`
     - `/opt/s3/dest.s3cfg`
     - `/opt/s3/dest.config`
 
 ---
-name: tardis-command---cron-hour24utc
+name: tardis-command---cron-hour24utc--
 
-### TARDIS Command: `cron [hour24UTC]` &nbsp;&nbsp;&nbsp; <img  alt="Timer image" src="clock-308937.svg" height="30" />
+### TARDIS Command: `cron [hour24UTC]` &nbsp;&nbsp;&nbsp; <img  alt="Timer image" src="clock-308937.svg" height="60" />
 
-- Once a day, run `backup` and (if it succeeds), run `transmit`.
+The `cron` command:
+- Runs continuously until interrupted, e.g., by control-C.
+- Once a day, at the hour specified, run `backup` and (if it succeeds), run `transmit`.
 - `hour24UTC`, if supplied, must be a two digit specification of the hour to run.
   - Only values in the range `00-23` are accepted.
   - This is optional, the default is `01`.
   - Specifies hour in UTC (GMT), not local time.
 - Requires that PostgreSQL be running.
-- Required Docker bind-mounts (defined by `tardis_envar.sh`):
+- Requires these Docker bind-mounts (defined by `tardis_envar.sh`):
   - `/export`
   - `/pgparent`
   - `/var/run/docker.sock`
@@ -311,7 +350,7 @@ name: tardis-command---cron-hour24utc
   - `/opt/s3/dest.config`
 
 ---
-name: tardis-command---restore_files
+name: tardis-command---restore_files--
 
 ### TARDIS Command: `restore_files` &nbsp;&nbsp;&nbsp; <img  alt="Apply Datasets image" src="folder-151584-153008-mix.svg" height="60" />
 
@@ -322,7 +361,7 @@ name: tardis-command---restore_files
   - `/opt/s3/dest.config`
 
 ---
-name: tardis-command---retrieve_config
+name: tardis-command---retrieve_config--
 
 ### TARDIS Command: `retrieve_config` &nbsp;&nbsp;&nbsp; <img  alt="Recall from Trash image" src="undelete-146276.svg" height="60" />
 
@@ -337,7 +376,7 @@ name: tardis-command---retrieve_config
   - `/opt/s3/dest.config`
 
 ---
-name: tardis-command---apply_config-date
+name: tardis-command---apply_config-date--
 
 ### TARDIS Command: `apply_config [date]` &nbsp;&nbsp;&nbsp; <img  alt="Apply Config image" src="gears-467261-153008-mix.svg" height="60" />
 
@@ -352,7 +391,7 @@ name: tardis-command---apply_config-date
   - `/var/run/docker.sock`
 
 ---
-name: tardis-command---seed_database-date
+name: tardis-command---seed_database-date--
 
 ### TARDIS Command: `seed_database [date]` &nbsp;&nbsp;&nbsp; <img  alt="Apply PostgreSQL image" src="PostgreSQL-153008-mix.svg" height="60" />
 
@@ -364,7 +403,7 @@ name: tardis-command---seed_database-date
   - `/var/run/docker.sock`
 
 ---
-name: tardis-command---upgrade_database
+name: tardis-command---upgrade_database--
 
 ### TARDIS Command: `upgrade_database` &nbsp;&nbsp;&nbsp; <img  alt="Upgrade PostgreSQL image" src="PostgreSQL_upgrade.svg" height="60" />
 
@@ -376,7 +415,7 @@ name: tardis-command---upgrade_database
     - `/var/run/docker.sock`
 
 ---
-name: tardis-command---bash
+name: tardis-command---bash--
 
 ### TARDIS Command: `bash` &nbsp;&nbsp;&nbsp; <img  alt="GNU Bash logo" src="bash-64x64.svg" height="60" />
 
@@ -385,7 +424,7 @@ name: tardis-command---bash
   - For example, `docker run -ti --rm tardis bash -c "echo hello world"`
 
 ---
-name: tardis-command---upgrade_conda-url_or_path-md5sum
+name: tardis-command---upgrade_conda-url_or_path-md5sum--
 
 ### TARDIS Command: `upgrade_conda` &nbsp;&nbsp;&nbsp; <img  alt="Conda-reminscent logo" src="Ouroboros-simple.svg" height="50" />
 
@@ -402,13 +441,19 @@ name: tardis-command---upgrade_conda-url_or_path-md5sum
       `$TARDIS retrieve_config && $TARDIS apply_config`
 
 ---
-name: restore_example---transition
+name: an-example-of-a-galaxy-backed-up-by-s3
 
 ### An Example of a Galaxy backed up by S3
 
-Some text explaining that restore_example is a subdir of the repo and what it does for you.
+There is a subdirectory of the galaxy-tardis GitHub repository called `restore_example`.
 
-Include a cartoon showing them where the example is going.
+It demonstrates:
+- How to instantiate a Galaxy 19.01 instance on `docker-compose`.
+    - (For now, this example only runs on Usernetes.)
+- How to run `cron` to back up the instance once per day to S3 buckets.
+- How to restore a Galaxy instance from S3 buckets (and `docker-compose`).
+
+TODO - Clean up this slide.  Maybe include a cartoon showing them where the example is going.
 
 ---
 name: restore_example---an-example-of-a-galaxy-backed-up-by-s3
@@ -616,12 +661,12 @@ name: appendix-running-docker-rootlessly
 ]
 
 **Usernetes**
-- Runs in userspace.
+- Rootless containers for unprivileged users; `dockerd` does not run as root.
 - Provides rootlesskit, Docker, and Kubernetes.
-- [https://github.com/rootless-containers/usernetes](https://github.com/rootless-containers/usernetes)
+- See [https://github.com/rootless-containers/usernetes](https://github.com/rootless-containers/usernetes)
 
 ---
-name: setting-up-usernetes--getting-int
+name: setting-up-usernetes--getting-it
 
 ### Setting Up Usernetes--Getting It
 
@@ -693,7 +738,12 @@ In `systemd` based distributions (such as Ubuntu), you can have the per-user Doc
 ```bash
 cp docker.service ~/.config/systemd/user/docker.service
 systemctl --user daemon-reload
+systemctl --user enable docker.service
 systemctl --user start docker.service
+```
+To stop `dockerd`
+```bash
+systemctl --user stop docker.service
 ```
 
 To keep the daemon running when you logout, you will have to run the following once:
@@ -706,7 +756,7 @@ sudo loginctl enable-linger $(whoami)
 
 ### Image Credits
 <table>
-<tr><td><img alt="UK Police Box image" src="tardis-2311634.svg" height="30" />
+<tr><td><img alt="UK Police Box image" src="tardis-2311634.svg" height="50" />
 </td><td>UK Police Box: [https://pixabay.com/images/id-2311634](https://pixabay.com/vectors/tardis-doctor-who-time-travel-2311634)
 </td></tr>
 <tr><td><img alt="Backup sign" src="backup-153008.svg" height="30" />
@@ -733,9 +783,6 @@ sudo loginctl enable-linger $(whoami)
 <tr><td><img  alt="Upgrade PostgreSQL image" src="PostgreSQL_upgrade.svg" height="30" />
 </td><td>Upgrade Database: I drew [the Galaxy logo](https://usegalaxy.org/static/images/galaxyIcon_noText.png) over the PostgreSQL logo [https://commons.wikimedia.org/wiki/File:Postgresql_elephant.svg](https://commons.wikimedia.org/wiki/File:Postgresql_elephant.svg)
 </td></tr>
-<tr><td><img  alt="GNU Bash logo" src="bash-64x64.svg" height="30" />
-</td><td>Bash logo: [https://github.com/odb/official-bash-logo/tree/master/assets/Logos/Icons/SVG](https://github.com/odb/official-bash-logo/tree/master/assets/Logos/Icons/SVG)
-</td></tr>
 </table>
 &nbsp;<!-- &nbsp; needed to force table to render in Remark -->
 
@@ -743,6 +790,9 @@ sudo loginctl enable-linger $(whoami)
 
 ### Image Credits Continued
 <table>
+<tr><td><img  alt="GNU Bash logo" src="bash-64x64.svg" height="30" />
+</td><td>Bash logo: [https://github.com/odb/official-bash-logo/tree/master/assets/Logos/Icons/SVG](https://github.com/odb/official-bash-logo/tree/master/assets/Logos/Icons/SVG)
+</td></tr>
 <tr><td><img  alt="Conda-reminscent logo" src="Ouroboros-simple.svg" height="30" />
 </td><td>Hoop snake: [https://en.wikipedia.org/wiki/File:Ouroboros-simple.svg](https://en.wikipedia.org/wiki/File:Ouroboros-simple.svg)
 </td></tr>
@@ -753,6 +803,12 @@ sudo loginctl enable-linger $(whoami)
 </td><td>[https://commons.wikimedia.org/wiki/File:NoAnchor.svg](https://commons.wikimedia.org/wiki/File:NoAnchor.svg),<br />
 a mix of [https://svgsilh.com/image/156169.html](https://svgsilh.com/image/156169.html) and<br />
 and [https://commons.wikimedia.org/wiki/File:Anchor.svg](https://commons.wikimedia.org/wiki/File:Anchor.svg)
+</td></tr>
+<tr><td><img alt="Dataset image" src="tardis_cartoon/dataset-148595.svg" height="40" />
+</td><td>Dataset: [https://pixabay.com/images/id-148595](https://pixabay.com/vectors/calculation-binary-computer-data-148595/)
+</td></tr>
+<tr><td><img alt="Ceph logo" src="tardis_cartoon/Ceph_logo.png" height="18" />
+</td><td>Ceph logo: [https://en.wikipedia.org/wiki/File:Ceph_logo.png](https://en.wikipedia.org/wiki/File:Ceph_logo.png)
 </td></tr>
 &nbsp;<!-- &nbsp; needed to force table to render in Remark -->
 
