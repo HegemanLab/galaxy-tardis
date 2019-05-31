@@ -227,7 +227,7 @@ fi
 
 SUCCESS=YES
 if [ "$RESTORE_DATASETS" != "false" ]; then
-  ($TARDIS restore_files && echo dataset-file restoration succeeded) || SUCCESS=NO
+  ($TARDIS restore_datasets && echo dataset-file restoration succeeded) || SUCCESS=NO
   if [ "$SUCCESS" == "NO" ]; then
     echo Dataset-file restoration failed or skipped
     exit 1

@@ -26,7 +26,7 @@ Usage:
   tardis backup                - Back up PostgreSQL database and galaxy-central/config.
   tardis transmit              - Transmit datasets and backup to Amazon-S3-compatible storage.
   tardis cron [hour24UTC]      - Run backup and transmit daily at hour24 UTC.
-  tardis restore_files         - Retrieve datasets from S3 (not desirable when using object store).
+  tardis restore_datasets      - Retrieve datasets from S3 (not desirable when using object store).
   tardis retrieve_config       - Retrieve database and config backup (but not datasets) from S3.
   tardis apply_config [date]   - Restore config from backup, whether from S3 or "tardis backup".
   tardis seed_database [date]  - Replace PostgreSQL database with copy from backup.
@@ -65,8 +65,8 @@ Required environment Variables (set using the "-e" option of the "docker run")
 Required bind-mounts:
   "'${EXPORT_DIR}'"       - required by all but "bash" and "help"
   "/var/run/docker.sock"  - required by "seed_database", "backup"
-  "/opt/s3/dest.s3cfg"    - required by "transmit", "retrieve_config", and "restore_files"
-  "/opt/s3/dest.config"   - required by "transmit", "retrieve_config", and "restore_files"
+  "/opt/s3/dest.s3cfg"    - required by "transmit", "retrieve_config", and "restore_datasets"
+  "/opt/s3/dest.config"   - required by "transmit", "retrieve_config", and "restore_datasets"
   '
 }
 if [ $# -lt 1 ]; then
@@ -197,7 +197,7 @@ case "$subcommand" in
     rmcvs
     exit 0
     ;;
-  restore_files)
+  restore_datasets)
     reqmnt /opt/s3/dest.config /opt/s3/dest.s3cfg ${EXPORT_DIR}
     echo ---
     echo `date -I'seconds'` Restore files starting
