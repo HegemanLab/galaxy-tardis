@@ -341,7 +341,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#/zpdrone/drone/home/art/src/galaxy-tardis-poster/folder-151584-153008-mix.svg#</dia:string>
+        <dia:string>#/zpdrone/drone/home/art/src/galaxy-tardis-poster/dataset-148595-153008-mix.svg#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Image" version="0" id="O10">
@@ -765,7 +765,7 @@
         <dia:point val="24.2329,46.1395"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="24.0974,38.9403;37.4338,46.275"/>
+        <dia:rectangle val="24.0974,38.9404;37.4338,46.275"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="24.2329,46.1395"/>
@@ -885,7 +885,7 @@
         <dia:point val="40.9039,34.7492"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="32.714,22.3286;41.0423,34.8877"/>
+        <dia:rectangle val="32.7141,22.3286;41.0424,34.8877"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="40.9039,34.7492"/>
@@ -1641,7 +1641,7 @@
         <dia:point val="19.3491,50.0458"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="19.3491,48.7489;26.8085,50.4447"/>
+        <dia:rectangle val="19.3491,48.7883;26.7691,50.3658"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">

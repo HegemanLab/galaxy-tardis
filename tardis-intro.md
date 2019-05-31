@@ -771,8 +771,8 @@ sudo loginctl enable-linger $(whoami)
 <tr><td><img  alt="Recall from Trash image" src="undelete-146276.svg" height="30" />
 </td><td>Recall from Trash: [https://pixabay.com/images/id-146276](https://pixabay.com/vectors/undelete-undo-bin-trash-garbage-146276/)
 </td></tr>
-<tr><td><img  alt="Apply Datasets image" src="folder-151584-153008-mix.svg" height="30" />
-</td><td>Apply Datasets: A mix of [https://pixabay.com/images/id-153008/](https://pixabay.com/vectors/backup-undo-reload-arrow-circle-153008/) and [https://pixabay.com/images/id-151584](https://pixabay.com/vectors/folder-directory-explorer-dossier-151584/)
+<tr><td><img  alt="Apply Datasets image" src="dataset-148595-153008-mix.svg" height="30" />
+</td><td>Apply Datasets: A mix of [https://pixabay.com/images/id-148595/](https://pixabay.com/vectors/calculation-binary-computer-data-148595/) and [https://pixabay.com/images/id-151584](https://pixabay.com/vectors/folder-directory-explorer-dossier-151584/)
 </td></tr>
 <tr><td><img  alt="Apply Config image" src="gears-467261-153008-mix.svg" height="30" />
 </td><td>Apply Config: A mix of [https://pixabay.com/images/id-153008/](https://pixabay.com/vectors/backup-undo-reload-arrow-circle-153008/) and [https://pixabay.com/images/id-467261](https://pixabay.com/vectors/gears-options-settings-silhouette-467261/)
