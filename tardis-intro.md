@@ -81,7 +81,6 @@ TARDIS simplifies:
 - restoring the Galaxy instance
     - from the latest backup
     - from the most recent backup before a specifed date (i.e., time-travel)
-        - Not implemented: Time-travel between backups (or to the future)
 
 TARDIS assumes:
 - that Galaxy is running
@@ -246,7 +245,7 @@ Usage:
   tardis backup                - Back up PostgreSQL database and galaxy-central/config.
   tardis transmit              - Transmit datasets and backup to Amazon-S3-compatible storage.
   tardis cron [hour24UTC]      - Run backup and transmit daily at hour24 UTC.
-  tardis restore_files         - Retrieve datasets from S3 (not desirable when using object store).
+  tardis restore_datasets      - Retrieve datasets from S3 (not desirable when using object store).
   tardis retrieve_config       - Retrieve database and config backup (but not datasets) from S3.
   tardis apply_config [date]   - Restore config from backup, whether from S3 or "tardis backup".
   tardis seed_database [date]  - Replace PostgreSQL database with copy from backup.
@@ -350,9 +349,9 @@ The `cron` command:
   - `/opt/s3/dest.config`
 
 ---
-name: tardis-command---restore_files--
+name: tardis-command---restore_datasets--
 
-### TARDIS Command: `restore_files` &nbsp;&nbsp;&nbsp; <img  alt="Apply Datasets image" src="dataset-148595-153008-mix.svg" height="60" />
+### TARDIS Command: `restore_datasets` &nbsp;&nbsp;&nbsp; <img  alt="Apply Datasets image" src="dataset-148595-153008-mix.svg" height="60" />
 
 - Retrieves datasets from the S3 dataset bucket.
 - Required Docker bind-mounts (defined by `tardis_envar.sh`):
@@ -369,7 +368,7 @@ name: tardis-command---retrieve_config--
     - the configuration data originally gathered by the `backup` command.
         - the tools installed from the toolshed(s)
             - the definitions of the conda environments needed to support the tools
-- Does *not* retrieve datasets from the other S3 bucket (the `restore_files` command does that).
+- Does *not* retrieve datasets from the other S3 bucket (the `restore_datasets` command does that).
 - Required Docker bind-mounts (defined by `tardis_envar.sh`):
   - `/export`
   - `/opt/s3/dest.s3cfg`
