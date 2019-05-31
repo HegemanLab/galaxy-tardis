@@ -752,6 +752,7 @@ sudo loginctl enable-linger $(whoami)
 (Thanks to Brendan Long for pointing this out on [https://www.brendanlong.com/systemd-user-services-are-amazing.html](https://www.brendanlong.com/systemd-user-services-are-amazing.html))
 
 ---
+name: image-credits
 
 ### Image Credits
 <table>
@@ -786,8 +787,10 @@ sudo loginctl enable-linger $(whoami)
 &nbsp;<!-- &nbsp; needed to force table to render in Remark -->
 
 ---
+name: image-credits-continued
 
 ### Image Credits Continued
+
 <table>
 <tr><td><img  alt="GNU Bash logo" src="bash-64x64.svg" height="30" />
 </td><td>Bash logo: [https://github.com/odb/official-bash-logo/tree/master/assets/Logos/Icons/SVG](https://github.com/odb/official-bash-logo/tree/master/assets/Logos/Icons/SVG)
@@ -812,6 +815,7 @@ and [https://commons.wikimedia.org/wiki/File:Anchor.svg](https://commons.wikimed
 &nbsp;<!-- &nbsp; needed to force table to render in Remark -->
 
 ---
+name: thank-you
 
 ## Thank you!
 
