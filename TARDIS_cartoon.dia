@@ -2,10 +2,10 @@
 <dia:diagram xmlns:dia="http://www.lysator.liu.se/~alla/dia/">
   <dia:diagramdata>
     <dia:attribute name="background">
-      <dia:color val="#ffffffff"/>
+      <dia:color val="#ffffff"/>
     </dia:attribute>
     <dia:attribute name="pagebreak">
-      <dia:color val="#000099ff"/>
+      <dia:color val="#000099"/>
     </dia:attribute>
     <dia:attribute name="paper">
       <dia:composite type="paper">
@@ -37,9 +37,6 @@
     </dia:attribute>
     <dia:attribute name="grid">
       <dia:composite type="grid">
-        <dia:attribute name="dynamic">
-          <dia:boolean val="true"/>
-        </dia:attribute>
         <dia:attribute name="width_x">
           <dia:real val="1"/>
         </dia:attribute>
@@ -56,7 +53,7 @@
       </dia:composite>
     </dia:attribute>
     <dia:attribute name="color">
-      <dia:color val="#d8e5e5ff"/>
+      <dia:color val="#d8e5e5"/>
     </dia:attribute>
     <dia:attribute name="guides">
       <dia:composite type="guides">
@@ -64,27 +61,8 @@
         <dia:attribute name="vguides"/>
       </dia:composite>
     </dia:attribute>
-    <dia:attribute name="display">
-      <dia:composite type="display">
-        <dia:attribute name="antialiased">
-          <dia:boolean val="false"/>
-        </dia:attribute>
-        <dia:attribute name="snap-to-grid">
-          <dia:boolean val="false"/>
-        </dia:attribute>
-        <dia:attribute name="snap-to-object">
-          <dia:boolean val="true"/>
-        </dia:attribute>
-        <dia:attribute name="show-grid">
-          <dia:boolean val="true"/>
-        </dia:attribute>
-        <dia:attribute name="show-connection-points">
-          <dia:boolean val="true"/>
-        </dia:attribute>
-      </dia:composite>
-    </dia:attribute>
   </dia:diagramdata>
-  <dia:layer name="Background" visible="true" connectable="true">
+  <dia:layer name="Background" visible="true">
     <dia:object type="Standard - Box" version="0" id="O0">
       <dia:attribute name="obj_pos">
         <dia:point val="7.05,-8.15339"/>
@@ -102,20 +80,20 @@
         <dia:real val="59.400000000000006"/>
       </dia:attribute>
       <dia:attribute name="border_color">
-        <dia:color val="#ffffffff"/>
+        <dia:color val="#ffffff"/>
       </dia:attribute>
       <dia:attribute name="show_background">
         <dia:boolean val="true"/>
       </dia:attribute>
     </dia:object>
   </dia:layer>
-  <dia:layer name="foreground" visible="true" connectable="true" active="true">
+  <dia:layer name="foreground" visible="true" active="true">
     <dia:object type="Standard - Image" version="0" id="O1">
       <dia:attribute name="obj_pos">
         <dia:point val="32.6444,-4.39444"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="32.6444,-4.39444;40.8242,2.7828"/>
+        <dia:rectangle val="32.5944,-4.44444;40.8742,2.8328"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="32.6444,-4.39444"/>
@@ -124,7 +102,7 @@
         <dia:real val="8.1798238754272461"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="7.1772370338439941"/>
+        <dia:real val="7.1772384587892759"/>
       </dia:attribute>
       <dia:attribute name="draw_border">
         <dia:boolean val="false"/>
@@ -133,24 +111,24 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#/zpdrone/drone/home/art/src/galaxy-tardis-poster/tardis_cartoon/GalaxyInstance.svg#</dia:string>
+        <dia:string>#tardis_cartoon/GalaxyInstance.svg#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Image" version="0" id="O2">
       <dia:attribute name="obj_pos">
-        <dia:point val="9.16538,4.7072"/>
+        <dia:point val="10.352,6.15026"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="9.16538,4.7072;16.3654,11.9072"/>
+        <dia:rectangle val="10.302,6.10026;16.2869,11.9572"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="9.16538,4.7072"/>
+        <dia:point val="10.352,6.15026"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="7.1999998092651367"/>
+        <dia:real val="5.8848772048950195"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="7.1999998092651367"/>
+        <dia:real val="5.7569451332092285"/>
       </dia:attribute>
       <dia:attribute name="draw_border">
         <dia:boolean val="false"/>
@@ -159,7 +137,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#/zpdrone/drone/home/art/src/galaxy-tardis-poster/tardis_cartoon/dataset-148595.svg#</dia:string>
+        <dia:string>#tardis_cartoon/dataset-312111.svg#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Image" version="0" id="O3">
@@ -167,7 +145,7 @@
         <dia:point val="26.0953,5.46769"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="26.0953,5.46769;32.5453,11.9072"/>
+        <dia:rectangle val="26.0453,5.41769;32.5953,11.9572"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="26.0953,5.46769"/>
@@ -185,7 +163,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#/zpdrone/drone/home/art/src/galaxy-tardis-poster/Ouroboros-simple.svg#</dia:string>
+        <dia:string>#Ouroboros-simple.svg#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Image" version="0" id="O4">
@@ -193,7 +171,7 @@
         <dia:point val="44.4965,28.4507"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="44.4965,28.4507;48.5529,32.3396"/>
+        <dia:rectangle val="44.4465,28.4007;48.6029,32.3896"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="44.4965,28.4507"/>
@@ -211,7 +189,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#/zpdrone/drone/home/art/src/galaxy-tardis-poster/gears-467261-153008-mix.svg#</dia:string>
+        <dia:string>#gears-467261-153008-mix.svg#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Image" version="0" id="O5">
@@ -219,7 +197,7 @@
         <dia:point val="59.2488,6.01706"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="59.2488,6.01706;64.9592,11.9072"/>
+        <dia:rectangle val="59.1988,5.96706;65.0092,11.9572"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="59.2488,6.01706"/>
@@ -228,7 +206,7 @@
         <dia:real val="5.7103734016418457"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="5.8901429176330566"/>
+        <dia:real val="5.8901444161379777"/>
       </dia:attribute>
       <dia:attribute name="draw_border">
         <dia:boolean val="false"/>
@@ -237,7 +215,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#/zpdrone/drone/home/art/src/galaxy-tardis-poster/tardis_cartoon/Postgresql_elephant.svg#</dia:string>
+        <dia:string>#tardis_cartoon/Postgresql_elephant.svg#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Image" version="0" id="O6">
@@ -245,7 +223,7 @@
         <dia:point val="23.8629,14.3356"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="23.8629,14.3356;33.0129,22.4689"/>
+        <dia:rectangle val="23.8129,14.2856;33.0629,22.5189"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="23.8629,14.3356"/>
@@ -263,7 +241,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#/zpdrone/drone/home/art/src/galaxy-tardis-poster/tardis_cartoon/folder-151584.svg#</dia:string>
+        <dia:string>#tardis_cartoon/folder-151584.svg#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Image" version="0" id="O7">
@@ -271,7 +249,7 @@
         <dia:point val="11.35,35.6072"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="11.35,35.6072;14.4889,39.5889"/>
+        <dia:rectangle val="11.3,35.5572;14.5389,39.6389"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="11.35,35.6072"/>
@@ -289,7 +267,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#/zpdrone/drone/home/art/src/galaxy-tardis-poster/transmitter-312354.svg#</dia:string>
+        <dia:string>#transmitter-312354.svg#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Image" version="0" id="O8">
@@ -297,7 +275,7 @@
         <dia:point val="17.5278,46.1079"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.5278,46.1079;26.5233,48.5579"/>
+        <dia:rectangle val="17.4778,46.0579;26.5733,48.6079"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="17.5278,46.1079"/>
@@ -306,7 +284,7 @@
         <dia:real val="8.9955224990844762"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="2.4500000476837158"/>
+        <dia:real val="2.450000030238455"/>
       </dia:attribute>
       <dia:attribute name="draw_border">
         <dia:boolean val="false"/>
@@ -315,7 +293,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#/zpdrone/drone/home/art/src/galaxy-tardis-poster/tardis_cartoon/Ceph_logo.png#</dia:string>
+        <dia:string>#tardis_cartoon/Ceph_logo.png#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Image" version="0" id="O9">
@@ -323,7 +301,7 @@
         <dia:point val="30.2192,31.7897"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="30.2192,31.7897;35.2692,36.1353"/>
+        <dia:rectangle val="30.1692,31.7397;35.3192,36.1853"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="30.2192,31.7897"/>
@@ -341,7 +319,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#/zpdrone/drone/home/art/src/galaxy-tardis-poster/dataset-148595-153008-mix.svg#</dia:string>
+        <dia:string>#dataset-312111-153008-mix.svg#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Image" version="0" id="O10">
@@ -349,7 +327,7 @@
         <dia:point val="38.3483,35.8492"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="38.3483,35.8492;44.5812,39.5889"/>
+        <dia:rectangle val="38.2983,35.7992;44.6312,39.6389"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="38.3483,35.8492"/>
@@ -367,7 +345,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#/zpdrone/drone/home/art/src/galaxy-tardis-poster/undelete-146276.svg#</dia:string>
+        <dia:string>#undelete-146276.svg#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Image" version="0" id="O11">
@@ -375,7 +353,7 @@
         <dia:point val="52.0134,28.441"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="52.0134,28.441;55.7963,32.3493"/>
+        <dia:rectangle val="51.9634,28.391;55.8463,32.3993"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="52.0134,28.441"/>
@@ -393,7 +371,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#/zpdrone/drone/home/art/src/galaxy-tardis-poster/PostgreSQL-153008-mix.svg#</dia:string>
+        <dia:string>#PostgreSQL-153008-mix.svg#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Image" version="0" id="O12">
@@ -401,7 +379,7 @@
         <dia:point val="59.2232,28.4882"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="59.2232,28.4882;62.9207,32.3021"/>
+        <dia:rectangle val="59.1732,28.4382;62.9707,32.3521"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="59.2232,28.4882"/>
@@ -419,7 +397,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#/zpdrone/drone/home/art/src/galaxy-tardis-poster/PostgreSQL_upgrade.svg#</dia:string>
+        <dia:string>#PostgreSQL_upgrade.svg#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Image" version="0" id="O13">
@@ -427,7 +405,7 @@
         <dia:point val="22.7741,31.9625"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="22.7741,31.9625;26.7741,35.9625"/>
+        <dia:rectangle val="22.7241,31.9125;26.8241,36.0125"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="22.7741,31.9625"/>
@@ -445,7 +423,7 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#/zpdrone/drone/home/art/src/galaxy-tardis-poster/backup-153008.svg#</dia:string>
+        <dia:string>#backup-153008.svg#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Image" version="0" id="O14">
@@ -453,7 +431,7 @@
         <dia:point val="17.4711,31.9903"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.4711,31.9903;21.5822,36.1014"/>
+        <dia:rectangle val="17.4211,31.9403;21.6322,36.1514"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="17.4711,31.9903"/>
@@ -471,25 +449,25 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#/zpdrone/drone/home/art/src/galaxy-tardis-poster/clock-308937.svg#</dia:string>
+        <dia:string>#clock-308937.svg#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Line" version="0" id="O15">
       <dia:attribute name="obj_pos">
-        <dia:point val="16.365,6.93863"/>
+        <dia:point val="16.3367,7.75229"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="16.1069,0.490222;32.9049,7.19665"/>
+        <dia:rectangle val="16.0749,0.690218;32.8064,8.0141"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
-        <dia:point val="16.365,6.93863"/>
-        <dia:point val="32.6468,0.748242"/>
+        <dia:point val="16.3367,7.75229"/>
+        <dia:point val="32.5446,0.952021"/>
       </dia:attribute>
       <dia:attribute name="numcp">
         <dia:int val="1"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#646464ff"/>
+        <dia:color val="#646464"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.40000000596046448"/>
@@ -501,20 +479,20 @@
     </dia:object>
     <dia:object type="Standard - Line" version="0" id="O16">
       <dia:attribute name="obj_pos">
-        <dia:point val="31.8349,5.46759"/>
+        <dia:point val="31.9128,5.36793"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="31.5542,2.50182;34.2126,5.74832"/>
+        <dia:rectangle val="31.632,2.60235;34.1341,5.64866"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
-        <dia:point val="31.8349,5.46759"/>
-        <dia:point val="33.9319,2.78255"/>
+        <dia:point val="31.9128,5.36793"/>
+        <dia:point val="33.8534,2.88308"/>
       </dia:attribute>
       <dia:attribute name="numcp">
         <dia:int val="1"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#646464ff"/>
+        <dia:color val="#646464"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.40000000596046448"/>
@@ -529,17 +507,17 @@
         <dia:point val="37.3692,8.88713"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="36.7567,2.56965;37.5818,9.09978"/>
+        <dia:rectangle val="36.7632,2.66964;37.5818,9.09978"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="37.3692,8.88713"/>
-        <dia:point val="36.9693,2.7823"/>
+        <dia:point val="36.9759,2.88228"/>
       </dia:attribute>
       <dia:attribute name="numcp">
         <dia:int val="1"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#646464ff"/>
+        <dia:color val="#646464"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.40000000596046448"/>
@@ -564,7 +542,7 @@
         <dia:int val="1"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#646464ff"/>
+        <dia:color val="#646464"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.40000000596046448"/>
@@ -579,17 +557,17 @@
         <dia:point val="40.8242,-0.805821"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="40.6167,-1.0133;60.0421,28.6959"/>
+        <dia:rectangle val="40.6167,-1.0133;59.9781,28.6712"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="40.8242,-0.805821"/>
-        <dia:point val="59.8346,28.4884"/>
+        <dia:point val="59.7706,28.3899"/>
       </dia:attribute>
       <dia:attribute name="numcp">
         <dia:int val="1"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#ff0000ff"/>
+        <dia:color val="#ff0000"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.30000001192092896"/>
@@ -616,20 +594,20 @@
     </dia:object>
     <dia:object type="Standard - Line" version="0" id="O20">
       <dia:attribute name="obj_pos">
-        <dia:point val="61.1783,28.4893"/>
+        <dia:point val="61.184,28.3883"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="61.0202,11.7491;62.6232,28.6474"/>
+        <dia:rectangle val="61.0258,11.5723;62.6419,28.5464"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
-        <dia:point val="61.1783,28.4893"/>
+        <dia:point val="61.184,28.3883"/>
         <dia:point val="62.104,11.9072"/>
       </dia:attribute>
       <dia:attribute name="numcp">
         <dia:int val="1"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#ff0000ff"/>
+        <dia:color val="#ff0000"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.30000001192092896"/>
@@ -659,7 +637,7 @@
         <dia:point val="33.0129,18.4023"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="32.8102,18.1996;52.2161,28.6437"/>
+        <dia:rectangle val="32.8102,18.1996;52.31,28.6503"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="33.0129,18.4023"/>
@@ -669,7 +647,7 @@
         <dia:int val="1"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#ff0000ff"/>
+        <dia:color val="#ff0000"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.30000001192092896"/>
@@ -696,20 +674,20 @@
     </dia:object>
     <dia:object type="Standard - Line" version="0" id="O22">
       <dia:attribute name="obj_pos">
-        <dia:point val="54.652,28.4421"/>
+        <dia:point val="54.6908,28.3407"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="54.4583,11.7118;61.1717,28.6358"/>
+        <dia:rectangle val="54.4971,11.689;61.2078,28.5344"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
-        <dia:point val="54.652,28.4421"/>
-        <dia:point val="60.978,11.9055"/>
+        <dia:point val="54.6908,28.3407"/>
+        <dia:point val="60.941,12.0023"/>
       </dia:attribute>
       <dia:attribute name="numcp">
         <dia:int val="1"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#ff0000ff"/>
+        <dia:color val="#ff0000"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.30000001192092896"/>
@@ -736,20 +714,20 @@
     </dia:object>
     <dia:object type="Standard - Line" version="0" id="O23">
       <dia:attribute name="obj_pos">
-        <dia:point val="24.5919,46.1153"/>
+        <dia:point val="24.8171,46.0085"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="24.4587,39.4557;38.4815,46.2486"/>
+        <dia:rectangle val="24.6839,39.437;38.5503,46.1417"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
-        <dia:point val="24.5919,46.1153"/>
+        <dia:point val="24.8171,46.0085"/>
         <dia:point val="38.3483,39.5889"/>
       </dia:attribute>
       <dia:attribute name="numcp">
         <dia:int val="1"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#ff0000ff"/>
+        <dia:color val="#ff0000"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.20000000298023224"/>
@@ -776,20 +754,20 @@
     </dia:object>
     <dia:object type="Standard - Line" version="0" id="O24">
       <dia:attribute name="obj_pos">
-        <dia:point val="22.922,46.1078"/>
+        <dia:point val="22.9948,46.0084"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="22.7822,35.9955;30.359,46.2476"/>
+        <dia:rectangle val="22.855,35.9548;30.359,46.1481"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
-        <dia:point val="22.922,46.1078"/>
+        <dia:point val="22.9948,46.0084"/>
         <dia:point val="30.2192,36.1353"/>
       </dia:attribute>
       <dia:attribute name="numcp">
         <dia:int val="1"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#ff0000ff"/>
+        <dia:color val="#ff0000"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.20000000298023224"/>
@@ -819,17 +797,17 @@
         <dia:point val="30.2192,31.7897"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="15.293,11.7562;30.3591,31.9296"/>
+        <dia:rectangle val="15.3528,11.8056;30.3591,31.9296"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="30.2192,31.7897"/>
-        <dia:point val="15.4329,11.8961"/>
+        <dia:point val="15.4927,11.985"/>
       </dia:attribute>
       <dia:attribute name="numcp">
         <dia:int val="1"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#ff0000ff"/>
+        <dia:color val="#ff0000"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.20000000298023224"/>
@@ -859,17 +837,17 @@
         <dia:point val="41.4648,35.8492"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="31.334,22.3285;41.6047,35.9892"/>
+        <dia:rectangle val="31.4088,22.3894;41.6048,35.9892"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
         <dia:point val="41.4648,35.8492"/>
-        <dia:point val="31.474,22.4685"/>
+        <dia:point val="31.5487,22.5686"/>
       </dia:attribute>
       <dia:attribute name="numcp">
         <dia:int val="1"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#ff0000ff"/>
+        <dia:color val="#ff0000"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.20000000298023224"/>
@@ -896,20 +874,20 @@
     </dia:object>
     <dia:object type="Standard - Line" version="0" id="O27">
       <dia:attribute name="obj_pos">
-        <dia:point val="45.9145,28.452"/>
+        <dia:point val="45.8833,28.3527"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="40.511,11.7192;46.1025,28.6401"/>
+        <dia:rectangle val="40.4105,11.5872;46.0713,28.5408"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
-        <dia:point val="45.9145,28.452"/>
+        <dia:point val="45.8833,28.3527"/>
         <dia:point val="40.7187,11.9072"/>
       </dia:attribute>
       <dia:attribute name="numcp">
         <dia:int val="1"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#ff0000ff"/>
+        <dia:color val="#ff0000"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.30000001192092896"/>
@@ -936,20 +914,20 @@
     </dia:object>
     <dia:object type="Standard - Line" version="0" id="O28">
       <dia:attribute name="obj_pos">
-        <dia:point val="45.2738,28.4528"/>
+        <dia:point val="45.2079,28.3504"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="32.338,8.48012;45.4812,28.6601"/>
+        <dia:rectangle val="32.338,8.40545;45.4153,28.5578"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
-        <dia:point val="45.2738,28.4528"/>
+        <dia:point val="45.2079,28.3504"/>
         <dia:point val="32.5453,8.68745"/>
       </dia:attribute>
       <dia:attribute name="numcp">
         <dia:int val="1"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#ff0000ff"/>
+        <dia:color val="#ff0000"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.30000001192092896"/>
@@ -976,20 +954,20 @@
     </dia:object>
     <dia:object type="Standard - Line" version="0" id="O29">
       <dia:attribute name="obj_pos">
-        <dia:point val="33.0131,21.436"/>
+        <dia:point val="33.1125,21.5019"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="32.8052,21.2281;44.7047,29.2584"/>
+        <dia:rectangle val="32.9046,21.294;44.6803,29.1947"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
-        <dia:point val="33.0131,21.436"/>
-        <dia:point val="44.4968,29.0505"/>
+        <dia:point val="33.1125,21.5019"/>
+        <dia:point val="44.4007,28.9868"/>
       </dia:attribute>
       <dia:attribute name="numcp">
         <dia:int val="1"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#ff0000ff"/>
+        <dia:color val="#ff0000"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.30000001192092896"/>
@@ -1036,7 +1014,7 @@
         <dia:enum val="0"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#0000ffff"/>
+        <dia:color val="#0000ff"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.30000001192092896"/>
@@ -1080,7 +1058,7 @@
         <dia:enum val="0"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#0000ffff"/>
+        <dia:color val="#0000ff"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.30000001192092896"/>
@@ -1124,7 +1102,7 @@
         <dia:enum val="0"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#0000ffff"/>
+        <dia:color val="#0000ff"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.30000001192092896"/>
@@ -1164,7 +1142,7 @@
         <dia:enum val="0"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#0000ffff"/>
+        <dia:color val="#0000ff"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.30000001192092896"/>
@@ -1191,7 +1169,7 @@
         <dia:point val="23.8629,18.4023"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="12.4285,18.2985;23.9667,35.6072"/>
+        <dia:rectangle val="12.4284,18.2985;23.9667,35.6072"/>
       </dia:attribute>
       <dia:attribute name="bez_points">
         <dia:point val="23.8629,18.4023"/>
@@ -1204,7 +1182,7 @@
         <dia:enum val="0"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#0000ffff"/>
+        <dia:color val="#0000ff"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.20000000298023224"/>
@@ -1231,14 +1209,14 @@
     </dia:object>
     <dia:object type="Standard - BezierLine" version="0" id="O35">
       <dia:attribute name="obj_pos">
-        <dia:point val="12.7654,11.9072"/>
+        <dia:point val="13.2944,11.9072"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="12.4404,11.8071;13.3876,35.6072"/>
+        <dia:rectangle val="12.4403,11.8071;13.3946,35.6072"/>
       </dia:attribute>
       <dia:attribute name="bez_points">
-        <dia:point val="12.7654,11.9072"/>
-        <dia:point val="12.7605,16.0584"/>
+        <dia:point val="13.2944,11.9072"/>
+        <dia:point val="13.2895,16.0584"/>
         <dia:point val="12.8538,24.2668"/>
         <dia:point val="12.9194,35.6072"/>
       </dia:attribute>
@@ -1247,7 +1225,7 @@
         <dia:enum val="0"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#0000ffff"/>
+        <dia:color val="#0000ff"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.20000000298023224"/>
@@ -1277,7 +1255,7 @@
         <dia:point val="12.9194,39.5889"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="12.8183,39.4878;22.5026,46.1079"/>
+        <dia:rectangle val="12.8182,39.4877;22.5026,46.1079"/>
       </dia:attribute>
       <dia:attribute name="bez_points">
         <dia:point val="12.9194,39.5889"/>
@@ -1290,7 +1268,7 @@
         <dia:enum val="0"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#0000ffff"/>
+        <dia:color val="#0000ff"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.20000000298023224"/>
@@ -1320,7 +1298,7 @@
         <dia:point val="12.9194,37.5981"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="14.3862,29.2583;19.6297,37.7272"/>
+        <dia:rectangle val="14.4857,29.2583;19.6297,37.7289"/>
       </dia:attribute>
       <dia:attribute name="bez_points">
         <dia:point val="12.9194,37.5981"/>
@@ -1337,7 +1315,7 @@
         <dia:enum val="0"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#0000ffff"/>
+        <dia:color val="#0000ff"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.20000000298023224"/>
@@ -1371,7 +1349,7 @@
         <dia:enum val="0"/>
       </dia:attribute>
       <dia:attribute name="line_color">
-        <dia:color val="#0000ffff"/>
+        <dia:color val="#0000ff"/>
       </dia:attribute>
       <dia:attribute name="line_width">
         <dia:real val="0.30000001192092896"/>
@@ -1389,7 +1367,7 @@
         <dia:point val="37.3692,5.86706"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="37.3692,5.86706;44.0683,11.9072"/>
+        <dia:rectangle val="37.3192,5.81706;44.1183,11.9572"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="37.3692,5.86706"/>
@@ -1398,7 +1376,7 @@
         <dia:real val="6.699068546295166"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="6.0401430130004883"/>
+        <dia:real val="6.0401437712497401"/>
       </dia:attribute>
       <dia:attribute name="draw_border">
         <dia:boolean val="false"/>
@@ -1407,15 +1385,15 @@
         <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="file">
-        <dia:string>#/zpdrone/drone/home/art/src/galaxy-tardis-poster/tardis_cartoon/gears-467261.svg#</dia:string>
+        <dia:string>#tardis_cartoon/gears-467261.svg#</dia:string>
       </dia:attribute>
     </dia:object>
     <dia:object type="Standard - Text" version="1" id="O40">
       <dia:attribute name="obj_pos">
-        <dia:point val="10.0691,11.2296"/>
+        <dia:point val="9.91445,5.10327"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="10.0691,9.9721;15.8916,11.5496"/>
+        <dia:rectangle val="9.91445,3.74077;15.6769,5.38827"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1429,10 +1407,10 @@
             <dia:real val="1.6933332681655884"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="10.0691,11.2296"/>
+            <dia:point val="9.91445,5.10327"/>
           </dia:attribute>
           <dia:attribute name="color">
-            <dia:color val="#000000ff"/>
+            <dia:color val="#000000"/>
           </dia:attribute>
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
@@ -1448,7 +1426,7 @@
         <dia:point val="27.3591,9.13206"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="27.3591,7.87456;31.4816,9.45206"/>
+        <dia:rectangle val="27.3591,7.76956;31.4041,9.41706"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1465,7 +1443,7 @@
             <dia:point val="27.3591,9.13206"/>
           </dia:attribute>
           <dia:attribute name="color">
-            <dia:color val="#000000ff"/>
+            <dia:color val="#000000"/>
           </dia:attribute>
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
@@ -1481,7 +1459,7 @@
         <dia:point val="41.0591,11.4821"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="41.0591,10.2246;45.2041,13.4954"/>
+        <dia:rectangle val="41.0591,10.1196;45.1366,13.4604"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1499,7 +1477,7 @@
             <dia:point val="41.0591,11.4821"/>
           </dia:attribute>
           <dia:attribute name="color">
-            <dia:color val="#000000ff"/>
+            <dia:color val="#000000"/>
           </dia:attribute>
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
@@ -1512,10 +1490,10 @@
     </dia:object>
     <dia:object type="Standard - Text" version="1" id="O43">
       <dia:attribute name="obj_pos">
-        <dia:point val="57.6591,5.10806"/>
+        <dia:point val="57.6591,5.10327"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="57.6591,3.85056;65.3966,5.42806"/>
+        <dia:rectangle val="57.6591,3.74077;65.4866,5.38827"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1529,10 +1507,10 @@
             <dia:real val="1.6933332681655884"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="57.6591,5.10806"/>
+            <dia:point val="57.6591,5.10327"/>
           </dia:attribute>
           <dia:attribute name="color">
-            <dia:color val="#000000ff"/>
+            <dia:color val="#000000"/>
           </dia:attribute>
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
@@ -1548,7 +1526,7 @@
         <dia:point val="32.8947,-5.21316"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="32.8947,-6.47066;40.9522,-4.89316"/>
+        <dia:rectangle val="32.8947,-6.57566;40.9397,-4.92816"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1565,7 +1543,7 @@
             <dia:point val="32.8947,-5.21316"/>
           </dia:attribute>
           <dia:attribute name="color">
-            <dia:color val="#000000ff"/>
+            <dia:color val="#000000"/>
           </dia:attribute>
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
@@ -1581,7 +1559,7 @@
         <dia:point val="24.965,18.1314"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="24.965,16.8739;32.0375,20.1447"/>
+        <dia:rectangle val="24.965,16.7689;32.36,20.1097"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1599,7 +1577,7 @@
             <dia:point val="24.965,18.1314"/>
           </dia:attribute>
           <dia:attribute name="color">
-            <dia:color val="#000000ff"/>
+            <dia:color val="#000000"/>
           </dia:attribute>
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
@@ -1615,7 +1593,7 @@
         <dia:point val="19.3491,50.0458"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="19.3491,48.7883;26.7691,50.3658"/>
+        <dia:rectangle val="19.3491,48.6833;26.8616,50.3308"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1632,7 +1610,7 @@
             <dia:point val="19.3491,50.0458"/>
           </dia:attribute>
           <dia:attribute name="color">
-            <dia:color val="#000000ff"/>
+            <dia:color val="#000000"/>
           </dia:attribute>
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
@@ -1648,7 +1626,7 @@
         <dia:point val="51.8848,33.4838"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="51.8848,32.2263;58.1623,35.4971"/>
+        <dia:rectangle val="51.8848,32.1213;58.0673,35.4621"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1666,7 +1644,7 @@ database#</dia:string>
             <dia:point val="51.8848,33.4838"/>
           </dia:attribute>
           <dia:attribute name="color">
-            <dia:color val="#ff0000ff"/>
+            <dia:color val="#ff0000"/>
           </dia:attribute>
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
@@ -1682,7 +1660,7 @@ database#</dia:string>
         <dia:point val="58.9816,33.4838"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="58.9816,32.2263;65.3316,35.4971"/>
+        <dia:rectangle val="58.9816,32.1213;65.4116,35.4621"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1700,7 +1678,7 @@ database#</dia:string>
             <dia:point val="58.9816,33.4838"/>
           </dia:attribute>
           <dia:attribute name="color">
-            <dia:color val="#ff0000ff"/>
+            <dia:color val="#ff0000"/>
           </dia:attribute>
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
@@ -1716,7 +1694,7 @@ database#</dia:string>
         <dia:point val="44.6934,33.4838"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="44.6934,32.2263;49.1159,35.4971"/>
+        <dia:rectangle val="44.6934,32.1213;49.2334,35.4621"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1734,7 +1712,7 @@ config#</dia:string>
             <dia:point val="44.6934,33.4838"/>
           </dia:attribute>
           <dia:attribute name="color">
-            <dia:color val="#ff0000ff"/>
+            <dia:color val="#ff0000"/>
           </dia:attribute>
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
@@ -1750,7 +1728,7 @@ config#</dia:string>
         <dia:point val="30.6043,37.3114"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="30.6043,36.0145;36.4662,39.4036"/>
+        <dia:rectangle val="30.6043,35.9489;36.3668,39.2897"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1768,7 +1746,7 @@ datasets#</dia:string>
             <dia:point val="30.6043,37.3114"/>
           </dia:attribute>
           <dia:attribute name="color">
-            <dia:color val="#ff0000ff"/>
+            <dia:color val="#ff0000"/>
           </dia:attribute>
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
@@ -1784,7 +1762,7 @@ datasets#</dia:string>
         <dia:point val="17.9032,31.4076"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.9032,30.1501;20.8632,31.7276"/>
+        <dia:rectangle val="17.9032,30.0451;20.8657,31.6926"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1801,7 +1779,7 @@ datasets#</dia:string>
             <dia:point val="17.9032,31.4076"/>
           </dia:attribute>
           <dia:attribute name="color">
-            <dia:color val="#0000ffff"/>
+            <dia:color val="#0000ff"/>
           </dia:attribute>
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
@@ -1812,7 +1790,7 @@ datasets#</dia:string>
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="fill_color">
-        <dia:color val="#ffffffff"/>
+        <dia:color val="#ffffff"/>
       </dia:attribute>
       <dia:attribute name="show_background">
         <dia:boolean val="true"/>
@@ -1823,7 +1801,7 @@ datasets#</dia:string>
         <dia:point val="10.4769,40.6526"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="10.4769,39.3951;16.1844,40.9726"/>
+        <dia:rectangle val="10.4769,39.2901;16.1644,40.9376"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1840,7 +1818,7 @@ datasets#</dia:string>
             <dia:point val="10.4769,40.6526"/>
           </dia:attribute>
           <dia:attribute name="color">
-            <dia:color val="#0000ffff"/>
+            <dia:color val="#0000ff"/>
           </dia:attribute>
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
@@ -1851,7 +1829,7 @@ datasets#</dia:string>
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="fill_color">
-        <dia:color val="#ffffffff"/>
+        <dia:color val="#ffffff"/>
       </dia:attribute>
       <dia:attribute name="show_background">
         <dia:boolean val="true"/>
@@ -1862,7 +1840,7 @@ datasets#</dia:string>
         <dia:point val="23.3168,37.3114"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="23.3168,36.0539;28.2118,37.6314"/>
+        <dia:rectangle val="23.3168,35.9489;28.1868,37.5964"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1879,7 +1857,7 @@ datasets#</dia:string>
             <dia:point val="23.3168,37.3114"/>
           </dia:attribute>
           <dia:attribute name="color">
-            <dia:color val="#0000ffff"/>
+            <dia:color val="#0000ff"/>
           </dia:attribute>
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
@@ -1890,7 +1868,7 @@ datasets#</dia:string>
         <dia:enum val="3"/>
       </dia:attribute>
       <dia:attribute name="fill_color">
-        <dia:color val="#ffffffff"/>
+        <dia:color val="#ffffff"/>
       </dia:attribute>
       <dia:attribute name="show_background">
         <dia:boolean val="true"/>
@@ -1901,7 +1879,7 @@ datasets#</dia:string>
         <dia:point val="38.3343,40.6526"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="38.3343,39.3951;44.3193,42.6659"/>
+        <dia:rectangle val="38.3343,39.2901;44.4693,42.6309"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -1919,7 +1897,7 @@ config#</dia:string>
             <dia:point val="38.3343,40.6526"/>
           </dia:attribute>
           <dia:attribute name="color">
-            <dia:color val="#ff0000ff"/>
+            <dia:color val="#ff0000"/>
           </dia:attribute>
           <dia:attribute name="alignment">
             <dia:enum val="0"/>
