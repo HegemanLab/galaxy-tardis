@@ -270,28 +270,7 @@ name: visual-overview-of-tardis-operations
 
 ### Visual Overview of TARDIS Operations
 
-.tugleft-left[
 ![TARDIS cartoon](TARDIS_cartoon.svg)
-]
-.tugleft-right[
-Galaxy-state
-- Internal
-  - PostgreSQL
-  - datasets
-  - config XML
-  - conda environments
-- Local backup
-  - `/export/backup`
-- Remote backup
-  - S3 (Ceph, Swift, etc.)
-
-<p style="color:blue">
-TARDIS backup operations in blue
-</p>
-<p style="color:red">
-TARDIS restore operations in red
-</p>
-]
 
 ---
 name: tardis-command---backup--
@@ -351,7 +330,7 @@ The `cron` command:
 ---
 name: tardis-command---restore_datasets--
 
-### TARDIS Command: `restore_datasets` &nbsp;&nbsp;&nbsp; <img  alt="Apply Datasets image" src="dataset-148595-153008-mix.svg" height="60" />
+### TARDIS Command: `restore_datasets` &nbsp;&nbsp;&nbsp; <img  alt="Apply Datasets image" src="dataset-312111-153008-mix.svg" height="60" />
 
 - Retrieves datasets from the S3 dataset bucket.
 - Required Docker bind-mounts (defined by `tardis_envar.sh`):
@@ -771,8 +750,8 @@ name: image-credits
 <tr><td><img  alt="Recall from Trash image" src="undelete-146276.svg" height="30" />
 </td><td>Recall from Trash: [https://pixabay.com/images/id-146276](https://pixabay.com/vectors/undelete-undo-bin-trash-garbage-146276/)
 </td></tr>
-<tr><td><img  alt="Apply Datasets image" src="dataset-148595-153008-mix.svg" height="30" />
-</td><td>Apply Datasets: A mix of [https://pixabay.com/images/id-153008/](https://pixabay.com/vectors/backup-undo-reload-arrow-circle-153008/) and [https://pixabay.com/images/id-148595/](https://pixabay.com/vectors/calculation-binary-computer-data-148595/)
+<tr><td><img  alt="Apply Datasets image" src="dataset-312111-153008-mix.svg" height="30" />
+</td><td>Apply Datasets: A mix of [https://pixabay.com/images/id-153008/](https://pixabay.com/vectors/backup-undo-reload-arrow-circle-153008/) and [https://pixabay.com/images/id-312111/](https://pixabay.com/vectors/paper-pencil-writing-stationery-312111/)
 </td></tr>
 <tr><td><img  alt="Apply Config image" src="gears-467261-153008-mix.svg" height="30" />
 </td><td>Apply Config: A mix of [https://pixabay.com/images/id-153008/](https://pixabay.com/vectors/backup-undo-reload-arrow-circle-153008/) and [https://pixabay.com/images/id-467261](https://pixabay.com/vectors/gears-options-settings-silhouette-467261/)
@@ -806,8 +785,8 @@ name: image-credits-continued
 a mix of [https://svgsilh.com/image/156169.html](https://svgsilh.com/image/156169.html) and<br />
 and [https://commons.wikimedia.org/wiki/File:Anchor.svg](https://commons.wikimedia.org/wiki/File:Anchor.svg)
 </td></tr>
-<tr><td><img alt="Dataset image" src="tardis_cartoon/dataset-148595.svg" height="40" />
-</td><td>Dataset: [https://pixabay.com/images/id-148595](https://pixabay.com/vectors/calculation-binary-computer-data-148595/)
+<tr><td><img alt="Dataset image" src="tardis_cartoon/dataset-312111.svg" height="40" />
+</td><td>Dataset: [https://pixabay.com/images/id-312111](https://pixabay.com/vectors/paper-pencil-writing-stationery-312111/)
 </td></tr>
 <tr><td><img alt="Ceph logo" src="tardis_cartoon/Ceph_logo.png" height="18" />
 </td><td>Ceph logo: [https://en.wikipedia.org/wiki/File:Ceph_logo.png](https://en.wikipedia.org/wiki/File:Ceph_logo.png)
