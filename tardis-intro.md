@@ -67,7 +67,7 @@ The Galaxy ["Temporal Archive Remote Distribution and Installation System", http
 - Any resemblance of the Galaxy TARDIS to [the TARDIS from *Doctor Who*](https://en.wikipedia.org/wiki/TARDIS) is purely (albeit intentionally) coincidental.
 
 Notably, the intent is **not** to replace other automation systems (e.g., ansible):
-- Rather, it is focused on restoring an existing Galaxy instance to a known state.
+- Rather, it is focused on restoring a Galaxy instance to a previous state.
 - The TARDIS also facilitates migrating a Galaxy instance to another host.
 
 ---
@@ -95,90 +95,23 @@ name: tardis-and-usernetes
 
 ### TARDIS and Usernetes
 
-- Our motivation for using Usernetes to run Docker rootlessly, and our approach to setting up Usernetes, is discussed in [Appendix: Running Docker Rootlessly ](#appendix-running-docker-rootlessly) below.
-- The TARDIS evolved from scripts running against classic [`docker-galaxy-stable`](https://github.com/bgruening/docker-galaxy-stable)-based Galaxy installations.
+- Our motivation for using Usernetes to run Docker rootlessly and our approach to setting up Usernetes are discussed at length in <br />[Appendix: Running Docker Rootlessly ](#appendix-running-docker-rootlessly) below.
+- The TARDIS evolved from scripts running against classic<br /> [`docker-galaxy-stable`](https://github.com/bgruening/docker-galaxy-stable)-based Galaxy installations.
 - The TARDIS was developed and tested with "rootless Docker" running on [Usernetes](https://github.com/rootless-containers/usernetes) on Ubuntu 18.04 LTS.
     - It does not directly interact any differently with the Docker daemon than it would with a daemon running as root.
     - Thus, it should work without modification with other Docker-based Galaxies that are not running under Usernetes.
         - Future testing should prove this out.
-- The `restore_example` presented next:
-    - is dependent on Usernetes, but likely could be adapted to work with other Docker-based Galaxies that are not running under Usernetes.
-    - is intentionally very terse, for those who want to dive in right away.
-
-If you would like a full explanation of the TARDIS and `restore_example`, you can skip through the "TL;DR" to ["Prelude to the Overview of Using the TARDIS"](#prelude-to-the-overview-of-using-the-tardis)
-
----
-name: tldr--part-1-build-the-tardis
-
-### TL;DR--part 1: Build the TARDIS
-
-**This is for the impatient.**
-
-Patient readers may skip these three "TL;DR" sections to a more detailed explanation.
-
-- At present, the example is dependent on Usernetes for running Docker rootlessly.  So, install Usernetes, then start the Docker daemon in Usernetes; e.g., see [Setting Up Usernetes--Getting It](#setting-up-usernetes--getting-it) below.
-- Next, build the TARDIS:
-```bash
-git clone https://github.com/HegemanLab/galaxy-tardis.git
-cd galaxy-tardis
-docker build -t tardis .
-```
-
----
-name: tldr--part-2-composition-setup
-
-### TL;DR--part 2: Composition Setup
-
-- Continuing in the `galaxy-tardis` directory...
-```bash
-cp s3/dest.config.example s3/dest.config
-cp s3/dest.s3cfg.example s3/dest.s3cfg
-```
-- Next customize `dest.config` and `dest.s3cfg`, and then:
-```bash
-cd galaxy-tardis/restore_example
-ln -s dot_env_for_compose .env
-cp setup_env.example setup_env.my_instance
-```
-- Now customize `setup_env.my_instance`
-
----
-name: tldr--part-3-restore-or-run-galaxy
-
-### TL;DR--part 3: Restore or Run Galaxy
-
-*Run these commands from within* `restore_example/`
-
-To instantiate a fresh Galaxy:
-```bash
-bash -c "export TLDR_RUN_MODE=fresh;   bash setup_env.my_instance &amp;&amp; bash TLDR"
-```
-
-To instantiate restore a Galaxy from an S3-compatible bucket:
-```bash
-bash -c "export TLDR_RUN_MODE=restore; bash setup_env.my_instance &amp;&amp; bash TLDR"
-```
-
-To instantiate run the existing Galaxy:
-```bash
-bash -c "export TLDR_RUN_MODE=run;     bash setup_env.my_instance &amp;&amp; bash TLDR"
-```
-
-To schedule daily backups from a running Galaxy at 6 hours UTC:
-```bash
-./compose_cron_backup.sh 06
-```
 
 ---
 name: prelude-to-the-overview-of-using-the-tardis
 
 ### Prelude to the Overview of Using the TARDIS
 
-The next section provides an introduction to the details of how the TARDIS may be used directly.  However, you may not do this very much because the `restore_example` subdirectory includes some scripts that package and automate invocation of the TARDIS in the context of a general Docker-composition of Galaxy (adapted from those that we use to manage our Galaxy instances). The `restore_example/TLDR` script provides a working example which demonstrates this.
+The next section provides an introduction to the details of how the TARDIS may be used directly.  You likely will build scripts that invoke the commands rather than invoking the scripts directly when using the TARDIS.  
 
-For now, we will dive into the details of what the TARDIS does in response to each subcommand, but after that we will return to `TLDR` and the other scripts in the `restore_example` subdirectory.
+The `restore_example` subdirectory includes some scripts to demonstrate such packaging and automation of TARDIS commands in the context of a general Docker-composition of Galaxy (adapted from those that we use to manage our Galaxy instances). The `restore_example/TLDR` script dispatches these scripts in a sensible order.
 
-The TARDIS was built and tested to run on rootless Docker in Usernetes.  For an introduction to Usernetes, and a detailed description of the setup process, see [Appendix: Running Docker Rootlessly](#appendix-running-docker-rootlessly) below.  If you want to use rootless Docker, follow the instructions in the appendix before the next section (["Overview of Using the TARDIS"](#overview-of-using-the-tardis)).
+We will return to `TLDR` and the other scripts in the `restore_example` subdirectory, but for now, we will dive into the details of what the TARDIS does in response to each subcommand.
 
 ---
 name: overview-of-using-the-tardis
@@ -345,8 +278,8 @@ name: tardis-command---retrieve_config--
 
 - Retrieves from S3 configuration bucket
     - the configuration data originally gathered by the `backup` command.
-        - the tools installed from the toolshed(s)
-            - the definitions of the conda environments needed to support the tools
+    - the tools installed from the toolshed(s)
+    - the definitions of the conda environments needed to support the tools
 - Does *not* retrieve datasets from the other S3 bucket (the `restore_datasets` command does that).
 - Required Docker bind-mounts (defined by `tardis_envar.sh`):
   - `/export`
@@ -399,22 +332,21 @@ name: tardis-command---bash--
 
 - You can run a bash shell within the TARDIS.
   - You can pass arguments to bash as you would pass arguments to `docker run`
-  - For example, `docker run -ti --rm tardis bash -c "echo hello world"`
+  - For example, <br />`docker run -ti --rm tardis bash -c "echo hello world"`
 
 ---
 name: tardis-command---upgrade_conda-url_or_path-md5sum--
 
 ### TARDIS Command: `upgrade_conda` &nbsp;&nbsp;&nbsp; <img  alt="Conda-reminscent logo" src="Ouroboros-simple.svg" height="50" />
 
-- The `upgrade_conda {url_or_path} {md5sum}` command allows fresh replacement of the base conda environment with one of your own choosing.
-- To replace the conda base package:
-    - Choose an environment from [https://repo.continuum.io/miniconda/](https://repo.continuum.io/miniconda/)
-    - Supply the URL for the relase and md5hash when invoking `upgrade_conda`
-    - Alternatively, you can copy the release to `/export` and supply the full path in lieu of the URL
+- The `upgrade_conda {url_or_path} {md5sum}` command allows fresh replacement of the base conda environment with one you choose:
+    - Choose an environment from [https://repo.continuum.io/miniconda/](https://repo.continuum.io/miniconda/).
+    - Supply the URL for the relase and md5hash when invoking `upgrade_conda`.
+        - Alternatively, you can copy the release to `/export` and supply the full path in lieu of the URL.
 - It is best to run `upgrade_conda` when during a full restoration because:
     - `apply_config` installs each environment from a manifest rather than copying content from S3.
     - The internal structure of conda environments (e.g., paths) is somewhat dependent on the base environment.
-    - If upgrading Conda has broken your environments and you have backed up to S3, you can recreate the environments with:<br />
+    - If upgrading Conda has broken your environments **and you have backed up to S3**, you can recreate the environments with:<br />
       `rm -rf /export/tool_deps/_conda`<br />
       `$TARDIS retrieve_config && $TARDIS apply_config`
 
@@ -447,6 +379,7 @@ name: restore_example---an-example-of-a-galaxy-backed-up-by-s3
 - The scripts use configuration files produced by `setup_env.*` [as described below](#restore_example---configuration-settings).
 - These scripts were developed assuming access to Docker through [Usernetes](https://github.com/rootless-containers/usernetes).
     - [Setup of Usernetes](#setting-up-usernetes) is described below.
+    - It is likely that the `restore_example` could be adapted to work with other Docker-based Galaxies that are not running under Usernetes.
 
 ---
 name: restore_examplecompose_startsh---start-galaxy
