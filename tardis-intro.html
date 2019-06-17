@@ -439,7 +439,7 @@ This script wraps most of the TARDIS functions as invocation options:
   --datasets               Restore ALL dataset file (not necessary when using Galaxy object store)
   --retrieve_config        Retrieve config data
   --apply_config ['date']  Apply retrieved config data
-  --database ['date']      Restore PostgreSQL database (this makes database changes since last backup unavailable)
+  --database ['date']      Restore PostgreSQL database (lose database changes since specified backup)
      'date' can be used to specify the newest backup can be applied, i.e., exclude backups newer than the date
      'date' can be any format accepted by the Linxx 'date' program (https://linux.die.net/man/1/date),
          which may be relative (e.g., '3 days ago')
@@ -564,6 +564,13 @@ has already been initialized), then, when you `bash TLDR`:
 If you are very lucky, the rudimentary error checking for this
 case will warn you when you have not yet initialized Galaxy;
 don't rely on it. :)
+
+---
+name: appendix-configuring--s3cmd
+
+### Appendix: Configuring `s3cmd`
+
+TODO
 
 ---
 name: appendix-running-docker-rootlessly
@@ -744,7 +751,7 @@ and [https://commons.wikimedia.org/wiki/File:Anchor.svg](https://commons.wikimed
 <tr><td><img alt="Dalek" src="tardis_cartoon/dalek_by_the2ndd_d6hmoao.png" height="36" />
 </td><td>Dalek by The2ndD:<br />[https://www.deviantart.com/the2ndd/art/Dalek-392408448](https://www.deviantart.com/the2ndd/art/Dalek-392408448)
 </td></tr>
-<tr><td><img alt="Fresh impact crater" src="tardis_cartoon/Fresh_impact_crater_HiRise_2013.jpg" height="36" />
+<tr><td><img alt="Fresh impact crater" src="tardis_cartoon/Fresh_impact_crater_HiRise_2013.jpg" height="30" />
 </td><td>Fresh impact crater: [https://commons.wikimedia.org/wiki/File:Fresh_impact_crater_HiRise_2013.jpg](https://commons.wikimedia.org/wiki/File:Fresh_impact_crater_HiRise_2013.jpg)
 </td></tr>
 &nbsp;<!-- &nbsp; needed to force table to render in Remark -->
