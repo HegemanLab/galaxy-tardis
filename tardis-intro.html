@@ -108,6 +108,7 @@ TARDIS assumes:
   [S3-compatible](https://en.wikipedia.org/wiki/Amazon_S3#S3_API_and_competing_services)
   buckets
     - S3 support is modular; it should be possible to add modules for other storage back-ends.
+    - One bucket stores the Galaxy datasets; the other, the Galaxy configuration and database.
 
 ---
 name: tardis-and-usernetes
@@ -438,7 +439,7 @@ This script wraps most of the TARDIS functions as invocation options:
   --help                   Show this help text
   --datasets               Restore ALL dataset file (not necessary when using Galaxy object store)
   --retrieve_config        Retrieve config data
-  --apply_config ['date']  Apply retrieved config data
+  --apply_config ['date']  Apply retrieved config data as of specified date
   --database ['date']      Restore PostgreSQL database (lose database changes since specified backup)
      'date' can be used to specify the newest backup can be applied, i.e., exclude backups newer than the date
      'date' can be any format accepted by the Linxx 'date' program (https://linux.die.net/man/1/date),

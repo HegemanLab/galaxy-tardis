@@ -89,6 +89,7 @@ TARDIS assumes:
   [S3-compatible](https://en.wikipedia.org/wiki/Amazon_S3#S3_API_and_competing_services)
   buckets
     - S3 support is modular; it should be possible to add modules for other storage back-ends.
+    - One bucket stores the Galaxy datasets; the other, the Galaxy configuration and database.
 
 ---
 name: tardis-and-usernetes
