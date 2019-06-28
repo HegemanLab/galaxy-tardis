@@ -36,7 +36,14 @@ class: left, middle
 
 ### Table of Contents
 
-TODO Put here table of contents.
+- [Motivation: Administering a Local Galaxy with Minimal Stress](#motivation-administering-a-local-galaxy-with-minimal-stress)
+- [Overview of Using the TARDIS](#overview-of-using-the-tardis)
+- [Build and Fly the TARDIS](#build-and-fly-the-tardis)
+- [Visual Overview of TARDIS Operations](#visual-overview-of-tardis-operations)
+- [TARDIS Commands](#tardis-command---help)
+- [`restore_example`--Example of Galaxy backed up by S3](#restore_example---an-example-of-a-galaxy-backed-up-by-s3)
+- [Appendix: Configuring `s3cmd`](#appendix-configuring--s3cmd)
+- [Appendix: Running Docker Rootlessly](#appendix-running-docker-rootlessly)
 
 ---
 name: bodyLayout
@@ -76,32 +83,20 @@ name: dont-panic
 ### [Don't Panic](https://en.wikipedia.org/wiki/Phrases_from_The_Hitchhiker%27s_Guide_to_the_Galaxy#Don't_Panic)
 
 TARDIS simplifies:
-- backing up the state of a Galaxy instance
-- scheduling backups conveniently
-- restoring the Galaxy instance
+- backing up the state of a Galaxy instance that is based on [`docker-galaxy-stable`](https://github.com/bgruening/docker-galaxy-stable);
+- scheduling backups conveniently;
+- restoring the Galaxy instance:
     - from the latest backup
-    - from the most recent backup before a specifed date (i.e., time-travel)
+    - from the most recent backup before a specifed date (i.e., time-travel).
 
 TARDIS assumes:
 - that Galaxy is running
-  in [Docker](https://en.wikipedia.org/wiki/Docker_(software) (or [docker-compose](https://docs.docker.com/compose/overview/))
+  in [Docker](https://en.wikipedia.org/wiki/Docker_(software) (or [docker-compose](https://docs.docker.com/compose/overview/));
 - that the Galaxy is backed up to two
   [S3-compatible](https://en.wikipedia.org/wiki/Amazon_S3#S3_API_and_competing_services)
-  buckets
+  buckets.
     - S3 support is modular; it should be possible to add modules for other storage back-ends.
     - One bucket stores the Galaxy datasets; the other, the Galaxy configuration and database.
-
----
-name: tardis-and-usernetes
-
-### TARDIS and Usernetes
-
-- Our motivation for using Usernetes to run Docker rootlessly and our approach to setting up Usernetes are discussed at length in <br />[Appendix: Running Docker Rootlessly ](#appendix-running-docker-rootlessly) below.
-- The TARDIS evolved from scripts running against classic<br /> [`docker-galaxy-stable`](https://github.com/bgruening/docker-galaxy-stable)-based Galaxy installations.
-- The TARDIS was developed and tested with "rootless Docker" running on [Usernetes](https://github.com/rootless-containers/usernetes) on Ubuntu 18.04 LTS.
-    - It does not directly interact any differently with the Docker daemon than it would with a daemon running as root.
-    - Thus, it should work without modification with other Docker-based Galaxies that are not running under Usernetes.
-        - Future testing should prove this out.
 
 ---
 name: prelude-to-the-overview-of-using-the-tardis
@@ -119,7 +114,7 @@ name: overview-of-using-the-tardis
 
 ### Overview of Using the TARDIS
 
-- Clone the code from [https://github.com/HegemanLab/galaxy-tardis](https://github.com/HegemanLab/galaxy-tardis)
+- The repository is [https://github.com/HegemanLab/galaxy-tardis](https://github.com/HegemanLab/galaxy-tardis)
 - You need to build and run a Docker image for the TARDIS under Usernetes
     - Hopefully, it will soon be possible to pull the image from a repository.
 - The TARDIS uses two S3-compatible buckets for backup and restore:
@@ -166,6 +161,15 @@ bash build_notar.sh
 - By its definition, `$TARDIS` runs as a container named `tardis`, so only one instance can run at a time.
 
 ---
+name: visual-overview-of-tardis-operations
+
+### Visual Overview of TARDIS Operations
+
+![TARDIS cartoon](TARDIS_cartoon.svg)
+
+Each of the TARDIS operations is described with its command below.
+
+---
 name: tardis-command---help
 
 ### TARDIS Command: `help`
@@ -196,15 +200,6 @@ where:
                   copied the miniconda installer to your export directory)
   md5sum      - MD5 digest for url_or_path, e.g., from https://repo.continuum.io/miniconda/
 </pre>
-
-Each of the other TARDIS commands is described after a visual overview of these operations.
-
----
-name: visual-overview-of-tardis-operations
-
-### Visual Overview of TARDIS Operations
-
-![TARDIS cartoon](TARDIS_cartoon.svg)
 
 ---
 name: tardis-command---backup--
@@ -360,33 +355,41 @@ The [`restore_example` subdirectory of the GitHub repository](https://github.com
 - How to instantiate a Galaxy 19.01 instance on `docker-compose`.
 - How to run `cron` to back up the instance once per day to S3 buckets.
 - How to restore a Galaxy instance from S3 buckets (and `docker-compose`).
-- (For now, this example only runs on Usernetes.)
+- (For now, this example only runs on [Usernetes](https://github.com/rootless-containers/usernetes).)
 
 <img  alt="restoration example" src="restore-example.svg" height="300" />
 
 ---
 name: restore_example---an-example-of-a-galaxy-backed-up-by-s3
 
-### `restore_example`--An Example of a Galaxy backed up by S3
+### `restore_example`--Example of Galaxy backed up by S3
 
-- Our lab's instance of Galaxy is backed up to S3.  This has been extremely helpful to us because:
-    - It gives us offsite backup for disaster recovery.
-    - As new Galaxy administrators, we cause disasters (with the help of our systems, hardware, and campus power interruptions).
-    - If you haven't restored a system and tested the result, you have no basis for trust in your backup procedure.
-        - We have recovered our Galaxy multiple times.
-- What we have learned in the process of restoring our Galaxy has been coded into the TARDIS and the scripts in the `restore_example` subdirectory.
-- The scripts use config files produced by `setup_env.*` [as described below](#restore_example---configuration-settings).
-- These scripts were developed assuming access to Docker through [Usernetes](https://github.com/rootless-containers/usernetes).
-    - [Setup of Usernetes](#setting-up-usernetes) is described below.
-    - It is likely that the `restore_example` could be adapted to work with other Docker-based Galaxies that are not running under Usernetes.
+Our lab's instance of Galaxy is backed up to S3.  This has been extremely helpful to us because:
+- It gives us offsite backup for disaster recovery.
+- As new Galaxy administrators, we cause disasters (with the help of our systems, hardware, and campus power interruptions).
+- One must restore a system and test the result to have a basis for trust in the backup procedure.  We have done so and also recovered our Galaxy multiple times.
+
+---
+name: restore_example---continued
+
+### `restore_example`--Galaxy backed up by S3 (continued)
+
+What we have learned in the process of restoring our Galaxy has been coded into the TARDIS, as demonstrated by the scripts in the `restore_example` subdirectory.
+- These scripts use config files produced by `setup_env.*` [as described below](#restore_example---configuration-settings).
+- The scripts were developed under `docker-compose` running on [Usernetes](https://github.com/rootless-containers/usernetes).
+- Our motivation for using Usernetes to run Docker rootlessly and our approach to setting it up are discussed in [Appendix: Running Docker Rootlessly ](#appendix-running-docker-rootlessly) below.
+- It is likely that the `restore_example` could be adapted to work with other Docker-based Galaxies that are not running under Usernetes.
+    - The TARDIS does not directly interact any differently with the Docker daemon than it would with a daemon running as root;
+    - thus, it should work without modification with other Docker-based Galaxies that are not running under Usernetes.
+        - Future testing should prove this out.
 
 ---
 name: restore_examplecompose_startsh---start-galaxy
 
 ### `restore_example/compose_start.sh`--start Galaxy
 
-- Starts the entire Galaxy composition or individual services<br />via `docker-compose` and the `docker-compose-env.yml` file.
-    - When no options are supplied, starts the entire composition.
+- `compose_start.sh` starts the entire Galaxy composition or individual services<br />via `docker-compose` and the `docker-compose-env.yml` file.
+    - When no options are supplied, it starts the entire composition.
     - The following options may be used individually or combined:
         - `--init-db`
             - Initialize PostgreSQL database if needed.
@@ -423,15 +426,18 @@ This script wraps most of the TARDIS functions as invocation options:
   --apply_config ['date']  Apply retrieved config data as of specified date
   --database ['date']      Restore PostgreSQL database (lose database changes since specified backup)
      'date' can be used to specify the newest backup can be applied, i.e., exclude backups newer than the date
-     'date' can be any format accepted by the Linxx 'date' program (https://linux.die.net/man/1/date),
+     'date' can be any format accepted by the Linux 'date' program (https://linux.die.net/man/1/date),
          which may be relative (e.g., '3 days ago')
          or RFC822  (e.g., '28 Apr 2019 05:20:23 -5')  [where '-5' means five hours behind UTC]
          or pseudo ISO8601 ('2019-04-28 05:20:23 -05:00')  [where '-05:00' means five hours behind UTC].
          It is quite flexible, so go ahead and try something that makes sense to you.
   --db_upgrade             Upgrade PostgreSQL to match installed Galaxy version
-  --Miniconda3             Upgrade /export/_conda to the latest Miniconda3 version. (experimental, requires lynx)
-  --Miniconda2             Upgrade /export/_conda to the latest Miniconda2 version. (experimental, requires lynx)
-     Upgrading to Miniconda2 will pointless once Galaxy has sunseted Python 2.
+  --Miniconda3             Upgrade /export/_conda to the latest Miniconda3 version.
+     This requires that Lynx be installed.
+  --Miniconda2             Upgrade /export/_conda to the latest Miniconda2 version.
+     Upgrading to Miniconda2 will pointless once Galaxy has sunseted Python 2 unless you are installing
+     an old version of Galaxy that used Miniconda2 and you want to maintain the Miniconda version.
+     This also requires that Lynx be installed.
 </pre>
 
 ---
@@ -445,8 +451,8 @@ Edit these three files to configure `restore_example`:
         - Example at `restore_example/tardis/s3/dest.config.example`
     - Note that `restore_example/tardis` just links to `restore_example/..`
 - `restore_example/tardis/s3/dest.s3cfg`
-    - This file has the configuration for [the s3cmd utility](https://github.com/s3tools/s3cmd#simple-s3cmd-howto).
-        - It is in the format recognized and generated by the<br />`s3cmd --configure` command.
+    - This file has the configuration for [the s3cmd utility](https://github.com/s3tools/s3cmd#simple-s3cmd-howto). (See [appendix](#appendix-configuring--s3cmd)).
+        - It is in the format generated (and recognized) by the<br />`s3cmd --configure` command.
         - Example at `restore_example/tardis/s3/dest.s3cfg.example`
 - `restore_example/setup_env.my_instance` (named as you like)
     - Copy this from `restore_example/setup_env.example`
@@ -552,7 +558,17 @@ name: appendix-configuring--s3cmd
 
 ### Appendix: Configuring `s3cmd`
 
-TODO
+- There are several service endpoints available that make use of the same protocol used to exchange ["file objects"](https://github.com/s3tools/s3cmd/blob/master/README.md#objects-files-stored-in-amazon-s3) with Amazon [S3 "buckets"](https://github.com/s3tools/s3cmd/blob/master/README.md#buckets).
+- The `s3cmd` utility [https://github.com/s3tools/s3cmd](https://github.com/s3tools/s3cmd) is a Python2 script that facilitates doing so from the command line.
+    - [The `s3cmd` HOWTO ](https://github.com/s3tools/s3cmd/blob/master/README.md#simple-s3cmd-howto) in the GitHub repository describes the basics.
+- The `s3cmd --configure` command may be used to create or modify a configuration file.
+    - It asks you questions and gives you the opportunity to replace either the defaults or your current settings.
+- To access the file objects in a "bucket", you must include in this file:
+    - `host_base`, the domain name or of the S3 endpoint.
+    - `host_bucket`, the fully qualified domain name address of the S3 bucket on the endpoint.
+        - E.g., if `host_base` is "`s3.foo.edu`",<br />then `host_bucket` is likely "`%(bucket)s.s3.foo.edu`".
+    - `access_key` identifies the owner of the bucket.
+    - `secret_key` controls operations on the bucket (keep this secure, especially if you cannot readily replace it)
 
 ---
 name: appendix-running-docker-rootlessly
@@ -749,13 +765,13 @@ This material is the result of a collaborative work. Thanks to the [Galaxy Train
 <div class="contributors-line">
 
 
-<a href="https://orcid.org/0000-0002-2882-0508" class="contributor-badge"><img src="https://avatars.githubusercontent.com/eschen42" alt="Arthur Eschenlauer" height="30px" >Arthur Eschenlauer</a>
+<a href="https://orcid.org/0000-0002-2882-0508" class="contributor-badge"><img src="./eschen42.png" alt="Arthur Eschenlauer" height="30px" >Arthur Eschenlauer</a>
 
 
 </div>
 
 
 
-<img src="https://galaxyproject.org/images/galaxy-logos/GTNLogoTrans300.png" alt="Galaxy Training Network" height="200px" />
+<img src="./GTNLogoTrans300.png" alt="Galaxy Training Network" height="200px" />
 
 
