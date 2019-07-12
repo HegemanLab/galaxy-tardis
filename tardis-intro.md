@@ -155,8 +155,8 @@ bash build_notar.sh
     - or by copying `restore_example/setup_env.example` to `restore_example/setup_env.my_instance`, customizing it, and:<br />
       `pushd restore_example; bash setup_env.my_instance; popd`
         - More information about this option is presented in ["An Example of a Galaxy backed up by S3"](#an-example-of-a-galaxy-backed-up-by-s3)
-- Set the `TARDIS` environment variable and invoke the TARDIS, e.g.:<br />
-  `tardis_envar.sh`<br />
+- Set the `TARDIS` environment variable and invoke the TARDIS, e.g. (in bash):<br />
+  `source tardis_envar.sh`<br />
   `$TARDIS help`
 - By its definition, `$TARDIS` runs as a container named `tardis`, so only one instance can run at a time.
 
