@@ -1,8 +1,14 @@
-# This file defines the environment variables that the TLDR script references.
+# This file defines the environment variables that
+#   - the TLDR script references
+#   - whatever setup_envar.* you choose referencces
 # Note that:
 #   - You can override the values here by setting them in the environment
 #     - I validated that this works in the bash, ash, and dash shells.
 #   - The 'readlink' paths are models - you will need to supply real paths.
+#     - Recall that `readlink -f foo` produces the path to 'foo' with symlinks resolved.
+
+# To indicate our intent to use this file, set environment variable to name of this file
+ENV_FOR_TLDR="${BASH_SOURCE[0]}"
 
 # TLDR can run in one of three modes:
 #   - 'run'    : Running Galaxy with neither initialization nor restoration 
@@ -20,8 +26,15 @@ MY_BUCKET_PREFIX=${MY_BUCKET_PREFIX:-mys3bucketprefix}
 MY_GALAXY_TOOL_DEPS_CONDA_BASE_PYTHON_VERSION=3
 # Path on docker host to directory that will be mounted as '/export' in container
 MY_GALAXY_EXPORT=${MY_GALAXY_EXPORT:-`readlink -f /path/to/export`}
-# Path on docker host to directory whose subdirectory 'main' will be mounted as '/var/lib/postgresql/data' in container
+
+# Set the root for the PostgreSQL database files here by supplying the path on docker
+#   host to directory whose subdirectory 'main' will be mounted as 
+#   '/var/lib/postgresql/data' in container
 MY_GALAXY_POSTGRES=${MY_GALAXY_POSTGRES:-`readlink -f /path/to/postgres`}
+# Postgres password - If the postgres listener is not exposed outside docker
+#    containers, there should be little risk in exposing the password here.
+POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-chaopagoosaequuashie}
+
 # Path on docker host where usernetes is located, if you are using usernetes,
 #   e.g., an unzipped release from https://github.com/rootless-containers/usernetes/releases
 MY_USERNETES=${MY_USERNETES:-`readlink -f /path/to/usernetes`}
@@ -37,8 +50,13 @@ MY_CONFIG_BUCKET=${MY_CONFIG_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}.config}
 
 # Name of dataset-backup bucket on S3-compatible storage; stores datasets
 #   If you are using an S3 or SWIFT object store for Galaxy, use the name of that bucket here
-MY_DATASET_BUCKET=${MY_DATASET_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}.data}
+MY_DATASET_BUCKET=${MY_DATASET_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}.datasets}
 
 # Which docker-compose file to use, probably this is fine
 MY_COMPOSE_FILE=${MY_COMPOSE_FILE:-docker-compose-env.yml}
 
+# This specifies the port where the Galaxy web server will listen
+GALAXY_PORT=${GALAXY_PORT:-8080}
+
+# Note: Set CONTAINERS_TO_RUN, EXTRA_GALAXY_ENVARS, NET_ADD, and NET_REMOVE
+#       in your setup_env.* file.

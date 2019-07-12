@@ -1,11 +1,59 @@
-EXPORT_DIR=/path/to/export
-INTERNAL_EXPORT_DIR='/export'
+# When you source 'tardis_envar.sh', it sources 'tags-for-tardis_envar-to-source
+# these environment variables are improted and used by tardis_envar.sh
 
-PGDATA_PARENT=/path/to/postgres
-IMAGE_POSTGRES='quay.io/bgruening/galaxy-postgres'
-TAG_POSTGRES=9.6.5_for_19.01
-CONTAINER_POSTGRES='galaxy-postgres'
+# Test that the directory containing tardis_envar.sh also contains a
+#   subdirectory named 's3' that contains two files (or links to files):
+# 's3/dest.config' merely names the S3 buckets used for backup and restore, e.g. 
+     # # S3 bucket to hold files (i.e., Galaxy datasets)
+     # #    If the Galaxy instance is using an S3 or Swift object store, this
+     # #    should be the name of the same bucket as is used for the object store.
+     # FILE_BUCKET=myprefix-myinstance.datasets
+     # # S3 bucket used to back up Galaxy configuration
+     # CONFIG_BUCKET=myprefix-myinstance.config
+# 's3/dest.s3cfg' is the file that you create with the command
+#    's3cmd --config' 
+if [ -e s3/dest.config -a -e s3/dest.s3cfg ]; then
 
-IMAGE_GALAXY_INIT='quay.io/bgruening/galaxy-init'
-CONTAINER_GALAXY_INIT='galaxy-init'
-TAG_GALAXY='19.01'
+  # EXPORT_DIR specifies the directory outside docker which is mapped by docker-galaxy-stable
+  #   (to '/export' within the container) so that configuration and data changes
+  #   will persist across instantiations of the container by docker-compose
+  #   For further info, see: https://github.com/bgruening/docker-galaxy-stable#usage--toc
+  EXPORT_DIR=${MY_GALAXY_EXPORT:-`readlink -f /path/to/export`}
+  # INTERNAL_EXPORT_DIR is the path within docker where EXPORT dir will be mounted
+  #   (e.g., -v $EXPORT_DIR:$INTERNAL_EXPORT_DIR).  You probably won't want to change this.
+  INTERNAL_EXPORT_DIR=${INTERNAL_EXPORT_DIR:-'/export'}
+
+  # PGDATA_PARENT is the path to the files for the postgres database installation.
+  # Specifically, it is the directory which must contain a directory named 'main' containing 
+  #   the PostgreSQL database that persists Galaxy data OUTSIDE of docker.
+  PGDATA_PARENT=${PGDATA_PARENT:-`readlink -f /path/to/postgres`}
+
+  # These variables specify the postgres image.
+  #   In this case it is the image that you would get with
+  #   docker pull quay.io/bgruening/galaxy-postgres:9.6.5_for_19.01
+  IMAGE_POSTGRES=${IMAGE_POSTGRES:-'quay.io/bgruening/galaxy-postgres'}
+  TAG_POSTGRES=${TAG_POSTGRES:-9.6.5_for_19.01}
+  CONTAINER_POSTGRES=${CONTAINER_POSTGRES:-'galaxy-postgres'}
+
+  # These variables specify the postgres image.
+  #   In this case it is the image that you would get with
+  #   docker pull quay.io/bgruening/galaxy-init:19.01
+  IMAGE_GALAXY_INIT=${IMAGE_GALAXY_INIT:-'quay.io/bgruening/galaxy-init'}
+  CONTAINER_GALAXY_INIT=${CONTAINER_GALAXY_INIT:-'galaxy-init'}
+  TAG_GALAXY=${TAG_GALAXY:-'19.01'}
+else
+  echo '
+  The directory containing tardis_envar.sh also must contain a
+    subdirectory named "s3" that contains two files (or links to files):
+      "s3/dest.config", which merely names the S3 buckets used for backup and restore, e.g. 
+        # S3 bucket to hold files (i.e., Galaxy datasets)
+        #    If the Galaxy instance is using an S3 or Swift object store, this
+        #    should be the name of the same bucket as is used for the object store.
+        FILE_BUCKET=myprefix-myinstance.datasets
+        # S3 bucket used to back up Galaxy configuration
+        CONFIG_BUCKET=myprefix-myinstance.config
+      "s3/dest.s3cfg", which is the file that you create with the command
+        s3cmd --config 
+  '
+fi
+

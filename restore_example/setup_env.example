@@ -2,6 +2,8 @@
 # setup_env.example: Set up environment variable files for restoration example.
 #   Adjust or replace any or all environment variables as appropriate to your case.
 
+. ${ENV_FOR_TLDR:-env-for-TLDR}
+
 # Set this to "restore" when you want TLDR to restore from S3-compatible buckets
 # Set this to "fresh" when you want TLDR to cleanly install Galaxy if it has not already been installed
 # Set this to "run" when you want TLDR to run without initialization attempts
@@ -9,71 +11,96 @@ TLDR_RUN_MODE=${TLDR_RUN_MODE:-run}
 
 # Name you will use for your Galaxy instance
 #  Currently only used by 'screen' and in this file, but you use it as you want
-MY_INSTANCE=myinstance
+MY_INSTANCE=${MY_INSTANCE:-myinstance}
+
+# This example assumes that S3 buckets are named like this:
+#   myprefix-myinstance.config
+#   myprefix-myinstance.datasets
+# that hold Galaxy config and Galaxy datasets, respectively
 # Prefix for bucket names - again, feel free to change it
-MY_BUCKET_PREFIX=myprefix
+MY_BUCKET_PREFIX=${MY_BUCKET_PREFIX:-myprefix}
 
 # Conda base's python version: should be '2' or '3'; default is '3'
-MY_GALAXY_TOOL_DEPS_CONDA_BASE_PYTHON_VERSION=3
+MY_GALAXY_TOOL_DEPS_CONDA_BASE_PYTHON_VERSION=${MY_GALAXY_TOOL_DEPS_CONDA_BASE_PYTHON_VERSION:-3}
 
-# Fully nonsymbolic path on docker host to directory that will be
-#   mounted as '/export' in container
-MY_GALAXY_EXPORT=`readlink -f /path/to/export`
-# Path on docker host where usernetes is located, if you are using usernetes,
+# Note: This example REQUIRES that the directory used to persist your Galaxy
+#   data exists BEFORE you run docker-compose
+# For the expected layout, please see:
+#   https://github.com/bgruening/docker-galaxy-stable/tree/master/compose#configuration--4
+# Specify the fully nonsymbolic path on docker host to directory that will be
+#   mounted as '/export' in container (replace '/path/to/export' with the actual
+#   path to an existing directory that the user owns).
+MY_GALAXY_EXPORT=${MY_GALAXY_EXPORT:-`readlink -f /path/to/export`}
+
+# Set MY_USERNETES to the path on docker host where usernetes is located, if you are using usernetes,
 #   e.g., an unzipped release from https://github.com/rootless-containers/usernetes/releases
-MY_USERNETES=~/usernetes
-# Path to the config file for s3cmd, see https://github.com/s3tools/s3cmd
-MY_S3CFG=~/.ssh/s3/${MY_BUCKET_PREFIX}.s3cfg
-# Name of configuration-backup bucket on S3-compatible storage; stores backups but not datasets
-MY_CONFIG_BUCKET=${MY_BUCKET_PREFIX}-${MY_INSTANCE}.config
-# Name of dataset-backup bucket on S3-compatible storage; stores datasets
+#   Running without Usernetes is not yet supported.  Hopefully it will be soon.
+MY_USERNETES=${MY_USERNETES:-~/usernetes}
+
+# S3 configuration:
+# Set MY_S3CFG to the path to the config file created by
+#   s3cmd --config
+# This is were you will specify the location where your S3 buckets are stored.
+# See https://github.com/s3tools/s3cmd for further info
+MY_S3CFG=${MY_S3CFG:-~/.ssh/s3/${MY_BUCKET_PREFIX}.s3cfg}
+# Set MY_CONFIG_BUCKET to the name of configuration-backup bucket on S3-compatible storage;
+#   This bucket stores backups of evertying except datasets.
+MY_CONFIG_BUCKET=${MY_CONFIG_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}.config}
+# Set MY_DATASET_BUCKET to the name of dataset-storage bucket on S3-compatible storage.
 #   If you are using an S3 or SWIFT object store for Galaxy, use the name of that bucket here
-MY_DATASET_BUCKET=${MY_BUCKET_PREFIX}-${MY_INSTANCE}.datasets
+MY_DATASET_BUCKET=${MY_DATASET_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}.datasets}
 
-# Which docker-compose file to use, probably this is fine
-MY_COMPOSE_FILE=docker-compose-env.yml
+# Specify which docker-compose file to use, probably this is fine
+MY_COMPOSE_FILE=${MY_COMPOSE_FILE:-docker-compose-env.yml}
 
-# Path used in containers that will persist Galaxy data in Docker, probably '/export'
-INTERNAL_EXPORT_DIR='/export'
-# Path on docker host to directory that will be mounted as '/export' in container
-EXPORT_DIR=${MY_GALAXY_EXPORT}
+# Specify the path used inside containers that will persist Galaxy data in Docker, probably '/export'
+INTERNAL_EXPORT_DIR=${INTERNAL_EXPORT_DIR:-'/export'}
+# Specify the path on docker host to the directory that will be mounted as '/export' in container
+EXPORT_DIR=${MY_GALAXY_EXPORT:?}
 
-# Parent directory for PostgreSQL; database will be init'ed in subdirectory '$PGDATA_SUBDIR'
-PGDATA_PARENT=`readlink -f /path/to/postgres`
-MY_GALAXY_POSTGRES=$PGDATA_PARENT
+# Specify the parent directory for the PostgreSQL database files to be stored;
+#   the database files will be init'ed in subdirectory '$PGDATA_SUBDIR'
+# You must change '/path/to/postgres' to a real path to a directory that you own.
+PGDATA_PARENT=${MY_GALAXY_POSTGRES:-`readlink -f /path/to/postgres`}
+# Sorry about this. Some of my scripts use the name MY_GALAXY_POSTGRES instead.
+MY_GALAXY_POSTGRES=${PGDATA_PARENT:?}
 # Name of subdirectory of PGDATA_PARENT for PostgreSQL database
 #   will be renamed (to save it) and replaced during restoration.
-PGDATA_SUBDIR=main
-# Docker image name for PostgreSQL executables
-IMAGE_POSTGRES='quay.io/bgruening/galaxy-postgres'
-# Docker image tag for PostgreSQL executables
-TAG_POSTGRES=9.6.5_for_19.01
-# Name of PostgreSQL container
-CONTAINER_POSTGRES='galaxy-postgres'
+#   You probably don't need to chnage this
+PGDATA_SUBDIR=${PGDATA_SUBDIR:-main}
 
+# Specify the docker image name for PostgreSQL executables
+IMAGE_POSTGRES=${IMAGE_POSTGRES:-'quay.io/bgruening/galaxy-postgres'}
+# Specify the tag for the docker image for PostgreSQL executables
+TAG_POSTGRES=${TAG_POSTGRES:-9.6.5_for_19.01}
+# Name of PostgreSQL container
+CONTAINER_POSTGRES=${CONTAINER_POSTGRES:-'galaxy-postgres'}
+
+# Docker image name for Galaxy initialization executables
 # N.B. that initialization of the Galaxy '/export' may change in the future,
 #      but this works for the containers for 19.01
-# Docker image name for Galaxy initialization executables
-IMAGE_GALAXY_INIT='quay.io/bgruening/galaxy-init'
+IMAGE_GALAXY_INIT=${IMAGE_GALAXY_INIT:-'quay.io/bgruening/galaxy-init'}
 # Docker image tag for Galaxy initialization executables
-TAG_GALAXY='19.01'
+TAG_GALAXY=${TAG_GALAXY:-'19.01'}
 # Name of Galaxy initialization container
-CONTAINER_GALAXY_INIT='galaxy-init'
+CONTAINER_GALAXY_INIT=${CONTAINER_GALAXY_INIT:-'galaxy-init'}
 
-# Tag for proftpd
-TAG_PROFTPD=for_galaxy_19.01
+# Tag for the proftpd image - presently the image name is hard-coded in docker-compose-env.yml
+TAG_PROFTPD=${TAG_PROFTPD:-for_galaxy_19.01}
 
-# Default tag for containers
-TAG_DEFAULT="$TAG_GALAXY"
+# Default tag for containers; the image names are hard-coded in docker-compose-env.yml
+TAG_DEFAULT=${TAG_DEFAULT:-"$TAG_GALAXY"}
 
 # Postgres password - If the postgres listener is not exposed outside docker
 #    containers, there should be little risk in exposing the password here.
 POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-chaopagoosaequuashie}
 
-GALAXY_PORT=8080
+# This specifies the port where the Galaxy web server will listen
+GALAXY_PORT=${GALAXY_PORT:-8080}
 
 # Ports to forward outside the "rootless namespace";
 #   you won't need these if you are running Docker as root
+# For explanation, see https://github.com/rootless-containers/rootlesskit#port-drivers
 NET_ADD="
 0.0.0.0:8080:${GALAXY_PORT}/tcp
 0.0.0.0:5050:5050/tcp
@@ -84,13 +111,14 @@ NET_REMOVE="
 "
 
 # This is the compose file to run (in this directory)
-COMPOSE_FILE=${MY_COMPOSE_FILE}
+COMPOSE_FILE=${MY_COMPOSE_FILE:?}
 
 # These are the containers in the compose file that we intend to run.
 #   Add or remove a needed, e.g., to run HT-Condor
 CONTAINERS_TO_RUN='galaxy-postgres galaxy-slurm galaxy-web galaxy-proftpd rabbitmq galaxy-init grafana pgadmin4'
 
 # Extra exported environment variables to be set in the galaxy-web container
+#   For further info, see https://github.com/bgruening/docker-galaxy-stable/#galaxys-config-settings--toc
 EXTRA_GALAXY_ENVARS="
 GALAXY_PORT=${GALAXY_PORT}
 # postgres password - If the postgres listener is not exposed outside docker

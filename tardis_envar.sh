@@ -21,24 +21,20 @@ source $DIR/tags-for-tardis_envar-to-source.sh
 # IMAGE_GALAXY_INIT='quay.io/bgruening/galaxy-init'
 # TAG_GALAXY='19.01'
 
-# fail if EXPORT_DIR is not specified; to address this failure, e.g., EXPORT_DIR=/full/path/to/export
 if [ ! -d ${EXPORT_DIR:?} ]; then
- echo "Please set EXPORT_DIR (which must contain the exported files referenced by galomix-compose) before sourcing ${SOURCE}"
-fi
-
-# fail if PGDATA_PARENT is not specified; to address this failure, e.g., EXPORT_DIR=/mnt/ace/piscesv/postgres
-if [ ! -d ${PGDATA_PARENT:?} ]; then
- echo "Please set PGDATA_PARENT (which must contain a directory named 'main' containing the PostgreSQL data for galomix-compose) before sourcing ${SOURCE}"
-fi
-
-# fail if TAG_POSTGRES is not specified; to address this failure, e.g., TAG_POSTGRES="9.6.5_for_19.01"
-if [ -z "${TAG_POSTGRES:?}" ]; then
- echo "Please set TAG_POSTGRES (a valid tag for an image of quay.io/bgruening/galaxy-postgres) before sourcing ${SOURCE}"
-fi
-
-if [ ! -f $DIR/s3/dest.s3cfg ]; then
+  # fail if EXPORT_DIR is not specified; to address this failure, e.g., EXPORT_DIR=/full/path/to/export
+  echo "Please set EXPORT_DIR (the directory which must contain the exported files referenced by galomix-compose) before sourcing ${SOURCE}"
+elif [ ! -d ${PGDATA_PARENT:?} ]; then
+  # fail if PGDATA_PARENT is not specified; to address this failure, e.g., EXPORT_DIR=/mnt/ace/piscesv/postgres
+  echo "Please set PGDATA_PARENT (the directory which must contain a directory named 'main' containing the PostgreSQL data for galomix-compose) before sourcing ${SOURCE}"
+elif [ -z "${TAG_POSTGRES:?}" ]; then
+  # fail if TAG_POSTGRES is not specified; to address this failure, e.g., TAG_POSTGRES="9.6.5_for_19.01"
+  echo "Please set TAG_POSTGRES (a valid tag for an image of quay.io/bgruening/galaxy-postgres) before sourcing ${SOURCE}"
+elif [ ! -f $DIR/s3/dest.s3cfg ]; then
+  # fail if $DIR/s3/dest.s3cfg is not proper
   echo "ERROR: $DIR/s3/dest.s3cfg does not exist or is not a file"
 elif [ ! -f $DIR/s3/dest.config ]; then
+  # fail if $DIR/s3/dest.config is not proper
   echo "ERROR: $DIR/s3/dest.config does not exist or is not a file"
 else
   TARDIS="docker run --rm -ti \

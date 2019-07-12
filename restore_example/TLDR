@@ -7,10 +7,12 @@
 #           ./env-for-compose-to-source.sh, and ./tags-for-compose-to-source.sh
 # step 4: Using ./tardis/s3/dest.s3cfg.example as a guide, create or link
 #           ./tardis/s3/dest.s3cfg
-# step 4: `bash TLDR`
+# step 5: `bash TLDR`
 
 # get required environment variables
-. env-for-TLDR
+. ${ENV_FOR_TLDR:-env-for-TLDR}
+
+# show the required envars that we have; abort if some are not set
 echo "
 TLDR_RUN_MODE       : ${TLDR_RUN_MODE:?}
 MY_INSTANCE         : ${MY_INSTANCE:?}
@@ -25,8 +27,14 @@ MY_COMPOSE_FILE     : ${MY_COMPOSE_FILE:?}
 MY_GALAXY_TOOL_DEPS_CONDA_BASE_PYTHON_VERSION : ${MY_GALAXY_TOOL_DEPS_CONDA_BASE_PYTHON_VERSION:?}
 ls -l tardis/s3/dest.s3cfg tardis/s3/dest.config
 "
+
+# force logical link: .env -> dot_env_for_compose
 ln -s -f dot_env_for_compose .env > /dev/null
-ROODO='rootlesskit --disable-host-loopback'
+
+# Right now, TLDR assumes that we are running with usernetes' rootless dockerd
+#   In the future, it may be desirable to override as ROODO=sudo to use sudo with the rooted dockerd.
+ROODO=${ROODO:-'rootlesskit --disable-host-loopback'}
+
 # Create storage directories and set ownership
 if [ ! -d ${MY_GALAXY_EXPORT:?}   ]; then $ROODO mkdir -p ${MY_GALAXY_EXPORT}  ; fi
 if [ ! -d ${MY_GALAXY_POSTGRES:?} ]; then $ROODO mkdir -p ${MY_GALAXY_POSTGRES}; fi
