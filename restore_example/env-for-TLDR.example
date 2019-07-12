@@ -1,0 +1,44 @@
+# This file defines the environment variables that the TLDR script references.
+# Note that:
+#   - You can override the values here by setting them in the environment
+#     - I validated that this works in the bash, ash, and dash shells.
+#   - The 'readlink' paths are models - you will need to supply real paths.
+
+# TLDR can run in one of three modes:
+#   - 'run'    : Running Galaxy with neither initialization nor restoration 
+#   - 'restore': Restoring an instance of Galaxy from S3
+#   - 'fresh'  : Not restoring Galaxy, initializing fresh instance if necessary
+TLDR_RUN_MODE=${TLDR_RUN_MODE:-fresh}
+
+# Name you will use for your Galaxy instance
+#  Currently only used by 'screen' and in this file, but you use it as you want
+MY_INSTANCE=${MY_INSTANCE:-mygalaxyinstancename}
+# Prefix for bucket names - again, feel free to change it
+MY_BUCKET_PREFIX=${MY_BUCKET_PREFIX:-mys3bucketprefix}
+
+# Conda base's python version: should be '2' or '3'; default is '3'
+MY_GALAXY_TOOL_DEPS_CONDA_BASE_PYTHON_VERSION=3
+# Path on docker host to directory that will be mounted as '/export' in container
+MY_GALAXY_EXPORT=${MY_GALAXY_EXPORT:-`readlink -f /path/to/export`}
+# Path on docker host to directory whose subdirectory 'main' will be mounted as '/var/lib/postgresql/data' in container
+MY_GALAXY_POSTGRES=${MY_GALAXY_POSTGRES:-`readlink -f /path/to/postgres`}
+# Path on docker host where usernetes is located, if you are using usernetes,
+#   e.g., an unzipped release from https://github.com/rootless-containers/usernetes/releases
+MY_USERNETES=${MY_USERNETES:-`readlink -f /path/to/usernetes`}
+
+# Path to the config file for s3cmd
+#   - This is the file that you generate with the command
+#       s3cmd --config
+#   - For further info, see https://github.com/s3tools/s3cmd
+MY_S3CFG=${MY_S3CFG:-`readlink -f /path/to/.s3cfg`}
+
+# Name of configuration-backup bucket on S3-compatible storage; stores backups but not datasets
+MY_CONFIG_BUCKET=${MY_CONFIG_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}.config}
+
+# Name of dataset-backup bucket on S3-compatible storage; stores datasets
+#   If you are using an S3 or SWIFT object store for Galaxy, use the name of that bucket here
+MY_DATASET_BUCKET=${MY_DATASET_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}.data}
+
+# Which docker-compose file to use, probably this is fine
+MY_COMPOSE_FILE=${MY_COMPOSE_FILE:-docker-compose-env.yml}
+
