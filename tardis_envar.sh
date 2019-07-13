@@ -25,7 +25,7 @@ if [ ! -d ${EXPORT_DIR:?} ]; then
   # fail if EXPORT_DIR is not specified; to address this failure, e.g., EXPORT_DIR=/full/path/to/export
   echo "Please set EXPORT_DIR (the directory which must contain the exported files referenced by galomix-compose) before sourcing ${SOURCE}"
 elif [ ! -d ${PGDATA_PARENT:?} ]; then
-  # fail if PGDATA_PARENT is not specified; to address this failure, e.g., EXPORT_DIR=/mnt/ace/piscesv/postgres
+  # fail if PGDATA_PARENT is not specified; to address this failure, e.g., PGDATA_PARENT=/mnt/ace/piscesv/postgres
   echo "Please set PGDATA_PARENT (the directory which must contain a directory named 'main' containing the PostgreSQL data for galomix-compose) before sourcing ${SOURCE}"
 elif [ -z "${TAG_POSTGRES:?}" ]; then
   # fail if TAG_POSTGRES is not specified; to address this failure, e.g., TAG_POSTGRES="9.6.5_for_19.01"

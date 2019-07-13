@@ -7,8 +7,29 @@
 #   - The 'readlink' paths are models - you will need to supply real paths.
 #     - Recall that `readlink -f foo` produces the path to 'foo' with symlinks resolved.
 
-# To indicate our intent to use this file, set environment variable to name of this file
-ENV_FOR_TLDR="${BASH_SOURCE[0]}"
+# set the actual script directory per https://stackoverflow.com/a/246128
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+
+# Set environment variable to absolute path to this file
+MY_ENV_FOR_TLDR="$SOURCE"
+DIR_FOR_TLDR="$DIR"
+
+# some base paths
+#   path to location of usernetes
+#     see: https://github.com/rootless-containers/usernetes#install-from-binary
+PATH_TO_USERNETES=/path/to/usernetes
+#   path to persist Galaxy data (except the database) 
+#     see: https://github.com/bgruening/docker-galaxy-stable#usage--toc
+PATH_TO_EXPORT="$DIR_FOR_TLDR/export"
+#   path where postgres database files are persistently stored 
+PATH_TO_POSTGRES="$DIR/postgres"
+PGDATA_SUBDIR=${PGDATA_SUBDIR:-main}
 
 # TLDR can run in one of three modes:
 #   - 'run'    : Running Galaxy with neither initialization nor restoration 
@@ -27,13 +48,15 @@ MY_GALAXY_TOOL_DEPS_CONDA_BASE_PYTHON_VERSION=3
 # Path on docker host to directory that will be mounted as '/export' in container
 MY_GALAXY_EXPORT=${MY_GALAXY_EXPORT:-`readlink -f /path/to/export`}
 
+# Path on docker host to directory whose subdirectory 'main' will be mounted as 
+#   '/var/lib/postgresql/data' in container
 # Set the root for the PostgreSQL database files here by supplying the path on docker
 #   host to directory whose subdirectory 'main' will be mounted as 
 #   '/var/lib/postgresql/data' in container
 MY_GALAXY_POSTGRES=${MY_GALAXY_POSTGRES:-`readlink -f /path/to/postgres`}
 # Postgres password - If the postgres listener is not exposed outside docker
 #    containers, there should be little risk in exposing the password here.
-POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-chaopagoosaequuashie}
+POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-quindicissimipillars}
 
 # Path on docker host where usernetes is located, if you are using usernetes,
 #   e.g., an unzipped release from https://github.com/rootless-containers/usernetes/releases
@@ -43,20 +66,88 @@ MY_USERNETES=${MY_USERNETES:-`readlink -f /path/to/usernetes`}
 #   - This is the file that you generate with the command
 #       s3cmd --config
 #   - For further info, see https://github.com/s3tools/s3cmd
-MY_S3CFG=${MY_S3CFG:-`readlink -f /path/to/.s3cfg`}
+MY_S3CFG=${MY_S3CFG:-`readlink -f /path/to/dest.s3cfg`}
 
 # Name of configuration-backup bucket on S3-compatible storage; stores backups but not datasets
 MY_CONFIG_BUCKET=${MY_CONFIG_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}.config}
 
 # Name of dataset-backup bucket on S3-compatible storage; stores datasets
 #   If you are using an S3 or SWIFT object store for Galaxy, use the name of that bucket here
-MY_DATASET_BUCKET=${MY_DATASET_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}.datasets}
+MY_DATASET_BUCKET=${MY_DATASET_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}.data}
 
 # Which docker-compose file to use, probably this is fine
 MY_COMPOSE_FILE=${MY_COMPOSE_FILE:-docker-compose-env.yml}
 
 # This specifies the port where the Galaxy web server will listen
-GALAXY_PORT=${GALAXY_PORT:-8080}
+MY_GALAXY_PORT=${MY_GALAXY_PORT:-8080}
+# This variable is called 'GALAXY_PORT' in setup_env.example
+GALAXY_PORT=${MY_GALAXY_PORT}
 
-# Note: Set CONTAINERS_TO_RUN, EXTRA_GALAXY_ENVARS, NET_ADD, and NET_REMOVE
-#       in your setup_env.* file.
+# Note: Set CONTAINERS_TO_RUN, NET_ADD, and NET_REMOVE in your setup_env.* file.
+
+######### EXTRA_GALAXY_ENVARS - start ##############
+EXTRA_GALAXY_ENVARS="
+# Extra exported environment variables to be set in the galaxy-web container
+#   For further info, see https://github.com/bgruening/docker-galaxy-stable/#galaxys-config-settings--toc
+GALAXY_PORT=${GALAXY_PORT}
+# postgres password - If the postgres listener is not exposed outside docker
+#    containers, there should be little risk in exposing the password here.
+POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+# Galaxy default-admin
+#   TBD - what happens when you change the user's password through the web UI?
+GALAXY_DEFAULT_ADMIN_USER=${GALAXY_DEFAULT_ADMIN_USER:-admin}
+GALAXY_DEFAULT_ADMIN_EMAIL=${GALAXY_DEFAULT_ADMIN_EMAIL:-admin@galaxy.org}
+GALAXY_DEFAULT_ADMIN_PASSWORD=${GALAXY_DEFAULT_ADMIN_PASSWORD:-${POSTGRES_PASSWORD}}
+GALAXY_DEFAULT_ADMIN_KEY=${GALAXY_DEFAULT_ADMIN_KEY:-$(echo $(date -Ins | md5sum) | cut -f 1 -d ' ')}
+
+# galaxy.yml config-file sustitutions vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+#   These can be overridden in galaxy.yml, but why would you do that?
+GALAXY_CONFIG_ADMIN_USERS=${GALAXY_CONFIG_ADMIN_USERS:-admin@galaxy.org}
+# Master key that allows many API admin actions to be used without
+#   actually having a defined admin user in the database/config.
+#   Uncomment next line only if you need to bootstrap Galaxy;
+#   you do not want to leave this variable set on public servers!
+#GALAXY_CONFIG_MASTER_API_KEY=${GALAXY_CONFIG_MASTER_API_KEY:-$(echo $(date -Ins | md5sum | md5sum) | cut -f 1 -d ' ')}
+GALAXY_CONFIG_DATABASE_AUTO_MIGRATE=${GALAXY_CONFIG_DATABASE_AUTO_MIGRATE:-false}
+GALAXY_CONFIG_TOOL_CONFIG_FILE=${GALAXY_CONFIG_TOOL_CONFIG_FILE:-config/tool_conf.xml,config/shed_tool_conf.xml}
+# galaxy.yml config-file sustitutions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+# Get all the rabbits in the same queue
+RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-somerand0mstringhere}
+
+# default destination 'slurm_cluster' is our SLURM cluster (no htcondor)
+GALAXY_DESTINATIONS_DEFAULT=${GALAXY_DESTINATIONS_DEFAULT:-slurm_cluster}
+GALAXY_RUNNERS_ENABLE_SLURM=${GALAXY_RUNNERS_ENABLE_SLURM:-True}
+
+# You will want to disable Docker support for HT-Condor; you can enable it in a non HPC environment
+GALAXY_DOCKER_ENABLED=${GALAXY_DOCKER_ENABLED:-true}
+GALAXY_CONFIG_CLEANUP_JOB=${GALAXY_CONFIG_CLEANUP_JOB:-onsuccess}
+
+ENABLE_CONDOR=${ENABLE_CONDOR:-false}
+CONDOR_HOST=${CONDOR_HOST:-galaxy-htcondor}
+"
+######### EXTRA_GALAXY_ENVARS - end ##############
+
+
+# show results
+set | grep '^MY_'
+
+# Set up ${DIR_FOR_TLDR}/dot_env_for_compose here:
+# For examples of the GALAXY_* variables, see the '.env_*' files at
+#   https://github.com/bgruening/docker-galaxy-stable/tree/master/compose
+echo "
+
+# This file is setting up a composed Galaxy instance with support
+# for submitting SLURM.
+# Docker compose will use parameters specified in an '.env' file
+# next to the docker-compose.yml file.
+
+TAG=19.01
+PGDATA_DIR=${MY_GALAXY_POSTGRES:?}/${PGDATA_SUBDIR}
+EXPORT_DIR=${MY_GALAXY_EXPORT:?}
+${EXTRA_GALAXY_ENVARS}
+
+" > ${DIR_FOR_TLDR}/dot_env_for_compose
+
+cat ${DIR_FOR_TLDR}/dot_env_for_compose

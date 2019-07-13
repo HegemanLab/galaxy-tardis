@@ -100,22 +100,9 @@ export COMPOSE_FILE=${MY_COMPOSE_FILE:?}
 ${EXTRA_GALAXY_ENVARS:?}
 " > env-for-compose-to-source.sh
 
-echo "
-# This file is setting up a composed Galaxy instance with support
-# for submitting SLURM.
-# Docker compose will use parameters specified in an '.env' file
-# next to the docker-compose.yml file.
-# We recommend to symlink this file and play around with different
-# Galaxy deployments.
-# ln -sf .env_slurm .env
-
-TAG=${TAG_DEFAULT:?}
-EXPORT_DIR=${EXPORT_DIR:?}
-PGDATA_PARENT=${PGDATA_PARENT:?}
-PGDATA_DIR=${PGDATA_PARENT:?}/${PGDATA_SUBDIR:?}
-
-${EXTRA_GALAXY_ENVARS:?}
-
-" > dot_env_for_compose
+cat dot_env_for_compose > .env
+# echo "
+# ${EXTRA_GALAXY_ENVARS:?}
+# " >> .env
 
 sed -e "s@/path/to/usernetes@${MY_USERNETES:?}@g" docker.service.example > docker.service

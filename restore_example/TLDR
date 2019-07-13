@@ -10,7 +10,7 @@
 # step 5: `bash TLDR`
 
 # get required environment variables
-. ${ENV_FOR_TLDR:-env-for-TLDR}
+. ${MY_ENV_FOR_TLDR:-env-for-TLDR}
 
 # show the required envars that we have; abort if some are not set
 echo "
@@ -28,8 +28,10 @@ MY_GALAXY_TOOL_DEPS_CONDA_BASE_PYTHON_VERSION : ${MY_GALAXY_TOOL_DEPS_CONDA_BASE
 ls -l tardis/s3/dest.s3cfg tardis/s3/dest.config
 "
 
-# force logical link: .env -> dot_env_for_compose
-ln -s -f dot_env_for_compose .env > /dev/null
+# TODO delete these entirely - start
+# # force logical link: .env -> dot_env_for_compose
+# ln -s -f dot_env_for_compose .env > /dev/null
+# TODO delete these entirely - end
 
 # Right now, TLDR assumes that we are running with usernetes' rootless dockerd
 #   In the future, it may be desirable to override as ROODO=sudo to use sudo with the rooted dockerd.
