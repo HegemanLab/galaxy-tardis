@@ -2,7 +2,10 @@
 # setup_env.example: Set up environment variable files for restoration example.
 #   Adjust or replace any or all environment variables as appropriate to your case.
 
-. ${MY_ENV_FOR_TLDR:-env-for-TLDR}
+# source second argument if provided, e.g., 'globals.custom'
+if [ ! -z "$1" ]; then
+  . "$1"
+fi
 
 # Set this to "restore" when you want TLDR to restore from S3-compatible buckets
 # Set this to "fresh" when you want TLDR to cleanly install Galaxy if it has not already been installed

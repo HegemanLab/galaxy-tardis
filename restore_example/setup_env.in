@@ -2,8 +2,9 @@
 # setup_env.in
 #   This is sourced by setup_env.example to set up environment variable files for the restoration example.
 
-echo "
-TLDR_RUN_MODE=${TLDR_RUN_MODE:?}
+echo '
+TLDR_RUN_MODE=${TLDR_RUN_MODE:-'"${TLDR_RUN_MODE:?}}
+# produced from ${MY_ENV_FOR_TLDR:?}
 
 # Name you will use for your Galaxy instance
 #  Currently only used by 'screen' and in this file, but you use it as you want
@@ -34,9 +35,9 @@ MY_DATASET_BUCKET=${MY_DATASET_BUCKET:?}
 # Which docker-compose file to use, probably this is fine
 MY_COMPOSE_FILE=${MY_COMPOSE_FILE:?}
 
-# EXPORT_DIR=${EXPORT_DIR:?}
-# PGDATA_DIR=${PGDATA_PARENT:?}/${PGDATA_SUBDIR:?}
 " > env-for-TLDR
+#did removed line below from two lines above (and commented out)
+#${EXTRA_GALAXY_ENVARS}
 
 # Set up environment variables used to set TARDIS environment
 echo "
