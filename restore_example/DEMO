@@ -2,7 +2,7 @@
 # step 0: `pushd tardis; bash build_notar.sh; popd`
 # step 1: `cp globals.example globals.custom` # or choose another name
 # step 2: Edit globals.custom as appropriate for your installation
-# step 3: `bash -c ". setup_env globals.custom`, which generates
+# step 3: `bash setup_env globals.custom`, which generates
 #           ./env-for-DEMO,
 #           ./tardis/s3/dest.config,
 #           ./env-for-compose-to-source.sh, and
