@@ -7,7 +7,9 @@
 #   - The 'readlink' paths are models - you will need to supply real paths.
 #     - Recall that `readlink -f foo` produces the path to 'foo' with symlinks resolved.
 
-# set the actual script directory per https://stackoverflow.com/a/246128
+#### Get the path to this file's location as DIR_FOR_DEMO
+#    and the name of this file as MY_GLOBALS_FOR_DEMO 
+#      ref: https://stackoverflow.com/a/246128
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
   DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
@@ -16,12 +18,12 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 echo "sourcing $SOURCE"
-
 # Set environment variable to absolute path to this file
-MY_ENV_FOR_DEMO="$SOURCE"
+MY_GLOBALS_FOR_DEMO="$SOURCE"
 DIR_FOR_DEMO="$DIR"
+#### End get the name of, and path to location of, this file
 
-# some base paths
+# Declare some base paths here:
 #   path to location of usernetes
 #     see: https://github.com/rootless-containers/usernetes#install-from-binary
 PATH_TO_USERNETES=/path/to/usernetes
@@ -29,7 +31,7 @@ PATH_TO_USERNETES=/path/to/usernetes
 #     see: https://github.com/bgruening/docker-galaxy-stable#usage--toc
 PATH_TO_EXPORT="$DIR_FOR_DEMO/export"
 #   path where postgres database files are persistently stored 
-PATH_TO_POSTGRES="$DIR/postgres"
+PATH_TO_POSTGRES="$DIR_FOR_DEMO/postgres"
 PGDATA_SUBDIR=${PGDATA_SUBDIR:-main}
 
 echo "

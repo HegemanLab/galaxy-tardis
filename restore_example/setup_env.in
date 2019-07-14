@@ -4,7 +4,7 @@
 
 echo '
 DEMO_RUN_MODE=${DEMO_RUN_MODE:-'"${DEMO_RUN_MODE:?}}
-# produced from ${MY_ENV_FOR_DEMO:?}
+# produced from ${MY_GLOBALS_FOR_DEMO:?}
 
 # Name you will use for your Galaxy instance
 #  Currently only used by 'screen' and in this file, but you use it as you want
