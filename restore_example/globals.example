@@ -32,11 +32,18 @@ PATH_TO_EXPORT="$DIR_FOR_TLDR/export"
 PATH_TO_POSTGRES="$DIR/postgres"
 PGDATA_SUBDIR=${PGDATA_SUBDIR:-main}
 
-# TLDR can run in one of three modes:
-#   - 'run'    : Running Galaxy with neither initialization nor restoration 
-#   - 'restore': Restoring an instance of Galaxy from S3
-#   - 'fresh'  : Not restoring Galaxy, initializing fresh instance if necessary
-TLDR_RUN_MODE=${TLDR_RUN_MODE:-fresh}
+echo "
+TLDR can run in one of three modes:
+  - 'run'    : Running Galaxy with neither initialization nor restoration 
+  - 'restore': Restoring an instance of Galaxy from S3
+  - 'fresh'  : Not restoring Galaxy, initializing fresh instance if necessary
+You can pass it as a value when invoking TLDR, e.g.
+  bash TLDR run
+  bash TLDR restore
+  bash TLDR fresh
+or you can export TLDR_RUN_MODE set to one of these values before running TLDR, e.g.
+  bash -c 'export TLDR_RUN_MODE=fresh;   bash TLDR'
+"
 
 # Name you will use for your Galaxy instance
 #  Currently only used by 'screen' and in this file, but you use it as you want
