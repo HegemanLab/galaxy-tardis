@@ -1,5 +1,5 @@
 # This file defines the environment variables that
-#   - the TLDR script references
+#   - the DEMO script references
 #   - whatever setup_envar.* you choose referencces
 # Note that:
 #   - You can override the values here by setting them in the environment
@@ -18,8 +18,8 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 echo "sourcing $SOURCE"
 
 # Set environment variable to absolute path to this file
-MY_ENV_FOR_TLDR="$SOURCE"
-DIR_FOR_TLDR="$DIR"
+MY_ENV_FOR_DEMO="$SOURCE"
+DIR_FOR_DEMO="$DIR"
 
 # some base paths
 #   path to location of usernetes
@@ -27,22 +27,22 @@ DIR_FOR_TLDR="$DIR"
 PATH_TO_USERNETES=/path/to/usernetes
 #   path to persist Galaxy data (except the database) 
 #     see: https://github.com/bgruening/docker-galaxy-stable#usage--toc
-PATH_TO_EXPORT="$DIR_FOR_TLDR/export"
+PATH_TO_EXPORT="$DIR_FOR_DEMO/export"
 #   path where postgres database files are persistently stored 
 PATH_TO_POSTGRES="$DIR/postgres"
 PGDATA_SUBDIR=${PGDATA_SUBDIR:-main}
 
 echo "
-TLDR can run in one of three modes:
+DEMO can run in one of three modes:
   - 'run'    : Running Galaxy with neither initialization nor restoration 
   - 'restore': Restoring an instance of Galaxy from S3
   - 'fresh'  : Not restoring Galaxy, initializing fresh instance if necessary
-You can pass it as a value when invoking TLDR, e.g.
-  bash TLDR run
-  bash TLDR restore
-  bash TLDR fresh
-or you can export TLDR_RUN_MODE set to one of these values before running TLDR, e.g.
-  bash -c 'export TLDR_RUN_MODE=fresh;   bash TLDR'
+You can pass it as a value when invoking DEMO, e.g.
+  bash DEMO run
+  bash DEMO restore
+  bash DEMO fresh
+or you can export DEMO_RUN_MODE set to one of these values before running DEMO, e.g.
+  bash -c 'export DEMO_RUN_MODE=fresh;   bash DEMO'
 "
 
 # Name you will use for your Galaxy instance
@@ -137,7 +137,7 @@ CONDOR_HOST=${CONDOR_HOST:-galaxy-htcondor}
 "
 ######### EXTRA_GALAXY_ENVARS - end ##############
 
-# Set up ${DIR_FOR_TLDR}/dot_env_for_compose here:
+# Set up ${DIR_FOR_DEMO}/dot_env_for_compose here:
 # For examples of the GALAXY_* variables, see the '.env_*' files at
 #   https://github.com/bgruening/docker-galaxy-stable/tree/master/compose
 echo "
@@ -152,6 +152,6 @@ PGDATA_DIR=${MY_GALAXY_POSTGRES:?}/${PGDATA_SUBDIR}
 EXPORT_DIR=${MY_GALAXY_EXPORT:?}
 ${EXTRA_GALAXY_ENVARS}
 
-" > ${DIR_FOR_TLDR}/dot_env_for_compose
+" > ${DIR_FOR_DEMO}/dot_env_for_compose
 
-#cat ${DIR_FOR_TLDR}/dot_env_for_compose
+#cat ${DIR_FOR_DEMO}/dot_env_for_compose
