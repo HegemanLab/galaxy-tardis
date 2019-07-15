@@ -1,5 +1,5 @@
-# When you source 'tardis_envar.sh', it sources 'tags-for-tardis_envar-to-source
-# these environment variables are improted and used by tardis_envar.sh
+# When you source 'tardis_envar.sh', it sources 'tags-for-tardis_envar-to-source.sh
+# which defines these environment variables to be imported and used by tardis_envar.sh
 
 # Test that the directory containing tardis_envar.sh also contains a
 #   subdirectory named 's3' that contains two files (or links to files):

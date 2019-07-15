@@ -104,21 +104,21 @@ GALAXY_PORT=${GALAXY_PORT:-8080}
 # Ports to forward outside the "rootless namespace";
 #   you won't need these if you are running Docker as root
 # For explanation, see https://github.com/rootless-containers/rootlesskit#port-drivers
-NET_ADD="
+NET_ADD=${NET_ADD:-"
 0.0.0.0:8080:${GALAXY_PORT}/tcp
 0.0.0.0:5050:5050/tcp
-"
-NET_REMOVE="
+"}
+NET_REMOVE=${NET_REMOVE:-"
 /${GALAXY_PORT}/{ s/[^0-9].*//; p }
 /5050/{ s/[^0-9].*//; p }
-"
+"}
 
 # This is the compose file to run (in this directory)
 COMPOSE_FILE=${MY_COMPOSE_FILE:?}
 
 # These are the containers in the compose file that we intend to run.
 #   Add or remove a needed, e.g., to run HT-Condor
-CONTAINERS_TO_RUN='galaxy-postgres galaxy-slurm galaxy-web galaxy-proftpd rabbitmq galaxy-init grafana pgadmin4'
+CONTAINERS_TO_RUN=${CONTAINERS_TO_RUN:-'galaxy-postgres galaxy-slurm galaxy-web galaxy-proftpd rabbitmq galaxy-init grafana pgadmin4'}
 
 ######### EXTRA_GALAXY_ENVARS - moved to env-for-DEMO.* - start ##############
 # # Extra exported environment variables to be set in the galaxy-web container

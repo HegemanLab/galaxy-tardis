@@ -93,7 +93,22 @@ MY_GALAXY_PORT=${MY_GALAXY_PORT:-8080}
 # This variable is called 'GALAXY_PORT' in setup_env.example
 GALAXY_PORT=${MY_GALAXY_PORT}
 
-# Note: Set CONTAINERS_TO_RUN, NET_ADD, and NET_REMOVE in your setup_env.* file.
+# Note: CONTAINERS_TO_RUN, NET_ADD, and NET_REMOVE will be set in your setup_env.* file unless you over-ride them here.
+# These are the containers in the compose file that we intend to run.  Add or remove a needed, e.g., to run HT-Condor
+CONTAINERS_TO_RUN=${CONTAINERS_TO_RUN:-'galaxy-postgres galaxy-slurm galaxy-web galaxy-proftpd rabbitmq galaxy-init grafana pgadmin4'}
+# Set or revert ports to forward outside the "rootless namespace";
+#   you won't need these if you are running Docker as root
+# For explanation, see https://github.com/rootless-containers/rootlesskit#port-drivers
+# Port 8080 - Galaxy web app
+# Port 5050 - PGAdmin web app
+NET_ADD="
+0.0.0.0:8080:${GALAXY_PORT}/tcp
+0.0.0.0:5050:5050/tcp
+"
+NET_REMOVE="
+/${GALAXY_PORT}/{ s/[^0-9].*//; p }
+/5050/{ s/[^0-9].*//; p }
+"
 
 ######### EXTRA_GALAXY_ENVARS - start ##############
 EXTRA_GALAXY_ENVARS="
