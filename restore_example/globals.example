@@ -42,21 +42,6 @@ PATH_TO_POSTGRES="$DIR_FOR_DEMO/postgres"
 #     You probably don't need to change this
 PGDATA_SUBDIR=${PGDATA_SUBDIR:-main}
 
-# print help message - no changes needed here
-echo "
-DEMO can run in one of three modes:
-  - 'run'    : Running Galaxy with neither initialization nor restoration 
-  - 'restore': Restoring an instance of Galaxy from S3
-  - 'fresh'  : Not restoring Galaxy, initializing fresh instance if necessary
-You can pass it as a value when invoking DEMO, e.g.
-  bash DEMO run
-  bash DEMO restore
-  bash DEMO fresh
-or you can export DEMO_RUN_MODE set to one of these values before running DEMO, e.g.
-  bash -c 'export DEMO_RUN_MODE=fresh;   bash DEMO'
-"
-# end of help message
-
 # Name you will use for your Galaxy instance
 #  Currently only used by 'screen' and in this file, but you use it as you want
 MY_INSTANCE=${MY_INSTANCE:-mygalaxyinstancename}
@@ -129,10 +114,17 @@ NET_REMOVE="
 /5050/{ s/[^0-9].*//; p }
 "
 
+# This is the compose file to run (in this directory)
+COMPOSE_FILE=${MY_COMPOSE_FILE}
+
+# These are the containers in the compose file that we intend to run.
+#   Add or remove a needed, e.g., to run HT-Condor
+CONTAINERS_TO_RUN='galaxy-postgres galaxy-slurm galaxy-web galaxy-proftpd rabbitmq galaxy-init grafana pgadmin4'
+
 ######### EXTRA_GALAXY_ENVARS - start ##############
-EXTRA_GALAXY_ENVARS="
 # Extra exported environment variables to be set in the galaxy-web container
 #   For further info, see https://github.com/bgruening/docker-galaxy-stable/#galaxys-config-settings--toc
+EXTRA_GALAXY_ENVARS="
 GALAXY_PORT=${GALAXY_PORT}
 # postgres password - If the postgres listener is not exposed outside docker
 #    containers, there should be little risk in exposing the password here.
@@ -191,3 +183,18 @@ ${EXTRA_GALAXY_ENVARS}
 " > ${DIR_FOR_DEMO}/dot_env_for_compose
 
 #cat ${DIR_FOR_DEMO}/dot_env_for_compose
+
+####### print hint message - no changes needed here
+echo "
+DEMO can run in one of three modes:
+  - 'run'    : Running Galaxy with neither initialization nor restoration 
+  - 'restore': Restoring an instance of Galaxy from S3
+  - 'fresh'  : Not restoring Galaxy, initializing fresh instance if necessary
+You can pass it as a value when invoking DEMO, e.g.
+  bash DEMO run
+  bash DEMO restore
+  bash DEMO fresh
+or you can export DEMO_RUN_MODE set to one of these values before running DEMO, e.g.
+  bash -c 'export DEMO_RUN_MODE=fresh;   bash DEMO'
+"
+# end of hint message
