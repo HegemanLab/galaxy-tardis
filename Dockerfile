@@ -29,10 +29,6 @@ RUN apk add man && bash -c 'for i in {1..8}; do mkdir -p /usr/local/man/man${i};
 # Support the vim editor
 RUN apk add vim
 
-# Include s3cmd for transmitting files to Amazon-S3 compatible buckets.  See e.g.:
-#   https://en.wikipedia.org/wiki/Amazon_S3#S3_API_and_competing_services
-RUN pip install s3cmd
-
 ####################################  Large Binaries  #######################################
 # Substitute statically linked busybox so that it can be shared with glibc-based containers
 #   See https://github.com/eschen42/alpine-cbuilder#statically-linked-busybox
@@ -101,6 +97,12 @@ COPY support/backup.crontab                  /opt/support/backup.crontab
 COPY support/cron.sh                         /opt/support/cron.sh
 # Entrypoint executable
 COPY init                                    /opt/init
+
+# Include s3cmd for transmitting files to Amazon-S3 compatible buckets.  See e.g.:
+#   https://en.wikipedia.org/wiki/Amazon_S3#S3_API_and_competing_services
+# Modify s3cmd to make it unbuffered
+RUN pip install s3cmd && \
+    sed -i -e "s/config_file = None/config_file = None; sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)/" /usr/bin/s3cmd
 
 #######################################  Permissions  ######################################
 # Executable-file permissions (besides busybox and cvs because they are hard-linked)
