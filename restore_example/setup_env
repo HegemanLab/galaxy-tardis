@@ -45,7 +45,7 @@ MY_USERNETES=${MY_USERNETES:-~/usernetes}
 #   s3cmd --config
 # This is were you will specify the location where your S3 buckets are stored.
 # See https://github.com/s3tools/s3cmd for further info
-MY_S3CFG=${MY_S3CFG:-~/.ssh/s3/${MY_BUCKET_PREFIX}.s3cfg}
+MY_S3CFG=${MY_S3CFG:-./tardis/s3/dest.s3cfg}
 # Set MY_CONFIG_BUCKET to the name of configuration-backup bucket on S3-compatible storage;
 #   This bucket stores backups of evertying except datasets.
 MY_CONFIG_BUCKET=${MY_CONFIG_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}.config}
