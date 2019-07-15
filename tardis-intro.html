@@ -36,7 +36,7 @@ name: time-travel-through-your-galaxy
 
 by Art Eschenlauer
 
-25 May 2019
+15 July 2019
 
 ---
 name: time-travel-through-your-galaxy-1
@@ -55,11 +55,11 @@ class: left, middle
 
 ### Table of Contents
 
-- [Motivation: Administering a Local Galaxy with Minimal Stress](#motivation-administering-a-local-galaxy-with-minimal-stress)
+- [Motivation: To Administer a Local Galaxy with Minimal Stress](#motivation-administering-a-local-galaxy-with-minimal-stress)
 - [Overview of Using the TARDIS](#overview-of-using-the-tardis)
-- [Build and Fly the TARDIS](#build-and-fly-the-tardis)
 - [Visual Overview of TARDIS Operations](#visual-overview-of-tardis-operations)
 - [TARDIS Commands](#tardis-command---help)
+- [Build and Fly the TARDIS](#build-and-fly-the-tardis)
 - [`restore_example`--Example of Galaxy backed up by S3](#restore_example---an-example-of-a-galaxy-backed-up-by-s3)
 - [Appendix: Configuring `s3cmd`](#appendix-configuring--s3cmd)
 - [Appendix: Running Docker Rootlessly](#appendix-running-docker-rootlessly)
@@ -80,7 +80,7 @@ class: left, middle
 ---
 name: motivation-administering-a-local-galaxy-with-minimal-stress
 
-### Motivation: Administering a Local Galaxy with Minimal Stress
+### Motivation: To Administer a Local Galaxy with Minimal Stress
 
 Suppose that:
 - You want to host a local instance of Galaxy.
@@ -124,9 +124,9 @@ name: prelude-to-the-overview-of-using-the-tardis
 
 The next section provides an introduction to the details of how the TARDIS may be used directly.  You likely will build scripts that invoke the commands rather than invoking the scripts directly when using the TARDIS.  
 
-The `restore_example` subdirectory includes some scripts to demonstrate such packaging and automation of TARDIS commands in the context of a general Docker-composition of Galaxy (adapted from those that we use to manage our Galaxy instances). The `restore_example/TLDR` script dispatches these scripts in a sensible order.
+The `restore_example` subdirectory includes some scripts to demonstrate such packaging and automation of TARDIS commands in the context of a general Docker-composition of Galaxy (adapted from those that we use to manage our Galaxy instances). The `restore_example/DEMO` script dispatches these scripts in a sensible order.
 
-We will return to `TLDR` and the other scripts in the `restore_example` subdirectory, but for now, we will dive into the details of what the TARDIS does in response to each subcommand.
+We will return to `DEMO` and the other scripts in the `restore_example` subdirectory, but for now, we will dive into the details of what the TARDIS does in response to each subcommand.
 
 ---
 name: overview-of-using-the-tardis
@@ -149,35 +149,6 @@ name: overview-of-using-the-tardis
         - can be run to generate the files used by the `compose_*.sh` scripts,
           `docker-compose-env.yml`, and `tardis_envar.sh`.
 - Source `tardis_envar.sh` to set up the `TARDIS` environment variable to invoke TARDIS.
-
----
-name: build-and-fly-the-tardis
-
-### Build and Fly the TARDIS
-
-.tugleft-left[
-**Building the TARDIS**
-```
-cd galaxy-tardis
-bash build_notar.sh
-```
-]
-.tugleft-right[
-<img  alt="UK Police Box" src="tardis-2311634.svg" height="85" />
-]
-
-**Flying the TARDIS**
-
-- Ensure that `tags-for-tardis_envar-to-source.sh` exists
-    - either by copying and adapting<br />
-      `tags-for-tardis_envar-to-source.sh.example`
-    - or by copying `restore_example/setup_env.example` to `restore_example/setup_env.my_instance`, customizing it, and:<br />
-      `pushd restore_example; bash setup_env.my_instance; popd`
-        - More information about this option is presented in ["An Example of a Galaxy backed up by S3"](#an-example-of-a-galaxy-backed-up-by-s3)
-- Set the `TARDIS` environment variable and invoke the TARDIS, e.g. (in bash):<br />
-  `source tardis_envar.sh`<br />
-  `$TARDIS help`
-- By its definition, `$TARDIS` runs as a container named `tardis`, so only one instance can run at a time.
 
 ---
 name: visual-overview-of-tardis-operations
@@ -366,12 +337,41 @@ name: tardis-command---upgrade_conda-url_or_path-md5sum--
       `$TARDIS retrieve_config && $TARDIS apply_config`
 
 ---
+name: build-and-fly-the-tardis
+
+### Build and Fly the TARDIS
+
+.tugleft-left[
+**Building the TARDIS**
+```
+cd galaxy-tardis
+bash build_notar.sh
+```
+]
+.tugleft-right[
+<img  alt="UK Police Box" src="tardis-2311634.svg" height="85" />
+]
+
+**Flying the TARDIS**
+
+- Ensure that `tags-for-tardis_envar-to-source.sh` exists
+    - either by copying and adapting<br />
+      `tags-for-tardis_envar-to-source.sh.example`
+    - or by copying `restore_example/globals.example` to `restore_example/globals.my_instance`, customizing it, and:<br />
+      `pushd restore_example; bash setup_env globals.my_instance; popd`
+        - More information about this approach is presented in ["An Example of a Galaxy backed up by S3"](#an-example-of-a-galaxy-backed-up-by-s3)
+- Set the `TARDIS` environment variable and invoke the TARDIS, e.g. (in bash):<br />
+  `source tardis_envar.sh # set the TARDIS environment variable`<br />
+  `$TARDIS help`
+- By its definition, `$TARDIS` runs as a container named `tardis`, so only one instance can run at a time.
+
+---
 name: an-example-of-a-galaxy-backed-up-by-s3
 
 ### An Example of a Galaxy backed up by S3
 
 The [`restore_example` subdirectory of the GitHub repository](https://github.com/HegemanLab/galaxy-tardis/tree/master/restore_example) demonstrates:
-- How to instantiate a Galaxy 19.01 instance on `docker-compose`.
+- How to instantiate a Galaxy 19.01 instance on `docker-compose` (under Usernetes).
 - How to run `cron` to back up the instance once per day to S3 buckets.
 - How to restore a Galaxy instance from S3 buckets (and `docker-compose`).
 - (For now, this example only runs on [Usernetes](https://github.com/rootless-containers/usernetes).)
@@ -473,42 +473,19 @@ Edit these three files to configure `restore_example`:
     - This file has the configuration for [the s3cmd utility](https://github.com/s3tools/s3cmd#simple-s3cmd-howto). (See [appendix](#appendix-configuring--s3cmd)).
         - It is in the format generated (and recognized) by the<br />`s3cmd --configure` command.
         - Example at `restore_example/tardis/s3/dest.s3cfg.example`
-- `restore_example/setup_env.my_instance` (named as you like)
-    - Copy this from `restore_example/setup_env.example`
+- `restore_example/globals.my_instance` (named as you like)
+    - Copy this from `restore_example/globals.example`
     - Adjust the many variables to meet your needs.
-    - `restore_example/setup_env.in` is a "helper" called by this script.
+    - Write the environment files used by the example scripts:
+        - `bash setup_env globals.my_instance`
 
-Add one more logical link:
-```bash
-ln -s restore_example/dot_env_for_compose restore_example/.env`
-```
-
----
-name: restore_example---configuration-generation
-
-### `restore_example`--Configuration Generation
-
-Now you can generate the configuraton for the `restore_example/compose_*.sh` scripts.
-
-- To instantiate a fresh Galaxy:
-```bash
-bash -c "export TLDR_RUN_MODE=fresh;   bash setup_env.my_instance"
-```
-- To instantiate restore a Galaxy from an S3-compatible bucket:
-```bash
-bash -c "export TLDR_RUN_MODE=restore; bash setup_env.my_instance"
-```
-- To instantiate run the existing Galaxy:
-```bash
-bash -c "export TLDR_RUN_MODE=run;     bash setup_env.my_instance"
-```
 ---
 name: restore_example---configuration-result
 
 ### `restore_example`--Configuration Result
 
 Configuration-generation produces the following files, relative to `restore_example/`:
-- `env-for-TLDR`, which is used by the `restore_example/TLDR` script
+- `env-for-DEMO`, which is used by the `restore_example/DEMO` script
 - `tardis/tags-for-tardis_envar-to-source.sh` and `tardis/s3/dest.config`, which are needed when you source `tardis_envar.sh`
 - `tags-for-compose-to-source.sh`, which is needed by `docker-compose-env.yml`, `compose_start.sh`, and `compose_restore.sh`
 - `env-for-compose-to-source.sh`, which is needed by `compose_stop.sh`, `compose_start.sh`, and `compose_restore.sh`
@@ -516,11 +493,31 @@ Configuration-generation produces the following files, relative to `restore_exam
 - `docker.service`, which will be discussed below.
 
 ---
+name: restore_example---run-modes
+
+### `restore_example`--Run Modes
+
+- To instantiate a fresh Galaxy:
+```bash
+bash -c "export DEMO fresh"
+```
+- To instantiate restore a Galaxy from an S3-compatible bucket:
+```bash
+bash -c "export DEMO restore"
+```
+- To instantiate run the existing Galaxy:
+```bash
+bash -c "export DEMO run"
+```
+
+The following slides describe what the DEMO script does in each of these cases.
+
+---
 name: restore_example---fresh-galaxy
 
 ### `restore_example`--Fresh Galaxy
 
-If you chose `TLDR_RUN_MODE=fresh`, then, when you `bash TLDR`, the following occur:
+When you invoke `bash DEMO fresh`, the following occur:
 - Directories are created as specified in config files, if necessary.
 - Galaxy is initialized, as is the database:
 ```bash
@@ -539,7 +536,7 @@ name: restore_example---restore-galaxy
 
 ### `restore_example`--Restore Galaxy
 
-If you chose `TLDR_RUN_MODE=restore`, then, when you `bash TLDR`:
+When you invoke `bash DEMO restore`, the following occur:
 - Directories are created as specified in config files, if necessary.
 - Galaxy is initialized, as is the database:
 ```bash
@@ -563,13 +560,13 @@ name: restore_example---run-galaxy
 
 ### `restore_example`--Run Galaxy
 
-If you chose `TLDR_RUN_MODE=run` (and the Galaxy instance
-has already been initialized), then, when you `bash TLDR`:
+When you invoke `bash DEMO run`, the following occur:
+has already been initialized), then, when you `bash DEMO`:
 - `compose_start.sh` is invoked without options to launch Galaxy.
   - If `screen` is installed, Galaxy will be launched within it.
 
-If you are very lucky, the rudimentary error checking for this
-case will warn you when you have not yet initialized Galaxy;
+If you are very lucky and you have not yet initialized Galaxy,
+the rudimentary error checking for this case will warn you;
 don't rely on it. :)
 
 ---
