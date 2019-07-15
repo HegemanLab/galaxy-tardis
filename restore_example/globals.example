@@ -1,39 +1,48 @@
+# Do not invoke this file directly.  Rather, supply it as an argument to 'setup_env':
+#   bash setup_env globals.example
 # This file defines the environment variables that
 #   - the DEMO script references
-#   - whatever setup_envar.* you choose referencces
+#   - the ./tardis/tardis_envar.sh script references
 # Note that:
 #   - You can override the values here by setting them in the environment
 #     - I validated that this works in the bash, ash, and dash shells.
 #   - The 'readlink' paths are models - you will need to supply real paths.
 #     - Recall that `readlink -f foo` produces the path to 'foo' with symlinks resolved.
 
-#### Get the path to this file's location as DIR_FOR_DEMO
+#### This gets the path to this file's location as DIR_FOR_DEMO
 #    and the name of this file as MY_GLOBALS_FOR_DEMO 
 #      ref: https://stackoverflow.com/a/246128
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
   DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
   SOURCE="$(readlink "$SOURCE")"
-  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+  # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 echo "sourcing $SOURCE"
-# Set environment variable to absolute path to this file
+# This sets environment variable to absolute path to this file
 MY_GLOBALS_FOR_DEMO="$SOURCE"
 DIR_FOR_DEMO="$DIR"
-#### End get the name of, and path to location of, this file
+#### End getting the name of, and path to location of, this file
 
-# Declare some base paths here:
+# Declaring some base paths here:
 #   path to location of usernetes
 #     see: https://github.com/rootless-containers/usernetes#install-from-binary
-PATH_TO_USERNETES=/path/to/usernetes
+#   You MUST change this.
+PATH_TO_USERNETES=/path/on/host/to/usernetes
 #   path to persist Galaxy data (except the database) 
 #     see: https://github.com/bgruening/docker-galaxy-stable#usage--toc
+#     You probably don't need to change this
 PATH_TO_EXPORT="$DIR_FOR_DEMO/export"
 #   path where postgres database files are persistently stored 
+#     You probably don't need to change this
 PATH_TO_POSTGRES="$DIR_FOR_DEMO/postgres"
+#   relative path to subdirectory of PATH_TO_POSTGRES where database files will be initialized
+#     You probably don't need to change this
 PGDATA_SUBDIR=${PGDATA_SUBDIR:-main}
 
+# print help message - no changes needed here
 echo "
 DEMO can run in one of three modes:
   - 'run'    : Running Galaxy with neither initialization nor restoration 
@@ -46,44 +55,54 @@ You can pass it as a value when invoking DEMO, e.g.
 or you can export DEMO_RUN_MODE set to one of these values before running DEMO, e.g.
   bash -c 'export DEMO_RUN_MODE=fresh;   bash DEMO'
 "
+# end of help message
 
 # Name you will use for your Galaxy instance
 #  Currently only used by 'screen' and in this file, but you use it as you want
 MY_INSTANCE=${MY_INSTANCE:-mygalaxyinstancename}
-# Prefix for bucket names - again, feel free to change it
+
+### S3 configuration section - start
+# The previous and next two variables are principally to name your S3 buckets.
+#   This example assumes that your buckets are named:
+#     mybucketprefix-mygalaxyinstancename.config
+#     mybucketprefix-mygalaxyinstancename.dataset
+#   Change to suit your needs.  Alternatively, replace the definitions of
+#     MY_CONFIG_BUCKET and MY_DATASET_BUCKET further below with whatever you want.
+# Prefix for S3 bucket names - again, feel free to change it
 MY_BUCKET_PREFIX=${MY_BUCKET_PREFIX:-mys3bucketprefix}
+# Name of configuration-backup bucket on S3-compatible storage; stores backups but not datasets
+MY_CONFIG_BUCKET=${MY_CONFIG_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}-config}
+# Name of dataset-backup bucket on S3-compatible storage; stores datasets
+#   If you are using an S3 or SWIFT object store for Galaxy, use the name of that bucket here
+MY_DATASET_BUCKET=${MY_DATASET_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}-dataset}
+# Path to the config file for s3cmd, see https://github.com/s3tools/s3cmd
+#   - This is the file that you generate with the command
+#       s3cmd --config
+#   - For further info, see https://github.com/s3tools/s3cmd
+MY_S3CFG=${MY_S3CFG:-`readlink -f /path/to/dest.s3cfg`}
+### S3 configuration section - end
 
 # Conda base's python version: should be '2' or '3'; default is '3'
 MY_GALAXY_TOOL_DEPS_CONDA_BASE_PYTHON_VERSION=3
-# Path on docker host to directory that will be mounted as '/export' in container
-MY_GALAXY_EXPORT=${MY_GALAXY_EXPORT:-`readlink -f /path/to/export`}
+
+# Fully nonsymbolic path on docker host to directory that will be
+#   mounted as '/export' in container
+#   You MUST change this.
+MY_GALAXY_EXPORT=${MY_GALAXY_EXPORT:-`readlink -f /path/on/host/to/export`}
 
 # Path on docker host to directory whose subdirectory 'main' will be mounted as 
 #   '/var/lib/postgresql/data' in container
 # Set the root for the PostgreSQL database files here by supplying the path on docker
 #   host to directory whose subdirectory 'main' will be mounted as 
 #   '/var/lib/postgresql/data' in container
-MY_GALAXY_POSTGRES=${MY_GALAXY_POSTGRES:-`readlink -f /path/to/postgres`}
+MY_GALAXY_POSTGRES=${MY_GALAXY_POSTGRES:-`readlink -f /path/on/host/to/postgres`}
 # Postgres password - If the postgres listener is not exposed outside docker
 #    containers, there should be little risk in exposing the password here.
 POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-quindicissimipillars}
 
 # Path on docker host where usernetes is located, if you are using usernetes,
 #   e.g., an unzipped release from https://github.com/rootless-containers/usernetes/releases
-MY_USERNETES=${MY_USERNETES:-`readlink -f /path/to/usernetes`}
-
-# Path to the config file for s3cmd
-#   - This is the file that you generate with the command
-#       s3cmd --config
-#   - For further info, see https://github.com/s3tools/s3cmd
-MY_S3CFG=${MY_S3CFG:-`readlink -f /path/to/dest.s3cfg`}
-
-# Name of configuration-backup bucket on S3-compatible storage; stores backups but not datasets
-MY_CONFIG_BUCKET=${MY_CONFIG_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}.config}
-
-# Name of dataset-backup bucket on S3-compatible storage; stores datasets
-#   If you are using an S3 or SWIFT object store for Galaxy, use the name of that bucket here
-MY_DATASET_BUCKET=${MY_DATASET_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}.data}
+MY_USERNETES=${MY_USERNETES:-`readlink -f ${PATH_TO_USERNETES:?}`}
 
 # Which docker-compose file to use, probably this is fine
 MY_COMPOSE_FILE=${MY_COMPOSE_FILE:-docker-compose-env.yml}
