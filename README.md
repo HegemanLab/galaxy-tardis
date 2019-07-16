@@ -33,7 +33,15 @@ bash build_notar.sh
 
 ## TL;DR
 
-For a quick start with minimal reading, got to [https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html#tldr--part-1-build-the-tardis](https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html#tldr--part-1-build-the-tardis).
+For a quick DEMO with minimal reading, look at the first lines of the comment at the head of the [`restore_example/DEMO` script](https://github.com/HegemanLab/galaxy-tardis/blob/master/restore_example/DEMO), which assumes, at a minimum, significant familiarity with:
+- bash
+- docker
+- docker-compose
+- S3
+- s3cmd
+- docker-galaxy-stable
+
+I have not yet linked these because I do not want to give the impression that reading a few links is a substitute for significant experience.
 
 ## Usage 
 
@@ -57,7 +65,7 @@ Usage:
                                - Upgrade conda (both arguments required)
 where:
   date        - can be relative (e.g., "1 hour ago") or absolute (e.g., any format accepted by the
-                  Linux `date` program, see e.g. http://man7.org/linux/man-pages/man1/date.1.html)
+                  --date argument of the Linux `date` program, see e.g. https://linux.die.net/man/1/date)
   hour24UTC   - any two digit hour for backup to occur; must be UTC (GMT), not local time.
   url_or_path - any URL from https://repo.continuum.io/miniconda/, or path (e.g., if you
                   copied the miniconda installer to your export directory)

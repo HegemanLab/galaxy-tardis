@@ -37,7 +37,7 @@ Usage:
                                - Upgrade conda (both arguments required)
 where:
   date        - can be relative (e.g., "1 hour ago") or absolute (e.g., any format accepted by the
-                  Linux `date` program, see e.g. http://man7.org/linux/man-pages/man1/date.1.html)
+                  --date argument of the Linux `date` program, see e.g. https://linux.die.net/man/1/date)
   hour24UTC   - any two digit hour for backup to occur; must be UTC (GMT), not local time.
   url_or_path - any URL from https://repo.continuum.io/miniconda/, or path (e.g., if you
                   copied the miniconda installer to your export directory)
