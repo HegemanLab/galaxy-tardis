@@ -10,15 +10,15 @@ done
 DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
 source $DIR/tags-for-tardis_envar-to-source.sh
-# e.g.:
-# EXPORT_DIR='/mnt/ace/piscesv/export'
+# tags-for-tardis_envar-to-source.sh may contain, e.g.:
+# TAG_GALAXY='19.01'
+# EXPORT_DIR=/home/demo/export
 # INTERNAL_EXPORT_DIR='/export'
-# PGDATA_PARENT='/mnt/ace/piscesv/postgres'
+# PGDATA_PARENT=/home/demo/postgres
 # IMAGE_POSTGRES='quay.io/bgruening/galaxy-postgres'
-# CONTAINER_POSTGRES='galaxy-postgres'
-# TAG_POSTGRES='9.6.5_for_19.01'
-# CONTAINER_GALAXY_INIT='quay.io/bgruening/galaxy-init'
+# TAG_POSTGRES=9.6.5_for_19.01
 # IMAGE_GALAXY_INIT='quay.io/bgruening/galaxy-init'
+# CONTAINER_GALAXY_INIT='galaxy-init'
 # TAG_GALAXY='19.01'
 
 if [ ! -d ${EXPORT_DIR:?} ]; then
@@ -50,7 +50,6 @@ else
     -e PGDATA_SUBDIR=${PGDATA_SUBDIR:-main} \
     -e TAG_POSTGRES=${TAG_POSTGRES:?} \
     -e IMAGE_POSTGRES=${IMAGE_POSTGRES:?} \
-    -e CONTAINER_POSTGRES=${CONTAINER_POSTGRES:?} \
     -e TAG_GALAXY=${TAG_GALAXY:?} \
     -e IMAGE_GALAXY_INIT=${IMAGE_GALAXY_INIT:?} \
     -e CONTAINER_GALAXY_INIT=${CONTAINER_GALAXY_INIT:?} \

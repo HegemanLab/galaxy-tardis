@@ -43,14 +43,13 @@ where:
                   copied the miniconda installer to your export directory)
   md5sum      - MD5 digest for url_or_path, e.g., from https://repo.continuum.io/miniconda/
 
-Optional environment variables:
-  EXPORT_DIR (default "/export") - path to directory containing "galaxy-central"
-    - Optional, used by most tasks
-  PGDATA (default "/var/lib/postgresql/data") - internal path to database in "galaxy-postgres"
-    - Optional, used by "backup" and "seed_database"
+Optional environment variable:
   PGDATA_SUBDIR (default "main") - name of subdirectory of PGDATA_PARENT where PostgreSQL database lives
+    - Used by "seed database"
 Required environment Variables (set using the "-e" option of the "docker run")
   These are the environment variables and the tasks that require them:
+    EXPORT_DIR (usually "/export") - path to directory containing "galaxy-central"
+      - Used by most tasks
     HOST_EXPORT_DIR - host path to the EXPORT_DIR as bind-mounted in docker
       - Used by "seed database"
     HOST_PGDATA_PARENT - host directory whose PGDATA_SUBDIR subdirectory is
@@ -62,6 +61,12 @@ Required environment Variables (set using the "-e" option of the "docker run")
       - Used by "seed database"
     TAG_POSTGRES - tag for docker image for PostgreSQL, e.g., "9.6.5_for_19.01"
       - Used by "seed database"
+    IMAGE_GALAXY_INIT - docker image for initializing Galaxy, e.g., "quay.io/bgruening/galaxy-init"
+      - Used by "apply_config" and "upgrade_conda"
+    TAG_GALAXY - tag for docker image for PostgreSQL, e.g., "19.01"
+      - Used by "apply_config" and "upgrade_conda"
+    CONTAINER_GALAXY - name of instantiated PostgreSQL container, e.g., "galaxy-init"
+      - Used by "apply_config" and "upgrade_conda"
 Required bind-mounts:
   "'${EXPORT_DIR}'"       - required by all but "bash" and "help"
   "/var/run/docker.sock"  - required by "seed_database", "backup"

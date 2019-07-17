@@ -76,8 +76,6 @@ PGDATA_SUBDIR=${PGDATA_SUBDIR:-main}
 IMAGE_POSTGRES=${IMAGE_POSTGRES:-'quay.io/bgruening/galaxy-postgres'}
 # Specify the tag for the docker image for PostgreSQL executables
 TAG_POSTGRES=${TAG_POSTGRES:-9.6.5_for_19.01}
-# Name of PostgreSQL container
-CONTAINER_POSTGRES=${CONTAINER_POSTGRES:-'galaxy-postgres'}
 
 # Docker image name for Galaxy initialization executables
 # N.B. that initialization of the Galaxy '/export' may change in the future,

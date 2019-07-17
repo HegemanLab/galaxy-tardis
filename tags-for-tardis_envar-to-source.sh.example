@@ -1,4 +1,3 @@
-# When you source 'tardis_envar.sh', it sources 'tags-for-tardis_envar-to-source.sh
 # which defines these environment variables to be imported and used by tardis_envar.sh
 
 # Test that the directory containing tardis_envar.sh also contains a
@@ -33,7 +32,6 @@ if [ -e s3/dest.config -a -e s3/dest.s3cfg ]; then
   #   docker pull quay.io/bgruening/galaxy-postgres:9.6.5_for_19.01
   IMAGE_POSTGRES=${IMAGE_POSTGRES:-'quay.io/bgruening/galaxy-postgres'}
   TAG_POSTGRES=${TAG_POSTGRES:-9.6.5_for_19.01}
-  CONTAINER_POSTGRES=${CONTAINER_POSTGRES:-'galaxy-postgres'}
 
   # These variables specify the postgres image.
   #   In this case it is the image that you would get with

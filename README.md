@@ -1,3 +1,5 @@
+[![Docker Repository on quay.io](https://quay.io/repository/eschen42/galaxy-tardis/status "Docker Repository on quay.io")](https://quay.io/repository/eschen42/galaxy-tardis)
+
 # TARDIS - Temporal Archive Remote Distribution and Installation System
 
 ## Motivation: Administering a Local Galaxy with Minimal Stress
@@ -12,28 +14,48 @@ Basically, you want to be able to travel (back) in time.
 The Galaxy ["Temporal Archive Remote Distribution and Installation System", https://github.com/HegemanLab/galaxy-tardis](https://github.com/HegemanLab/galaxy-tardis) may be right for you.
 - Any resemblance of the Galaxy TARDIS to [the TARDIS from *Doctor Who*](https://en.wikipedia.org/wiki/TARDIS) is purely (albeit intentionally) coincidental.
 
-Notably, the intent is **not** to replace other automation systems (e.g., ansible):
-- Rather, it is focused on restoring an existing Galaxy instance to a known state.
-- However, the TARDIS facilitates migrating an instance to another host.
+The intent of Galaxy TARDIS is:
+- to facilitate restoration of an existing ([`docker-galaxy-stable`](https://github.com/bgruening/docker-galaxy-stable/)-based) Galaxy instance to a known state.
+- to facilitates migrating an instance to another host.
 
-## Documentation
-
-Documentation for using the Galaxy TARDIS may be found at [https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html](https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html).
+Notably, the intent is **not** to replace other automation systems (e.g., ansible); conversely, Galaxy TARDIS facilitate the job of automating backup and restoration of a `docker-galaxy-stable`-based Galaxy instance.
 
 ## Overview
 
-- The purpose of the Galaxy `tardis` Docker image is to back up and restore Galaxy instances that are based on [galaxy-docker-stable](https://github.com/bgruening/docker-galaxy-stable/).
+- The purpose of the Galaxy `tardis` Docker image is to back up and restore Galaxy instances that are based on [docker-galaxy-stable](https://github.com/bgruening/docker-galaxy-stable/).
 - The only storage back-end for backup implemented thus far is S3-compatible storage such as Ceph.
     - Because the implementation is modular, it should not be particularly challenging to support other back-ends.
-- You can build the image from this repository with:
-```bash
-bash build_notar.sh
-```
+- You can [pull the image](#how-to-pull-the-docker-image-by-tag) or [build it yourself](#how-to-build-the-docker-image).
 - A practical example of application of the Galaxy TARDIS is given in the `restore example` directory.
 
-## TL;DR
+### Documentation
 
-For a quick DEMO with minimal reading, look at the first lines of the comment at the head of the [`restore_example/DEMO` script](https://github.com/HegemanLab/galaxy-tardis/blob/master/restore_example/DEMO), which assumes, at a minimum, significant familiarity with:
+Documentation and instructions for using the Galaxy TARDIS may be found at [https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html](https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html).
+This also describes the illustrative example available in the `restore_example` directory.
+
+### How to pull the Docker image by tag:
+
+Identify a tag with a "Passed" security tag from [https://quay.io/repository/eschen42/galaxy-tardis?tab=tags](https://quay.io/repository/eschen42/galaxy-tardis?tab=tags).
+> For example, when this was written, the "v0.0.1-pre" had passed the "security scan" for known vulnerabilities.
+  As time goes on, new vulnerabilites may be discovered and the "security scan" status of a tag may change.
+
+Use the tag that you chose to pull the image.
+```bash
+docker pull quay.io/eschen42/galaxy-tardis:v0.0.1-pre
+```
+
+### How to build the Docker image:
+
+You can build the image with:
+```bash
+git clone https://github.com/HegemanLab/galaxy-tardis.git
+cd galaxy-tardis
+bash build_notar.sh
+```
+
+### Quick Start
+
+Suppose that you have significant familiarity with the following (links are not provided to avoid the impression that following a few links is a substitute for significant experience):
 - bash
 - docker
 - docker-compose
@@ -41,11 +63,22 @@ For a quick DEMO with minimal reading, look at the first lines of the comment at
 - s3cmd
 - docker-galaxy-stable
 
-I have not yet linked these because I do not want to give the impression that reading a few links is a substitute for significant experience.
+If so, then try looking at the first lines of the comment at the head of the [`restore_example/DEMO` script](https://github.com/HegemanLab/galaxy-tardis/blob/master/restore_example/DEMO).
+Otherwise, please [see Documentation](#documentation).
 
 ## Usage 
 
-Usage for the `tardis` Docker image:
+Please [see Documentation](#documentation) to understand how the parts of Galaxy TARDIS work.
+
+If you were to:
+- create `tags-for-tardis_envar-to-source.sh` by copying `tags-for-tardis_envar-to-source.sh.example`
+- adjust it for your Galaxy instance (based on `docker-galaxy-stable` or one of its derivitives)
+- and run:
+```bash
+source tardis_envar.sh
+$TARDIS help
+```
+you would see the following help text:
 
 ```
 tardis - Temporal Archive Remote Distribution and Installation System for Galaxy-in-Docker
@@ -71,14 +104,13 @@ where:
                   copied the miniconda installer to your export directory)
   md5sum      - MD5 digest for url_or_path, e.g., from https://repo.continuum.io/miniconda/
 
-Optional environment variables:
-  EXPORT_DIR (default "/export") - path to directory containing "galaxy-central"
-    - Optional, used by most tasks
-  PGDATA (default "/var/lib/postgresql/data") - internal path to database in "galaxy-postgres"
-    - Optional, used by "backup" and "seed_database"
+Optional environment variable:
   PGDATA_SUBDIR (default "main") - name of subdirectory of PGDATA_PARENT where PostgreSQL database lives
+    - Used by "seed database"
 Required environment Variables (set using the "-e" option of the "docker run")
   These are the environment variables and the tasks that require them:
+    EXPORT_DIR (usually "/export") - path to directory containing "galaxy-central"
+      - Used by most tasks
     HOST_EXPORT_DIR - host path to the EXPORT_DIR as bind-mounted in docker
       - Used by "seed database"
     HOST_PGDATA_PARENT - host directory whose PGDATA_SUBDIR subdirectory is
@@ -90,6 +122,12 @@ Required environment Variables (set using the "-e" option of the "docker run")
       - Used by "seed database"
     TAG_POSTGRES - tag for docker image for PostgreSQL, e.g., "9.6.5_for_19.01"
       - Used by "seed database"
+    IMAGE_GALAXY_INIT - docker image for initializing Galaxy, e.g., "quay.io/bgruening/galaxy-init"
+      - Used by "apply_config" and "upgrade_conda"
+    TAG_GALAXY - tag for docker image for PostgreSQL, e.g., "19.01"
+      - Used by "apply_config" and "upgrade_conda"
+    CONTAINER_GALAXY - name of instantiated PostgreSQL container, e.g., "galaxy-init"
+      - Used by "apply_config" and "upgrade_conda"
 Required bind-mounts:
   "/export"       - required by all but "bash" and "help"
   "/var/run/docker.sock"  - required by "seed_database", "backup"
@@ -97,10 +135,6 @@ Required bind-mounts:
   "/opt/s3/dest.config"   - required by "transmit", "retrieve_config", and "restore_datasets"
 
 ```
-
-### How to build the Docker image:
-
-See [https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html#build-and-fly-the-tardis](https://hegemanlab.github.io/galaxy-tardis/tardis-intro.html#build-and-fly-the-tardis)
 
 ## Supporting Software
 
