@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3339453.svg)](https://doi.org/10.5281/zenodo.3339453)
 [![Docker Repository on quay.io](https://quay.io/repository/eschen42/galaxy-tardis/status "Docker Repository on quay.io")](https://quay.io/repository/eschen42/galaxy-tardis)
 
 # TARDIS - Temporal Archive Remote Distribution and Installation System
