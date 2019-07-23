@@ -37,12 +37,12 @@ This also describes the illustrative example available in the `restore_example` 
 ### How to pull the Docker image by tag:
 
 Identify a tag with a "Passed" security tag from [https://quay.io/repository/eschen42/galaxy-tardis?tab=tags](https://quay.io/repository/eschen42/galaxy-tardis?tab=tags).
-> For example, when this was written, the "v0.0.1-pre" had passed the "security scan" for known vulnerabilities.
+> For example, when this was written, the "v0.0.1" had passed the "security scan" for known vulnerabilities.
   As time goes on, new vulnerabilites may be discovered and the "security scan" status of a tag may change.
 
-Use the tag that you chose to pull the image.
+Use the tag that you chose to pull the image and tag it as `tardis:latest`.  The `pull_tag.sh` exists to simplify this:
 ```bash
-docker pull quay.io/eschen42/galaxy-tardis:v0.0.1-pre
+bash pull_tag.sh -s quay.io/eschen42/galaxy-tardis:v0.0.1 -t tardis:latest
 ```
 
 ### How to build the Docker image:
