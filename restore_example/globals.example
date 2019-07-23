@@ -73,14 +73,14 @@ MY_GALAXY_TOOL_DEPS_CONDA_BASE_PYTHON_VERSION=3
 # Fully nonsymbolic path on docker host to directory that will be
 #   mounted as '/export' in container
 #   You MUST change this.
-MY_GALAXY_EXPORT=${MY_GALAXY_EXPORT:-`readlink -f ${PATH_TO_EXPORT:}`}
+MY_GALAXY_EXPORT=${MY_GALAXY_EXPORT:-`readlink -f ${PATH_TO_EXPORT:?}`}
 
 # Path on docker host to directory whose subdirectory 'main' will be mounted as 
 #   '/var/lib/postgresql/data' in container
 # Set the root for the PostgreSQL database files here by supplying the path on docker
 #   host to directory whose subdirectory 'main' will be mounted as 
 #   '/var/lib/postgresql/data' in container
-MY_GALAXY_POSTGRES=${MY_GALAXY_POSTGRES:-`readlink -f ${PATH_TO_POSTGRES:}`}
+MY_GALAXY_POSTGRES=${MY_GALAXY_POSTGRES:-`readlink -f ${PATH_TO_POSTGRES:?}`}
 # Postgres password - If the postgres listener is not exposed outside docker
 #    containers, there should be little risk in exposing the password here.
 POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-quindicissimipillars}
