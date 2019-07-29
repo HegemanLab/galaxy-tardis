@@ -172,3 +172,9 @@ tar -xvf usernetes-x86_64.tar usernetes/bin/docker
 cp usernetes/bin/docker support/docker-usernetes
 rm -rf usernetes-x86_64.tar usernetes
 ```
+
+### dcron - Dillon's Cron
+
+[Dillon's Cron Daemon](http://www.jimpryor.net/linux/dcron.html) was chosen over the more traditional Vixie Cron because:
+- "having to combine a cron daemon with another daemon like anacron makes for too much complexity", and
+- "All jobs are run with `/bin/sh` for conformity and portability".
