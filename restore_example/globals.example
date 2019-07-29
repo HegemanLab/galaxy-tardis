@@ -4,13 +4,22 @@
 #   - the DEMO script references
 #   - the ./tardis/tardis_envar.sh script references
 # Note that:
-#   - You can override the values here by setting them in the environment
-#     - I validated that this works in the bash, ash, and dash shells.
-#   - The 'readlink' paths are models - you will need to supply real paths.
+#   - The 'readlink' paths below are models - you will need to supply real paths.
 #     - Recall that `readlink -f foo` produces the path to 'foo' with symlinks resolved.
+#   - You can override many of the values here by setting them in the environment
+#     - I validated that this works in the bash, ash, and dash shells.
+#   - You can override many of the values here by setting them in the overrides
+#     section below; these take precedence over the values set in the environment
+#     unless they in fact read from the environment.
+#   - A few variables are set only below the overrides section.
+#   - If you have to ADD variables, decide where you would like to put and use them:
+#     - in the environment,
+#     - in the overrides section below,
+#     - in the body below the overrides section, or
+#     - in the 'setup_env.in' file.
 
-#### This gets the path to this file's location as DIR_FOR_DEMO
-#    and the name of this file as MY_GLOBALS_FOR_DEMO 
+#### This gets the path to this file's location as DIR_BASE
+#    and the name of this file as MY_GLOBALS
 #      ref: https://stackoverflow.com/a/246128
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
@@ -21,30 +30,109 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 echo "sourcing $SOURCE"
-# This sets environment variable to absolute path to this file
-MY_GLOBALS_FOR_DEMO="$SOURCE"
-DIR_FOR_DEMO="$DIR"
+# This sets an environment variable to absolute path to this file
+MY_GLOBALS="$SOURCE"
+DIR_BASE="$DIR"
 #### End getting the name of, and path to location of, this file
+
+#### Override variables here - start
+# Find the comments about these variables after the overrides themselves.
+
+MY_INSTANCE=${MY_INSTANCE:-mygalaxy}
+
+MY_BUCKET_PREFIX=${MY_BUCKET_PREFIX:-mys3bucketprefix}
+MY_CONFIG_BUCKET=${MY_CONFIG_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}-config}
+MY_DATASET_BUCKET=${MY_DATASET_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}-datasets}
+MY_S3CFG=${MY_S3CFG:-`readlink -f $DIR_BASE/tardis/s3/dest.s3cfg`}
+
+POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-galaxy}
+GALAXY_DEFAULT_ADMIN_USER=${GALAXY_DEFAULT_ADMIN_USER:-admin}
+GALAXY_DEFAULT_ADMIN_EMAIL=${GALAXY_DEFAULT_ADMIN_EMAIL:-admin@galaxy.org}
+
+GALAXY_DEFAULT_ADMIN_PASSWORD=${GALAXY_DEFAULT_ADMIN_PASSWORD:-admin}
+GALAXY_DEFAULT_ADMIN_KEY=${GALAXY_DEFAULT_ADMIN_KEY:-$(echo $(date -Ins | md5sum) | cut -f 1 -d ' ')}
+GALAXY_CONFIG_ADMIN_USER=${GALAXY_CONFIG_ADMIN_USER:-admin@galaxy.org}
+
+STORAGE_PATH_BASE=${STORAGE_PATH_BASE:-"${DIR_BASE:?}"}
+
+STORAGE_PATH_SUFFIX=${STORAGE_PATH_SUFFIX:-""}
+PATH_TO_EXPORT="${PATH_TO_EXPORT:-${STORAGE_PATH_BASE}}/export${STORAGE_PATH_SUFFIX}"
+MY_GALAXY_EXPORT=${MY_GALAXY_EXPORT:-`readlink -f ${PATH_TO_EXPORT:?}`}
+PATH_TO_POSTGRES="${PATH_TO_POSTGRES:-${STORAGE_PATH_BASE}}/postgres${STORAGE_PATH_SUFFIX}"
+MY_GALAXY_POSTGRES=${MY_GALAXY_POSTGRES:-`readlink -f ${PATH_TO_POSTGRES:?}`}
+PGDATA_SUBDIR=${PGDATA_SUBDIR:-main}
+
+USERNETES_PATH=${USERNETES_PATH:-~/usernetes}
+
+USERNETES_EXTERN_GALAXY_PORT=${USERNETES_EXTERN_GALAXY_PORT:-8080}
+GALAXY_CONFIG_DATABASE_AUTO_MIGRATE=${GALAXY_CONFIG_DATABASE_AUTO_MIGRATE:-false}
+GALAXY_CONFIG_TOOL_CONFIG_FILE=${GALAXY_CONFIG_TOOL_CONFIG_FILE:-config/tool_conf.xml,config/shed_tool_conf}
+
+RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-runrabbitrunrabbitmq}
+GALAXY_DESTINATIONS_DEFAULT=${GALAXY_DESTINATIONS_DEFAULT:-slurm_cluster}
+GALAXY_RUNNERS_ENABLE_SLURM=${GALAXY_RUNNERS_ENABLE_SLURM:-True}
+ENABLE_CONDOR=${ENABLE_CONDOR:-false}
+CONDOR_HOST=${CONDOR_HOST:-galaxy-htcondor}
+GALAXY_DOCKER_ENABLED=${GALAXY_DOCKER_ENABLED:-true}
+GALAXY_CONFIG_CLEANUP_JOB=${GALAXY_CONFIG_CLEANUP_JOB:-onsuccess}
+TAG_POSTGRES=${TAG_POSTGRES:-9.6.5_for_19.01}
+TAG_PROFTPD=${TAG_PROFTPD:-for_galaxy_19.01}
+TAG=${TAG:-19.01}
+
+#see comment below regarding GALAXY_CONFIG_MASTER_API_KEY
+#GALAXY_CONFIG_MASTER_API_KEY=${GALAXY_CONFIG_MASTER_API_KEY:-$(echo $(date -Ins | md5sum | md5sum) | cut -f 1 -d ' ')}
+
+show_variables(){
+  echo MY_INSTANCE=${MY_INSTANCE:?}
+  echo MY_BUCKET_PREFIX=${MY_BUCKET_PREFIX:?}
+  echo MY_CONFIG_BUCKET=${MY_CONFIG_BUCKET:?}
+  echo MY_DATASET_BUCKET=${MY_DATASET_BUCKET:?}
+  #echo POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?}
+  echo PGDATA_SUBDIR=${PGDATA_SUBDIR:?}
+  echo GALAXY_DEFAULT_ADMIN_USER=${GALAXY_DEFAULT_ADMIN_USER:?}
+  echo GALAXY_DEFAULT_ADMIN_EMAIL=${GALAXY_DEFAULT_ADMIN_EMAIL:?}
+  #echo GALAXY_DEFAULT_ADMIN_PASSWORD=${GALAXY_DEFAULT_ADMIN_PASSWORD:?}
+  echo GALAXY_DEFAULT_ADMIN_KEY=${GALAXY_DEFAULT_ADMIN_KEY:?}
+  echo GALAXY_CONFIG_ADMIN_USER=${GALAXY_CONFIG_ADMIN_USER:?}
+  echo STORAGE_PATH_SUFFIX=${STORAGE_PATH_SUFFIX}
+  echo PATH_TO_EXPORT=${PATH_TO_EXPORT:?}
+  echo MY_GALAXY_EXPORT=${MY_GALAXY_EXPORT:?}
+  echo PATH_TO_POSTGRES=${PATH_TO_POSTGRES:?}
+  echo MY_GALAXY_POSTGRES=${MY_GALAXY_POSTGRES:?}
+  echo USERNETES_PATH=${USERNETES_PATH:?}
+  echo USERNETES_EXTERN_GALAXY_PORT=${USERNETES_EXTERN_GALAXY_PORT:?}
+  echo GALAXY_CONFIG_DATABASE_AUTO_MIGRATE=${GALAXY_CONFIG_DATABASE_AUTO_MIGRATE:?}
+  echo GALAXY_CONFIG_TOOL_CONFIG_FILE=${GALAXY_CONFIG_TOOL_CONFIG_FILE:?}
+  echo GALAXY_DESTINATIONS_DEFAULT=${GALAXY_DESTINATIONS_DEFAULT:?}
+  echo GALAXY_RUNNERS_ENABLE_SLURM=${GALAXY_RUNNERS_ENABLE_SLURM:?}
+  echo ENABLE_CONDOR=${ENABLE_CONDOR:-false}
+  echo CONDOR_HOST=${CONDOR_HOST:-galaxy-htcondor}
+  echo TAG_POSTGRES=${TAG_POSTGRES:?}
+  echo TAG_PROFTPD=${TAG_PROFTPD:?}
+  echo "TAG(other images)=${TAG:?}"
+  #echo RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:?}
+}
+#### Override variables here - end
 
 # Declaring some base paths here:
 #   path to location of usernetes
 #     see: https://github.com/rootless-containers/usernetes#install-from-binary
-#   You MUST change this.
-PATH_TO_USERNETES=/path/on/host/to/usernetes
-#   path to persist Galaxy data (except the database) 
+#   You MUST set this in the overrides above or here.
+USERNETES_PATH=${USERNETES_PATH:-~/usernetes}
+#   path to persist Galaxy data (except the database)
 #     see: https://github.com/bgruening/docker-galaxy-stable#usage--toc
 #     You probably don't need to change this
-PATH_TO_EXPORT="$DIR_FOR_DEMO/export"
-#   path where postgres database files are persistently stored 
+PATH_TO_EXPORT="${PATH_TO_EXPORT:-${DIR_BASE}/export}"
+#   path where postgres database files are persistently stored
 #     You probably don't need to change this
-PATH_TO_POSTGRES="$DIR_FOR_DEMO/postgres"
+PATH_TO_POSTGRES="${PATH_TO_POSTGRES:-${DIR_BASE}/postgres}"
 #   relative path to subdirectory of PATH_TO_POSTGRES where database files will be initialized
 #     You probably don't need to change this
 PGDATA_SUBDIR=${PGDATA_SUBDIR:-main}
 
 # Name you will use for your Galaxy instance
 #  Currently only used by 'screen' and in this file, but you use it as you want
-MY_INSTANCE=${MY_INSTANCE:-mygalaxyinstancename}
+MY_INSTANCE=${MY_INSTANCE:-mygalaxy}
 
 ### S3 configuration section - start
 # The previous and next two variables are principally to name your S3 buckets.
@@ -59,35 +147,37 @@ MY_BUCKET_PREFIX=${MY_BUCKET_PREFIX:-mys3bucketprefix}
 MY_CONFIG_BUCKET=${MY_CONFIG_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}-config}
 # Name of dataset-backup bucket on S3-compatible storage; stores datasets
 #   If you are using an S3 or SWIFT object store for Galaxy, use the name of that bucket here
-MY_DATASET_BUCKET=${MY_DATASET_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}-dataset}
+MY_DATASET_BUCKET=${MY_DATASET_BUCKET:-${MY_BUCKET_PREFIX}-${MY_INSTANCE}-datasets}
 # Path to the config file for s3cmd, see https://github.com/s3tools/s3cmd
 #   - This is the file that you generate with the command
 #       s3cmd --config
 #   - For further info, see https://github.com/s3tools/s3cmd
-MY_S3CFG=${MY_S3CFG:-`readlink -f /path/to/dest.s3cfg`}
+MY_S3CFG=${MY_S3CFG:-`readlink -f $DIR_BASE/tardis/s3/dest.s3cfg`}
 ### S3 configuration section - end
 
 # Conda base's python version: should be '2' or '3'; default is '3'
+#   Unless you have a very old Galaxy you won't want to change this
+#   (at least not until Python 3 becomes obsolete).
 MY_GALAXY_TOOL_DEPS_CONDA_BASE_PYTHON_VERSION=3
 
 # Fully nonsymbolic path on docker host to directory that will be
 #   mounted as '/export' in container
-#   You MUST change this.
+#   You MUST set this appropriately.
 MY_GALAXY_EXPORT=${MY_GALAXY_EXPORT:-`readlink -f ${PATH_TO_EXPORT:?}`}
 
-# Path on docker host to directory whose subdirectory 'main' will be mounted as 
-#   '/var/lib/postgresql/data' in container
+# Path on docker host to directory whose subdirectory 'main' will be mounted as
+#   '/var/lib/postgresql/data' in the galaxy-postgres container
 # Set the root for the PostgreSQL database files here by supplying the path on docker
-#   host to directory whose subdirectory 'main' will be mounted as 
+#   host to directory whose subdirectory ${PGDATA_SUBDIR} will be mounted as
 #   '/var/lib/postgresql/data' in container
 MY_GALAXY_POSTGRES=${MY_GALAXY_POSTGRES:-`readlink -f ${PATH_TO_POSTGRES:?}`}
 # Postgres password - If the postgres listener is not exposed outside docker
 #    containers, there should be little risk in exposing the password here.
-POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-quindicissimipillars}
+POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-galaxy}
 
 # Path on docker host where usernetes is located, if you are using usernetes,
 #   e.g., an unzipped release from https://github.com/rootless-containers/usernetes/releases
-MY_USERNETES=${MY_USERNETES:-`readlink -f ${PATH_TO_USERNETES:?}`}
+MY_USERNETES=${MY_USERNETES:-`readlink -f $USERNETES_PATH`}
 
 # Which docker-compose file to use, probably this is fine
 MY_COMPOSE_FILE=${MY_COMPOSE_FILE:-docker-compose-env.yml}
@@ -103,14 +193,15 @@ CONTAINERS_TO_RUN=${CONTAINERS_TO_RUN:-'galaxy-postgres galaxy-slurm galaxy-web 
 # Set or revert ports to forward outside the "rootless namespace";
 #   you won't need these if you are running Docker as root
 # For explanation, see https://github.com/rootless-containers/rootlesskit#port-drivers
-# Port 8080 - Galaxy web app
+# Port ${USERNETES_EXTERN_GALAXY_PORT:} - Galaxy web app
 # Port 5050 - PGAdmin web app
+USERNETES_EXTERN_GALAXY_PORT=${USERNETES_EXTERN_GALAXY_PORT:-8080}
 NET_ADD="
-0.0.0.0:8080:${GALAXY_PORT}/tcp
+0.0.0.0:${USERNETES_EXTERN_GALAXY_PORT:?}:${GALAXY_PORT}/tcp
 0.0.0.0:5050:5050/tcp
 "
 NET_REMOVE="
-/${GALAXY_PORT}/{ s/[^0-9].*//; p }
+/${USERNETES_EXTERN_GALAXY_PORT:?}/{ s/[^0-9].*//; p }
 /5050/{ s/[^0-9].*//; p }
 "
 
@@ -129,7 +220,7 @@ EXTRA_GALAXY_ENVARS="
 GALAXY_PORT=${GALAXY_PORT}
 # postgres password - If the postgres listener is not exposed outside docker
 #    containers, there should be little risk in exposing the password here.
-POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?}
 
 # Galaxy default-admin
 #   TBD - what happens when you change the user's password through the web UI?
@@ -150,53 +241,66 @@ GALAXY_CONFIG_DATABASE_AUTO_MIGRATE=${GALAXY_CONFIG_DATABASE_AUTO_MIGRATE:-false
 GALAXY_CONFIG_TOOL_CONFIG_FILE=${GALAXY_CONFIG_TOOL_CONFIG_FILE:-config/tool_conf.xml,config/shed_tool_conf.xml}
 # galaxy.yml config-file sustitutions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-# Get all the rabbits in the same queue
-RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-somerand0mstringhere}
+# This is used to connect to the RabbitMQ message broker
+RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-runrabbitrunrabbitmq}
 
+### slurm-specific - start - for alternatives, see:
+###   https://github.com/bgruening/docker-galaxy-stable/tree/master/compose#start-container-
 # default destination 'slurm_cluster' is our SLURM cluster (no htcondor)
 GALAXY_DESTINATIONS_DEFAULT=${GALAXY_DESTINATIONS_DEFAULT:-slurm_cluster}
 GALAXY_RUNNERS_ENABLE_SLURM=${GALAXY_RUNNERS_ENABLE_SLURM:-True}
 
 # You will want to disable Docker support for HT-Condor; you can enable it in a non HPC environment
 GALAXY_DOCKER_ENABLED=${GALAXY_DOCKER_ENABLED:-true}
-GALAXY_CONFIG_CLEANUP_JOB=${GALAXY_CONFIG_CLEANUP_JOB:-onsuccess}
+### slurm-specific - end
 
+### condor-specific - start - for alternatives, see:
 ENABLE_CONDOR=${ENABLE_CONDOR:-false}
 CONDOR_HOST=${CONDOR_HOST:-galaxy-htcondor}
+### condor-specific - end
+
+GALAXY_CONFIG_CLEANUP_JOB=${GALAXY_CONFIG_CLEANUP_JOB:-onsuccess}
 ### Last line of EXTRA_GALAXY_ENVARS defined in the globals file ###
 "
 ######### EXTRA_GALAXY_ENVARS - end ##############
 
-# Set up ${DIR_FOR_DEMO}/dot_env_for_compose here:
+######### .env for docker-compose - start ##############
+# Set up ${DIR_BASE}/dot_env_for_compose here:
 # For examples of the GALAXY_* variables, see the '.env_*' files at
 #   https://github.com/bgruening/docker-galaxy-stable/tree/master/compose
+# Note that `setup_env.in` replaces `.env` with the contents of `dot_env_for_compose`
 echo "
-
-# This file is setting up a composed Galaxy instance with support
-# for submitting SLURM.
+### First line of .env for docker-compose defined in the globals file ###
+# This file is setting up a composed Galaxy instance.
 # Docker compose will use parameters specified in an '.env' file
 # next to the docker-compose.yml file.
 
-TAG=19.01
-PGDATA_DIR=${MY_GALAXY_POSTGRES:?}/${PGDATA_SUBDIR}
+TAG_POSTGRES=${TAG_POSTGRES:-9.6.5_for_19.01}
+TAG_PROFTPD=${TAG_PROFTPD:-for_galaxy_19.01}
+TAG=${TAG:-19.01}
+PGDATA_DIR=${MY_GALAXY_POSTGRES:?}/${PGDATA_SUBDIR:?}
 EXPORT_DIR=${MY_GALAXY_EXPORT:?}
 ${EXTRA_GALAXY_ENVARS}
 
-" > ${DIR_FOR_DEMO}/dot_env_for_compose
+### Last line of .env for docker-compose defined in the globals file ###
+" > ${DIR_BASE:?}/dot_env_for_compose
 
-#cat ${DIR_FOR_DEMO}/dot_env_for_compose
+####### show variables as they have been set in this file
+show_variables
 
 ####### print hint message - no changes needed here
-echo "
-DEMO can run in one of three modes:
-  - 'run'    : Running Galaxy with neither initialization nor restoration 
-  - 'restore': Restoring an instance of Galaxy from S3
-  - 'fresh'  : Not restoring Galaxy, initializing fresh instance if necessary
-You can pass it as a value when invoking DEMO, e.g.
-  bash DEMO run
-  bash DEMO restore
-  bash DEMO fresh
-or you can export DEMO_RUN_MODE set to one of these values before running DEMO, e.g.
-  bash -c 'export DEMO_RUN_MODE=fresh;   bash DEMO'
-"
+print_hint(){
+  echo "
+  DEMO can run in one of three modes:
+    - 'run'    : Running Galaxy with neither initialization nor restoration
+    - 'restore': Restoring an instance of Galaxy from S3
+    - 'fresh'  : Not restoring Galaxy, initializing fresh instance if necessary
+  You can pass it as a value when invoking DEMO, e.g.
+    bash DEMO run
+    bash DEMO restore
+    bash DEMO fresh
+  or you can export DEMO_RUN_MODE set to one of these values before running DEMO, e.g.
+    bash -c 'export DEMO_RUN_MODE=fresh;   bash DEMO'
+  "
+}
 # end of hint message

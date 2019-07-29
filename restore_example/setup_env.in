@@ -2,9 +2,11 @@
 # setup_env.in
 #   This is sourced by setup_env.example to set up environment variable files for the restoration example.
 
+# Set up environment variables used by the DEMO script
+echo wrting env-for-DEMO
 echo '
 DEMO_RUN_MODE=${DEMO_RUN_MODE:-'"${DEMO_RUN_MODE:?}}
-# produced from ${MY_GLOBALS_FOR_DEMO:?}
+# produced from ${MY_GLOBALS:?}
 
 # Name you will use for your Galaxy instance
 #  Currently only used by 'screen' and in this file, but you use it as you want
@@ -40,6 +42,7 @@ MY_COMPOSE_FILE=${MY_COMPOSE_FILE:?}
 #${EXTRA_GALAXY_ENVARS}
 
 # Set up environment variables used to set TARDIS environment
+echo writing tardis/s3/dest.config
 echo "
 EXPORT_DIR=${EXPORT_DIR:?}
 INTERNAL_EXPORT_DIR='${INTERNAL_EXPORT_DIR:?}'
@@ -63,6 +66,7 @@ CONFIG_BUCKET=${MY_CONFIG_BUCKET:?}
 " > tardis/s3/dest.config
 
 # Set up tag variables for docker-compose
+echo writing tags-for-compose-to-source.sh
 echo "
 TAG=${TAG_DEFAULT:?}
 TAG_POSTGRES=${TAG_POSTGRES:?}
@@ -74,6 +78,7 @@ POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?}
 " > tags-for-compose-to-source.sh
 
 # Set up environment .env docker-compose
+echo writing env-for-compose-to-source.sh
 echo "
 EXPORT_DIR=${EXPORT_DIR:?}
 PGDATA_PARENT=${PGDATA_PARENT:?}
@@ -105,4 +110,8 @@ cat dot_env_for_compose > .env
 # ${EXTRA_GALAXY_ENVARS:?}
 # " >> .env
 
+echo writing docker.service
 sed -e "s@/path/to/usernetes@${MY_USERNETES:?}@g" docker.service.example > docker.service
+
+# print the hint message from globals.*
+print_hint
