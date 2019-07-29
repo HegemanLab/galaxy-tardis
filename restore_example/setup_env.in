@@ -56,6 +56,7 @@ CONTAINER_GALAXY_INIT='${CONTAINER_GALAXY_INIT:?}'
 TAG_GALAXY='${TAG_GALAXY:?}'
 " > tardis/tags-for-tardis_envar-to-source.sh
 
+echo writing tardis/s3/dest.config
 echo "
 # S3 bucket to hold files (i.e., Galaxy datasets)
 #    If the Galaxy instance is using an S3 or Swift object store, this
