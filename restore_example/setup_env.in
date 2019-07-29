@@ -42,7 +42,7 @@ MY_COMPOSE_FILE=${MY_COMPOSE_FILE:?}
 #${EXTRA_GALAXY_ENVARS}
 
 # Set up environment variables used to set TARDIS environment
-echo writing tardis/s3/dest.config
+echo writing tardis/tags-for-tardis_envar-to-source.sh
 echo "
 EXPORT_DIR=${EXPORT_DIR:?}
 INTERNAL_EXPORT_DIR='${INTERNAL_EXPORT_DIR:?}'
