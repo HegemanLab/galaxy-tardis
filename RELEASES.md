@@ -8,6 +8,8 @@
 
 ## Release notes
 
+- [v0.0.2](https://github.com/HegemanLab/galaxy-tardis/compare/v0.0.3...v0.0.2)
+  - Upgrade Alpine Linux to 3.10.1
 - [v0.0.2](https://github.com/HegemanLab/galaxy-tardis/compare/v0.0.2...v0.0.1)
   - Upgrade static CVS binary to 1.12.13
   - Upgrade static busybox binary to 1.31.0

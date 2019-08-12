@@ -1,4 +1,4 @@
-FROM alpine:3.9.3
+FROM alpine:3.10.1
 LABEL maintainer="'Art Eschenlauer, esch0041@umn.edu'"
 
 ###################################  Accounts and Groups  ####################################
