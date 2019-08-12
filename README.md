@@ -151,13 +151,13 @@ There may be a modern source control system that could achieve compact storage a
 
 #### Statically linked `cvs` binary
 
-The `support/cvs-static` binary was compiled and statically linked as described at [https://github.com/eschen42/alpine-cbuilder#cvs-executable-independent-of-glibc](https://github.com/eschen42/alpine-cbuilder#cvs-executable-independent-of-glibc)
+The `support/cvs-static` binary, version 1.12.13, was compiled and statically linked as described at [https://github.com/eschen42/cvs-static#how-to-build-a-statically-linked-cvs-binary](https://github.com/eschen42/cvs-static#how-to-build-a-statically-linked-cvs-binary)
 
 ### Busybox
 
 This Docker image is based on Alpine linux, which uses the `musl` C library rather than `glibc`.  Busybox provides diverse functionality, especially useful inside a very minimal Docker container.  However, I don't want to have track one `musl` busybox and another `glibc` busybox, so I replaced the Alpine busybox in the image with a statically linked busybox, built as described at [https://github.com/eschen42/alpine-cbuilder#statically-linked-busybox](https://github.com/eschen42/alpine-cbuilder#statically-linked-busybox).
 
-### Docker client
+### Docker clients
 
 The `support/docker-usernetes` binary is a statically linked binary that was extracted from:
 [https://github.com/rootless-containers/usernetes/releases/tag/v20190511.1](https://github.com/rootless-containers/usernetes/releases/tag/v20190511.1)
@@ -178,3 +178,11 @@ rm -rf usernetes-x86_64.tar usernetes
 [Dillon's Cron Daemon](http://www.jimpryor.net/linux/dcron.html) was chosen over the more traditional Vixie Cron because:
 - "having to combine a cron daemon with another daemon like anacron makes for too much complexity", and
 - "All jobs are run with `/bin/sh` for conformity and portability".
+
+## Bugs and missing features
+
+See [./RELEASES.md#bugs-and-missing-features](./RELEASES.md#bugs-and-missing-features)
+ 
+## Release notes
+
+See [./RELEASES.md#release-notes](./RELEASES.md#release-notes)

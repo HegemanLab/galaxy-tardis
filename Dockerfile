@@ -35,7 +35,7 @@ RUN apk add vim
 #   and https://github.com/HegemanLab/galaxy-tardis/releases/tag/binary1-pre
 RUN mkdir -p /opt/support && \
     cd       /opt/support && \
-    wget https://github.com/HegemanLab/galaxy-tardis/releases/download/binary1-pre/busybox-static.gz --output-document busybox.gz && \
+    wget https://github.com/HegemanLab/galaxy-tardis/releases/download/binary2-pre/busybox-1.31.0-static.gz --output-document busybox.gz && \
     gzip -d busybox.gz && \
     chmod +x busybox
 RUN ln -f /opt/support/busybox               /bin/busybox
@@ -45,9 +45,8 @@ RUN ln -f /opt/support/busybox               /bin/busybox
 RUN apk add coreutils
 # Including bash (required), curl (handy)
 RUN apk add bash curl
-# Include s3cmd for transmitting files to Amazon-S3 compatible buckets.  See e.g.:
-#   https://en.wikipedia.org/wiki/Amazon_S3#S3_API_and_competing_services
-RUN apk add py-pip && pip install s3cmd
+# Include py-pip for installing s3cmd (see below) 
+RUN apk add py-pip
 # Support scheduled activity, e.g., daily backups
 RUN apk add dcron
 
@@ -62,10 +61,10 @@ RUN mkdir -p /usr/local/bin && \
     cd ..
 
 # Add statically linked cvs binary so that it can be shared with glibc-based containers
-#   See https://github.com/eschen42/alpine-cbuilder#cvs-executable-independent-of-glibc
-#   and https://github.com/HegemanLab/galaxy-tardis/releases/tag/binary1-pre
+#   See https://github.com/eschen42/cvs-static#how-to-build-a-statically-linked-cvs-binary
+#   and https://github.com/eschen42/alpine-cbuilder#cvs-executable-independent-of-glibc
 RUN cd /opt/support && \
-    wget https://github.com/HegemanLab/galaxy-tardis/releases/download/binary1-pre/cvs-static.gz --output-document cvs.gz && \
+    wget https://github.com/eschen42/cvs-static/releases/download/v1.12.13-1/cvs-static.gz --output-document cvs.gz && \
     gzip -d cvs.gz && \
     chmod +x cvs
 RUN ln       /opt/support/cvs                /usr/local/bin/cvs
