@@ -5,6 +5,8 @@
 - Need to back up and restore:
   - static HTML content ("welcome")
   - other features that I don't use yet
+- Security issues
+  - As of 2019.08.12, [CVE-2019-14697](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-14697) is still not fixed in the latest stable Alpine Linux build, 3.10.1.
 
 ## Release notes
 
