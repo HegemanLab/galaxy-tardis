@@ -11,11 +11,12 @@
 #           ./tardis/s3/dest.s3cfg
 #         TODO Explain how to do this using the copy of 's3cmd' in the TARDIS
 # step 5: Run as appropriate one or more of the following
+#           `bash DEMO pull`
 #           `bash DEMO fresh`
 #           `bash DEMO restore`
 #           `bash DEMO run`
 
-# set DEMO_RUN_MODE to second argument if provided: 'fresh', 'run', or 'restore'
+# set DEMO_RUN_MODE to second argument if provided: 'pull', 'fresh', 'run', or 'restore'
 if [ ! -z "$1" ]; then
   DEMO_RUN_MODE="$1"
 fi
@@ -69,11 +70,18 @@ swab_orphans() {
   done
 }
 
-# # If you don't want images to update each time you run this,
-#     comment out the next line after the first pull:
-docker-compose -f ${MY_COMPOSE_FILE:?} pull
-
 case ${DEMO_RUN_MODE:?} in
+  pull)
+    echo "#*#*#*#*#*#*#*# Pulling docker images  #*#*#*#*#*#*#*#"
+    SUCCESS=1
+    docker-compose -f ${MY_COMPOSE_FILE:?} pull || SUCCESS=0
+    if [ "$SUCCESS" == "1" ]; then
+      echo "Pull succeeded"
+    else
+      echo "Pull FAILED"
+    fi
+    exit $SUCCESS
+    ;;
   run)
     echo "#*#*#*#*#*#*#*#  Running Galaxy with neither initialization nor restoration  #*#*#*#*#*#*#*#"
     if [ ! -f ${MY_GALAXY_EXPORT:?}/config/tool_conf.xml ]; then
