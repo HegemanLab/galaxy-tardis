@@ -30,16 +30,18 @@ elif [ ! -d ${PGDATA_PARENT:?} ]; then
 elif [ -z "${TAG_POSTGRES:?}" ]; then
   # fail if TAG_POSTGRES is not specified; to address this failure, e.g., TAG_POSTGRES="9.6.5_for_19.01"
   echo "Please set TAG_POSTGRES (a valid tag for an image of quay.io/bgruening/galaxy-postgres) before sourcing ${SOURCE}"
-elif [ ! -f $DIR/s3/dest.s3cfg ]; then
-  # fail if $DIR/s3/dest.s3cfg is not proper
-  echo "ERROR: $DIR/s3/dest.s3cfg does not exist or is not a file"
+elif [ -z "${MY_S3CFG}" ]; then
+  echo "ERROR: environment variable MY_S3CFG is not set"
+elif [ ! -f ${MY_S3CFG:?} ]; then
+  # fail if ${MY_S3CFG:?} is not properly set or is not a path to a file
+  echo "ERROR: ${MY_S3CFG:?} does not exist or is not a file"
 elif [ ! -f $DIR/s3/dest.config ]; then
   # fail if $DIR/s3/dest.config is not proper
   echo "ERROR: $DIR/s3/dest.config does not exist or is not a file"
 else
   TARDIS="docker run --rm -ti \
     -v ${XDG_RUNTIME_DIR:?}/docker.sock:/var/run/docker.sock \
-    -v $DIR/s3/dest.s3cfg:/opt/s3/dest.s3cfg \
+    -v ${MY_S3CFG:?}:/opt/s3/dest.s3cfg \
     -v $DIR/s3/dest.config:/opt/s3/dest.config \
     -v ${EXPORT_DIR:?}:${INTERNAL_EXPORT_DIR:?} \
     -e EXPORT_DIR=${INTERNAL_EXPORT_DIR:?} \

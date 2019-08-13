@@ -54,6 +54,7 @@ TAG_POSTGRES=${TAG_POSTGRES:?}
 IMAGE_GALAXY_INIT='${IMAGE_GALAXY_INIT:?}'
 CONTAINER_GALAXY_INIT='${CONTAINER_GALAXY_INIT:?}'
 TAG_GALAXY='${TAG_GALAXY:?}'
+MY_S3CFG='${MY_S3CFG:?}'
 " > tardis/tags-for-tardis_envar-to-source.sh
 
 echo writing tardis/s3/dest.config

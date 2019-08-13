@@ -83,6 +83,7 @@ TAG=${TAG:-19.01}
 #GALAXY_CONFIG_MASTER_API_KEY=${GALAXY_CONFIG_MASTER_API_KEY:-$(echo $(date -Ins | md5sum | md5sum) | cut -f 1 -d ' ')}
 
 show_variables(){
+  echo MY_S3CFG=${MY_S3CFG:?}
   echo MY_INSTANCE=${MY_INSTANCE:?}
   echo MY_BUCKET_PREFIX=${MY_BUCKET_PREFIX:?}
   echo MY_CONFIG_BUCKET=${MY_CONFIG_BUCKET:?}
@@ -292,13 +293,15 @@ show_variables
 print_hint(){
   echo "
   DEMO can run in one of three modes:
-    - 'run'    : Running Galaxy with neither initialization nor restoration
-    - 'restore': Restoring an instance of Galaxy from S3
+    - 'pull'   : Pull docker images without running Galaxy at all
     - 'fresh'  : Not restoring Galaxy, initializing fresh instance if necessary
+    - 'restore': Restoring an instance of Galaxy from S3
+    - 'run'    : Running Galaxy with neither initialization nor restoration
   You can pass it as a value when invoking DEMO, e.g.
-    bash DEMO run
-    bash DEMO restore
+    bash DEMO pull
     bash DEMO fresh
+    bash DEMO restore
+    bash DEMO run
   or you can export DEMO_RUN_MODE set to one of these values before running DEMO, e.g.
     bash -c 'export DEMO_RUN_MODE=fresh;   bash DEMO'
   "
