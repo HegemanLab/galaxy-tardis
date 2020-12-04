@@ -9,7 +9,7 @@ RUN adduser -s /bin/bash -h /export -D -H -u 1450 -g "Galaxy-file owner" galaxy
 
 ######################################  Python Basis  ########################################
 # Base python for the image as Python3
-RUN apk add python3 py3-pip
+RUN apk add python3
 
 ########################################  Packages  ##########################################
 # The coreutils binary adds a megabyte to the image size,
@@ -46,8 +46,6 @@ RUN ln -f /opt/support/busybox /bin/busybox
 RUN apk add coreutils
 # Including bash (required), curl (handy)
 RUN apk add bash curl
-# Include py-pip for installing s3cmd (see below) 
-RUN apk add py-pip
 # Support scheduled activity, e.g., daily backups
 RUN apk add dcron
 
@@ -100,9 +98,16 @@ COPY init                                    /opt/init
 
 # Include s3cmd for transmitting files to Amazon-S3 compatible buckets.  See e.g.:
 #   https://en.wikipedia.org/wiki/Amazon_S3#S3_API_and_competing_services
-# Modify s3cmd to make it unbuffered
-RUN pip install s3cmd && \
-    sed -i -e "s/config_file = None/config_file = None; sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)/" /usr/bin/s3cmd
+RUN bash -c "echo '@edge http://dl-cdn.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositories" && \
+    bash -c "echo '@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories" && \
+    apk update && apk upgrade && \
+    apk add s3cmd@testing && \
+    apk add s3cmd
+# Force s3cmd I/O to be unbuffered
+RUN mv /usr/bin/s3cmd /usr/bin/s3cmd.py && \
+    echo '#!/bin/bash' > /usr/bin/s3cmd && \
+    echo '/usr/bin/python3 -u /usr/bin/s3cmd.py $*' >> /usr/bin/s3cmd && \
+    chmod +x /usr/bin/s3cmd
 
 #######################################  Permissions  ######################################
 # Executable-file permissions (besides busybox and cvs because they are hard-linked)
